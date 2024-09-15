@@ -1,3 +1,6 @@
+import { getUserById } from "$src/lib/database/users.js";
+import { redis } from "$src/lib/redis/redis.js";
+import { includeOnlyProperties } from "$src/lib/utils.js";
 import {
     locales,
     loadTranslations,
@@ -21,10 +24,31 @@ export const load = async ({ url, cookies, request }) => {
     if (!supportedLocales.includes(locale)) {
         locale = defaultLocale;
     }
-    await loadTranslations(locale, pathname);
-
-    return {
+    const data = {
         i18n: { locale, route: pathname },
         translations: translations.get(),
     };
+    await loadTranslations(locale, pathname);
+    const sessionToken = cookies.get("SESSION");
+    if (sessionToken == null) {
+        cookies.delete("SESSION", { path: "/" });
+        return data;
+    }
+    const userId = await redis.get(sessionToken);
+    if (userId == null) {
+        try {
+            cookies.delete("SESSION", { path: "/" });
+        } catch (error) {}
+        return data;
+    }
+    let user: any = await getUserById(parseInt(userId));
+    if (user == null) return data;
+    user = includeOnlyProperties(user, [
+        "email",
+        "first_name",
+        "last_name",
+        "middle_name",
+    ]);
+
+    return { ...data, user: user };
 };

@@ -12,6 +12,7 @@ const config = {
             $components: "./src/lib/components",
             $images: "./src/lib/images",
             $translations: "./src/lib/translations",
+            $src: "./src",
         },
 
         adapter: adapter(),
