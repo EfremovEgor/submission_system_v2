@@ -34,6 +34,7 @@
                         required={true}
                         name="email"
                         label="Email"
+                        autocomplete="email"
                         error={form?.errors.email}
                     />
                     <div class="flex flex-row gap-2">
@@ -42,6 +43,7 @@
                             required={true}
                             name="first_name"
                             label="First Name"
+                            autocomplete="given-name"
                             error={form?.errors.first_name}
                         />
                         <FormInput
@@ -49,6 +51,7 @@
                             required={true}
                             name="last_name"
                             label="Last Name"
+                            autocomplete="family-name"
                             error={form?.errors.last_name}
                         />
                         <FormInput
@@ -56,6 +59,7 @@
                             required={false}
                             name="middle_name"
                             label="Middle Name"
+                            autocomplete="additional-name"
                             error={form?.errors.middle_name}
                         />
                     </div>

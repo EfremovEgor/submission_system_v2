@@ -43,6 +43,7 @@ export const load = async ({ url, cookies, request }) => {
     }
     let user: any = await getUserById(parseInt(userId));
     if (user == null) return data;
+
     user = includeOnlyProperties(user, [
         "email",
         "first_name",

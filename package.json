@@ -33,9 +33,12 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^5.19.1",
+		"@types/ejs": "^3.1.5",
 		"bits-ui": "^0.21.12",
 		"clsx": "^2.1.1",
 		"crypto": "^1.0.1",
+		"ejs": "^3.1.10",
+		"fs": "^0.0.1-security",
 		"lucide-svelte": "^0.414.0",
 		"redis": "^4.7.0",
 		"tailwind-merge": "^2.4.0",

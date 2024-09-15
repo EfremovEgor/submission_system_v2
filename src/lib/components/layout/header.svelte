@@ -40,17 +40,21 @@
                         >{$t(`menu.call_for_papers`)}</a
                     >
                 </li>
-                <li>
-                    <a class="nav-link" href="/author">{$t(`menu.author`)}</a>
-                </li>
-                <li>
-                    <a class="nav-link" href="/reviewer"
-                        >{$t(`menu.reviewer`)}</a
-                    >
-                </li>
-                <li>
-                    <a class="nav-link" href="/chair">{$t(`menu.chair`)}</a>
-                </li>
+                {#if user}
+                    <li>
+                        <a class="nav-link" href="/author"
+                            >{$t(`menu.author`)}</a
+                        >
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/reviewer"
+                            >{$t(`menu.reviewer`)}</a
+                        >
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/chair">{$t(`menu.chair`)}</a>
+                    </li>
+                {/if}
             </ul>
             <div
                 class="flex w-full justify-between sm:w-fit items-center flex-row gap-2"

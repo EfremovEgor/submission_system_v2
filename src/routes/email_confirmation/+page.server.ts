@@ -5,8 +5,7 @@ import {
 import { error } from "@sveltejs/kit";
 
 export const load = async ({ params, url }) => {
-    const code = url.searchParams.get("code");
-    console.log(1);
+    const code = url.searchParams.get("token");
     if (code == null) {
         error(404, { message: "No such confirmation code" });
     }

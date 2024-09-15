@@ -13,6 +13,7 @@ const config = {
             $images: "./src/lib/images",
             $translations: "./src/lib/translations",
             $src: "./src",
+            $email: "./src/lib/email",
         },
 
         adapter: adapter(),

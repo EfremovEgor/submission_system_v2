@@ -6,22 +6,29 @@ export const getUserByEmail = async (email: string) => {
     const user = await prisma.user.findFirst({ where: { email: email } });
     return user;
 };
+
 export const getUserById = async (id: number) => {
-    const user = await prisma.user.findFirst({ where: { id: id } });
+    const user = await prisma.user.findFirst({
+        where: { id: id },
+    });
+    console.log(user);
     return user;
 };
+
 export const getUserByRegistrationCode = async (token: string) => {
     const user = await prisma.user.findFirst({
         where: { registration_token: token },
     });
     return user;
 };
+
 export const createNewUser = async (userCreate: Prisma.UserCreateInput) => {
     userCreate.password = hashString(userCreate.password);
 
     const user = await prisma.user.create({ data: userCreate });
     return user;
 };
+
 export const updateUserById = async (
     userId: number,
     userUpdate: Prisma.UserUpdateInput,
@@ -36,6 +43,7 @@ export const updateUserById = async (
         data: userUpdate,
     });
 };
+
 export const updateUserByEmail = async (
     userEmail: string,
     userUpdate: Prisma.UserUpdateInput,

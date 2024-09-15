@@ -1,14 +1,18 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import { z } from "zod";
-import transporter from "$components/email/setup.server";
-import { EMAIL } from "$env/static/private";
+import { DOMAIN, EMAIL } from "$env/static/private";
 import {
     createNewUser,
     getUserByEmail,
     updateUserById,
 } from "$lib/database/users";
 import { createBase64UrlSafeString } from "$lib/utils";
-
+import transporter from "$email/setup.server.js";
+import {
+    EmailTemplates,
+    readEmailTemplate,
+    renderEmailTemplate,
+} from "$src/lib/email/templating.js";
 export const load = async ({ cookies }) => {
     const sessionToken = cookies.get("SESSION");
     if (sessionToken != null) {
@@ -69,23 +73,28 @@ export const actions: Actions = {
         const formData = Object.fromEntries(await request.formData());
         try {
             const results = await registerSchema.parseAsync(formData);
+            const registrationToken = createBase64UrlSafeString();
+            const link = `${DOMAIN}/email_confirmation?token=${registrationToken}`;
+            const html = await renderEmailTemplate(
+                EmailTemplates.registration,
+                { link, name: results.first_name },
+            );
             transporter.sendMail({
                 from: `${EMAIL}`,
                 to: `${results.email}`,
                 subject: "Registration",
-                text: `${results}`,
-                html: `<b>${results}</b>`,
+                html: html,
             });
             const { password_confirm, ...data } = results;
             const user = await getUserByEmail(data.email);
             if (user == null)
                 await createNewUser({
                     ...data,
-                    registration_token: createBase64UrlSafeString(),
+                    registration_token: registrationToken,
                 });
             else
                 updateUserById(user.id, {
-                    registration_token: createBase64UrlSafeString(),
+                    registration_token: registrationToken,
                 });
 
             return { emailIsSent: true };
