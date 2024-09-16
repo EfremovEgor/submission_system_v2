@@ -11,10 +11,29 @@ export const getUserById = async (id: number) => {
     const user = await prisma.user.findFirst({
         where: { id: id },
     });
-    console.log(user);
     return user;
 };
-
+export const getUserProfile = async (id: number) => {
+    const user = await prisma.user.findFirst({
+        where: { id: id },
+        select: {
+            first_name: true,
+            last_name: true,
+            middle_name: true,
+            address_line_1: true,
+            address_line_2: true,
+            affiliation: true,
+            country: true,
+            city: true,
+            email: true,
+            state: true,
+            web_page: true,
+            title: true,
+            orcid_id: true,
+        },
+    });
+    return user;
+};
 export const getUserByRegistrationCode = async (token: string) => {
     const user = await prisma.user.findFirst({
         where: { registration_token: token },

@@ -77,7 +77,7 @@
                         id="repeat_password"
                         required={true}
                         name="password_confirm"
-                        label="Repeat password*"
+                        label="Repeat password"
                         autocomplete="off"
                         error={form?.errors.password_confirm}
                     />

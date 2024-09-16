@@ -8,7 +8,7 @@ import { SESSION_EXPIRATION_TIME } from "$src/config";
 export const load = async ({ cookies }) => {
     const sessionToken = cookies.get("SESSION");
     if (sessionToken != null) {
-        redirect(302, "/profile");
+        redirect(302, "/account");
     }
 };
 
@@ -77,6 +77,6 @@ export const actions: Actions = {
                 errors,
             };
         }
-        redirect(302, "/profile");
+        redirect(302, "/account");
     },
 };

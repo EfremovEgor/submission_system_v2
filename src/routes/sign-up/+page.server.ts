@@ -16,7 +16,7 @@ import {
 export const load = async ({ cookies }) => {
     const sessionToken = cookies.get("SESSION");
     if (sessionToken != null) {
-        redirect(302, "/profile");
+        redirect(302, "/account");
     }
 };
 

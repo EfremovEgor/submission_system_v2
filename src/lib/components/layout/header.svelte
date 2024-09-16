@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t, locale, locales } from "$translations/index";
     import logo from "$images/logo.png";
+    import { page } from "$app/stores";
     interface User {
         id: number;
         first_name: string;
@@ -9,7 +10,6 @@
     }
     export let user: User;
     const handleChange = ({ currentTarget }: { currentTarget: any }) => {
-        console.log(typeof currentTarget);
         const { value } = currentTarget;
 
         document.cookie = `lang=${value} ;`;
@@ -36,23 +36,41 @@
                     </div>
                 </li>
                 <li>
-                    <a class="nav-link" href="/call_for_papers"
-                        >{$t(`menu.call_for_papers`)}</a
+                    <a
+                        class="nav-link {$page.url.pathname ===
+                        '/call_for_papers'
+                            ? 'active'
+                            : ''}"
+                        href="/call_for_papers">{$t(`menu.call_for_papers`)}</a
                     >
                 </li>
                 {#if user}
                     <li>
-                        <a class="nav-link" href="/author"
-                            >{$t(`menu.author`)}</a
+                        <a
+                            class="nav-link {$page.url.pathname ===
+                            '/account/author'
+                                ? 'active'
+                                : ''}"
+                            href="/account/author">{$t(`menu.author`)}</a
                         >
                     </li>
                     <li>
-                        <a class="nav-link" href="/reviewer"
-                            >{$t(`menu.reviewer`)}</a
+                        <a
+                            class="nav-link {$page.url.pathname ===
+                            '/account/reviewer'
+                                ? 'active'
+                                : ''}"
+                            href="/account/reviewer">{$t(`menu.reviewer`)}</a
                         >
                     </li>
                     <li>
-                        <a class="nav-link" href="/chair">{$t(`menu.chair`)}</a>
+                        <a
+                            class="nav-link {$page.url.pathname ===
+                            '/account/chair'
+                                ? 'active'
+                                : ''}"
+                            href="/account/chair">{$t(`menu.chair`)}</a
+                        >
                     </li>
                 {/if}
             </ul>
@@ -67,7 +85,11 @@
                         >
                     </div>
                 {:else}
-                    <a class="nav-link" href="/profile"
+                    <a
+                        class="nav-link {$page.url.pathname === '/account'
+                            ? 'active'
+                            : ''}"
+                        href="/account"
                         >{user.first_name}
                         {user.last_name ? user.last_name[0] : ""}.
                         {user.middle_name ? user.middle_name[0] : ""}.</a

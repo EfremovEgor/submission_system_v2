@@ -11,7 +11,7 @@
 
 <div class="input-container mt-2 w-full">
     <label for={id}>{label}{required ? "*" : ""}</label><input
-        class="w-full"
+        class="w-full {error ? 'invalid' : 'valid'}"
         {type}
         {id}
         {name}
