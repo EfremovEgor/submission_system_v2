@@ -42,7 +42,10 @@ export const load = async ({ url, cookies, request }) => {
         return data;
     }
     let user: any = await getUserById(parseInt(userId));
-    if (user == null) return data;
+    if (user == null){
+        cookies.delete("SESSION", { path: "/" });
+        return data
+    };
     user = includeOnlyProperties(user, [
         "id",
         "email",

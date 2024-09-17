@@ -30,7 +30,7 @@ h1 {
     @apply font-bold text-2xl;
 }
 
-input {
+input,select {
     @apply border-gray-500 rounded border p-2;
     @apply outline-none;
     @apply transition-all ease-in-out duration-200;
@@ -39,7 +39,7 @@ input {
 }
 
 
-input:focus {
+input:focus, select:focus {
     @apply outline-none border border-blue-600 border-solid;
     @apply shadow-blue-600 shadow;
     box-shadow: 0 0 2px #2563eb;
@@ -67,4 +67,14 @@ label {
 
 .page-heading {
     @apply text-3xl;
+}
+.button{
+    @apply text-white bg-blue-700 font-medium p-3 hover:bg-blue-900 rounded-xl transition-all ease-in-out;
+    @apply min-w-20 
+}
+.button-green{
+    @apply bg-green-500 hover:bg-green-600
+}
+.button-red{
+    @apply bg-red-500 hover:bg-red-600
 }
