@@ -14,35 +14,57 @@ datasource db {
 }
 
 model User {
-  id                 Int      @id @default(autoincrement())
-  email              String   @unique
-  created_at         DateTime @default(now())
+  id                 Int          @id @default(autoincrement())
+  email              String       @unique
+  created_at         DateTime     @default(now())
   password           String
   first_name         String
   last_name          String
-  middle_name        String?  @default("")
-  title              String?  @default("")
-  affiliation        String?  @default("")
-  web_page           String?  @default("")
-  address_line_1     String?  @default("")
-  address_line_2     String?  @default("")
-  orcid_id           String?  @default("")
-  city               String?  @default("")
-  state              String?  @default("")
-  country            String?  @default("")
-  is_registered      Boolean  @default(false)
-  registration_token String?  @unique
+  middle_name        String?      @default("")
+  title              String?      @default("")
+  affiliation        String?      @default("")
+  web_page           String?      @default("")
+  address_line_1     String?      @default("")
+  address_line_2     String?      @default("")
+  orcid_id           String?      @default("")
+  city               String?      @default("")
+  state              String?      @default("")
+  country            String?      @default("")
+  is_registered      Boolean      @default(false)
+  registration_token String?      @unique
   plan_id            Int?
-  plan               Plan?    @relation(fields: [plan_id], references: [id])
+  plan               Plan?        @relation(fields: [plan_id], references: [id])
+  conferences        Conference[]
 
   @@map("users")
 }
 
 model Plan {
-  id                  Int    @id @default(autoincrement())
-  name                String @unique
+  id                  Int     @id @default(autoincrement())
+  name                String  @unique
   maximum_conferences Int
   users               User[]
+  is_public           Boolean @default(false)
+  price               Float?  @default(1000)
+  url_name            String
 
   @@map("plans")
+}
+
+model Conference {
+  id                  Int       @id @default(autoincrement())
+  name                String
+  name_ru             String?
+  allow_ru            Boolean   @default(false)
+  site_url            String?
+  description         String?
+  start_date          DateTime? @db.Date
+  submission_deadline DateTime? @db.Date
+  acronym             String    @unique
+  short_name          String
+  creator_id          Int
+  creator             User      @relation(fields: [creator_id], references: [id])
+
+  @@index([acronym])
+  @@map("conferences")
 }

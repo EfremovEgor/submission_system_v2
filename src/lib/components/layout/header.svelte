@@ -95,7 +95,11 @@
                         {user.middle_name ? user.middle_name[0] : ""}.</a
                     >
                     <div>
-                        <a class="reverse-nav-link" href="/logout">Logout</a>
+                        <a
+                            class="reverse-nav-link"
+                            data-sveltekit-reload
+                            href="/logout">Logout</a
+                        >
                     </div>
                 {/if}
 

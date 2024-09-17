@@ -30,6 +30,7 @@ export const getUserProfile = async (id: number) => {
             web_page: true,
             title: true,
             orcid_id: true,
+            plan: true,
         },
     });
     return user;

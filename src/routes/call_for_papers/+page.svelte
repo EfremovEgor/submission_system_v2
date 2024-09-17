@@ -1,6 +1,8 @@
 <script lang="ts">
     import Pagination from "$components/common/pagination.svelte";
     import { goto } from "$app/navigation";
+    export let data;
+    const conferences = data.conferences;
     let current = 0;
     function onPaginationClick(page: number) {
         current = page;
@@ -13,40 +15,39 @@
         <table class="w-full text-left text-sm">
             <thead class="bg-slate-50 uppercase font-bold">
                 <tr>
-                    <th scope="col" class="px-6 py-3">Short Name</th>
-                    <th scope="col" class="px-6 py-3">Name</th>
-                    <th scope="col" class="px-6 py-3">Submission deadline</th>
-                    <th scope="col" class="px-6 py-3">Start date</th>
+                    <th scope="col" class="px-4 py-3">Short Name</th>
+                    <th scope="col" class="px-4 py-3">Name</th>
+                    <th scope="col" class="px-4 py-3 text-center"
+                        >Submission deadline</th
+                    >
+                    <th scope="col" class="px-4 py-3 text-center">Start date</th
+                    >
                 </tr>
             </thead>
+
             <tbody>
-                <tr
-                    on:click={() => goto("/")}
-                    class="border-b last:border-none cursor-pointer hover:bg-slate-50"
-                >
-                    <th scope="row" class="px-6 py-3"> SCO/CIS CITS 2025 </th>
-                    <td class="px-6 py-3">
-                        SCO/CIS Conference on Information and Technical Systems
-                    </td>
-                    <td class="px-6 py-3"> 30.09.2024 </td>
-                    <td class="px-6 py-3"> 02.10.2024 </td>
-                </tr>
-                <tr
-                    on:click={() => goto("/")}
-                    class="border-b last:border-none cursor-pointer hover:bg-slate-50"
-                >
-                    <th scope="row" class="px-6 py-3">
-                        5th BRICS SciTech Forum 2024
-                    </th>
-                    <td class="px-6 py-3">
-                        5th BRICS SciTech Forum 2024 on Space Flight Mechanics
-                        and Space Structures and Materials
-                    </td>
-                    <td class="px-6 py-3"> 30.09.2024 </td>
-                    <td class="px-6 py-3"> 02.10.2024 </td>
-                </tr>
+                {#each conferences as conference}
+                    <tr
+                        on:click={() =>
+                            goto(`/call_for_papers/${conference.acronym}`)}
+                        class="border-b last:border-none cursor-pointer hover:bg-slate-50"
+                    >
+                        <th scope="row" class="px-4 py-3">
+                            {conference.short_name}
+                        </th>
+                        <td class="px-4 py-3">
+                            {conference.name}
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            {conference.start_date?.toLocaleDateString()}
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            {conference.submission_deadline?.toLocaleDateString()}
+                        </td>
+                    </tr>
+                {/each}
             </tbody>
         </table>
     </div>
-    <Pagination callback={onPaginationClick} bind:current amount={10} />
+    <!-- <Pagination callback={onPaginationClick} bind:current amount={10} /> -->
 </div>

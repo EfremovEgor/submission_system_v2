@@ -4,12 +4,12 @@
     import AccountInfoRow from "$components/account/accountInfoRow.svelte";
     import AccountLayout from "$components/layout/account/accountLayout.svelte";
     import type { ActionResult } from "@sveltejs/kit";
-
     export let data;
-    const user = data.user;
+    $: user = data.userProfile;
     let isEditing = false;
 
     const formSubmitHandler = () => {
+        invalidateAll();
         return async ({
             result,
             update,
@@ -17,17 +17,19 @@
             result: ActionResult;
             update: any;
         }) => {
-            await update({ reset: false });
-            if (result.type == "success") {
+            if (result.data.errors == undefined) {
                 isEditing = false;
-                invalidateAll();
+                await invalidateAll();
+                return;
             } else {
+                update({ reset: false });
+                return;
             }
         };
     };
 </script>
 
-<AccountLayout>
+<AccountLayout userProfile={user}>
     {#if isEditing}
         <form
             use:enhance={formSubmitHandler}
@@ -75,19 +77,20 @@
                 />
             </AccountInfoRow>
             <AccountInfoRow
-                name="Affiliation"
-                value={user.affilitation}
+                name="Affiliation*"
+                value={user.affiliation}
                 {isEditing}
             >
                 <input
-                    name="affilitation"
-                    value={user.affilitation ?? ""}
+                    name="affiliation"
+                    value={user.affiliation ?? ""}
                     class="w-full max-w-56"
                     type="text"
                 />
             </AccountInfoRow>
-            <AccountInfoRow name="Country" value={user.country} {isEditing}>
+            <AccountInfoRow name="Country*" value={user.country} {isEditing}>
                 <input
+                    required
                     name="country"
                     value={user.country ?? ""}
                     class="w-full max-w-56"
@@ -150,13 +153,13 @@
                 value={user.last_name}
                 {isEditing}
             />
-            <AccountInfoRow name="Surname" value={user.middle_name} />
-            <AccountInfoRow name="Affiliation" value={user.affilitation} />
-            <AccountInfoRow name="Country" value={user.country} {isEditing} />
-            <AccountInfoRow name="City" value={user.city} {isEditing} />
-            <AccountInfoRow name="State" value={user.state} {isEditing} />
-            <AccountInfoRow name="ORCID" value={user.orcid_id} />
-            <AccountInfoRow name="Web page" value={user.web_page} />
+            <AccountInfoRow name="Surname" value={user?.middle_name} />
+            <AccountInfoRow name="Affiliation" value={user?.affiliation} />
+            <AccountInfoRow name="Country" value={user?.country} {isEditing} />
+            <AccountInfoRow name="City" value={user?.city} {isEditing} />
+            <AccountInfoRow name="State" value={user?.state} {isEditing} />
+            <AccountInfoRow name="ORCID" value={user?.orcid_id} />
+            <AccountInfoRow name="Web page" value={user?.web_page} />
             <div>
                 <button on:click={() => (isEditing = true)} class="button mt-4">
                     Edit

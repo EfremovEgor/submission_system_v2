@@ -55,7 +55,7 @@ const signInSchema = z
         }
     });
 export const actions: Actions = {
-    default: async ({ request, cookies }) => {
+    default: async ({ request, cookies, session }) => {
         const formData = Object.fromEntries(await request.formData());
         const sessionToken = createBase64UrlSafeString();
         try {

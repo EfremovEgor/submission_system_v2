@@ -4,15 +4,6 @@ import { getUserFromCookies } from "$src/lib/utils";
 import type { Actions } from "@sveltejs/kit";
 import { z } from "zod";
 
-/** @type {import('@sveltejs/kit').Load} */
-export const load = async ({ parent }: { parent: any }) => {
-    const {
-        user: { id },
-    } = await parent();
-    const userProfile = await getUserProfile(id);
-
-    return { userProfile };
-};
 const profileChangeSchema = z.object({
     title: z
         .string()
@@ -36,44 +27,48 @@ const profileChangeSchema = z.object({
     affiliation: z
         .string()
         .trim()
+        .min(1)
         .max(64, { message: "Affiliation must be less than 64 characters" }),
     country: z
         .string()
         .trim()
-        .max(64, { message: "country must be less than 64 characters" }),
+        .max(64, { message: "country must be less than 64 characters" })
+        .optional(),
     city: z
         .string()
         .trim()
-        .max(64, { message: "City must be less than 64 characters" }),
+        .max(64, { message: "City must be less than 64 characters" })
+        .optional(),
     state: z
         .string()
         .trim()
-        .max(64, { message: "State must be less than 64 characters" }),
+        .max(64, { message: "State must be less than 64 characters" })
+        .optional(),
     orcid_id: z
         .string()
         .trim()
-        .max(64, { message: "Orcid ID must be less than 64 characters" }),
+        .max(64, { message: "Orcid ID must be less than 64 characters" })
+        .optional(),
     web_page: z
         .string()
         .trim()
-        .max(64, { message: "Web Page must be less than 64 characters" }),
+        .max(64, { message: "Web Page must be less than 64 characters" })
+        .optional(),
 });
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
-        const formData = await request.formData();
+        const formData = Object.fromEntries(await request.formData());
 
         try {
             const results = await profileChangeSchema.parseAsync(formData);
             const user = await getUserFromCookies(cookies, redis);
             updateUserById(user.id, results);
-
             return { message: "success" };
         } catch (error: any) {
-            const { ...rest } = formData;
             const { fieldErrors: errors } = error.flatten();
             return {
-                data: rest,
+                data: formData,
                 errors,
             };
         }
