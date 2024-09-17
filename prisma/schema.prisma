@@ -65,6 +65,5 @@ model Conference {
   creator_id          Int
   creator             User      @relation(fields: [creator_id], references: [id])
 
-  @@index([acronym])
   @@map("conferences")
 }
