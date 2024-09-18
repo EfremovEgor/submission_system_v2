@@ -9,6 +9,9 @@
     }
 </script>
 
+<svelte:head>
+    <title>Call For Papers</title>
+</svelte:head>
 <div class="container">
     <h1 class="page-heading">Call For Papers</h1>
     <div class="overflow-x-auto min-h-36 mt-5 rounded-lg">

@@ -1,6 +1,6 @@
-import { getUserProfile, updateUserById } from "$src/lib/database/users.js";
+import { updateUserById } from "$src/lib/database/users.js";
 import { redis } from "$src/lib/redis/redis";
-import { getUserFromCookies } from "$src/lib/utils";
+import { getUserFromCookies } from "$src/lib/auth.sever";
 import type { Actions } from "@sveltejs/kit";
 import { z } from "zod";
 
@@ -66,6 +66,7 @@ export const actions: Actions = {
             updateUserById(user.id, results);
             return { message: "success" };
         } catch (error: any) {
+            console.log(error);
             const { fieldErrors: errors } = error.flatten();
             return {
                 data: formData,

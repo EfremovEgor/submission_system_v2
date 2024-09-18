@@ -1,3 +1,3 @@
 <svelte:head>
-    <title>Home</title>
+    <title>Submition</title>
 </svelte:head>

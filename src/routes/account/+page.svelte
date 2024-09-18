@@ -29,6 +29,9 @@
     };
 </script>
 
+<svelte:head>
+    <title>Account</title>
+</svelte:head>
 <AccountLayout userProfile={user}>
     {#if isEditing}
         <form
@@ -142,6 +145,8 @@
         </form>
     {:else}
         <div class="flex flex-col gap-2">
+            <AccountInfoRow name="Email" value={user.email} />
+
             <AccountInfoRow name="Title" value={user.title} />
             <AccountInfoRow
                 name="First name"

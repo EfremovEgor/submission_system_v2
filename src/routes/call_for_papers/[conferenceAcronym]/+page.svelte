@@ -3,6 +3,10 @@
     const conference = data.conference;
 </script>
 
+<svelte:head>
+    <title>{conference.name}</title>
+</svelte:head>
+
 <div class="container">
     <h1 class="heading">
         {conference.name}

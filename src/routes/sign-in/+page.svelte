@@ -11,6 +11,10 @@
     };
 </script>
 
+<svelte:head>
+    <title>Sign In</title>
+</svelte:head>
+
 <div class="flex justify-center w-full self-center">
     <div class="shadow p-6 rounded w-11/12 sm:w-8/12 lg:w-1/2">
         <div class="lg:ml-10">
