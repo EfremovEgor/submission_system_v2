@@ -23,10 +23,19 @@
             <p class=" text-slate-900 p-2 rounded-xl font-medium">
                 Start Date: {conference.start_date?.toLocaleDateString()}
             </p>
-            <button
-                on:click={() => (modalIsOpen = !modalIsOpen)}
-                class="nav-link w-full">Submit an abstract</button
-            >
+            {#if conference.allow_ru}
+                <button
+                    on:click={() => (modalIsOpen = !modalIsOpen)}
+                    class="nav-link w-full">Submit an abstract</button
+                >
+            {:else}
+                <a
+                    href="{conference.acronym}/submit?lang=en"
+                    rel="noopener noreferrer"
+                    class="nav-link"
+                    ><button class="flex">Submit an abstract</button></a
+                >
+            {/if}
             <a
                 href={conference.site_url}
                 target="_blank"
@@ -38,6 +47,14 @@
             <article class="text-justify">
                 {@html conference.description}
             </article>
+            {#each conference.symposiums as symposium}
+                <h2 class="mt-2 font-bold">{symposium.name}</h2>
+                <ul class="pl-10 list-disc">
+                    {#each symposium.topics as topic}
+                        <li>{topic.name}</li>
+                    {/each}
+                </ul>
+            {/each}
         </section>
     </div>
 </div>

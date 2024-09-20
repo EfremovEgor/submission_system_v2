@@ -5,4 +5,6 @@ import type { RedisClientType } from "redis";
 export const redis = await createClient({
     url: REDIS_URL,
 });
-await redis.connect();
+try {
+    await redis.connect();
+} catch (error) {}

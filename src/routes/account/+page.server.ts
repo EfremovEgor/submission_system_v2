@@ -66,8 +66,6 @@ export const actions: Actions = {
             updateUserById(user.id, results);
             return { message: "success" };
         } catch (error: any) {
-            console.log(error);
-            const { fieldErrors: errors } = error.flatten();
             return {
                 data: formData,
                 errors,

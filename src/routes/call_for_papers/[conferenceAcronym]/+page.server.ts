@@ -15,9 +15,27 @@ export const load: Load = async ({ parent, params }) => {
         submission_deadline: true,
         description: true,
         site_url: true,
+        symposiums: {
+            select: {
+                name: true,
+                position: true,
+                topics: {
+                    select: {
+                        name: true,
+                    },
+                    orderBy: {
+                        position: "asc",
+                    },
+                },
+            },
+            orderBy: {
+                position: "asc",
+            },
+        },
     });
     if (conference == null) {
         error(404);
     }
+    console.log(conference);
     return { conference };
 };

@@ -13,6 +13,7 @@ export const getConferenceByAcronym = async (
 ) => {
     const conference = await prisma.conference.findFirst({
         where: { acronym: acronym },
+        select: fields,
     });
     return conference;
 };

@@ -1,0 +1,71 @@
+services:
+    postgres:
+        image: postgres:latest
+        restart: unless-stopped
+        container_name: postgres
+        environment:
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+            - POSTGRES_DB=${DATABASE_NAME}
+            - POSTGRES_USER=${DATABASE_USER}
+        expose:
+            - 5432
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        # healthcheck:
+        #     test: ["CMD-SHELL", "pg_isready -U postgres"]
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 5
+    redis:
+        restart: unless-stopped
+        image: redis
+        ports:
+            - "6380:6379"
+        expose:
+            - "6380"
+        volumes:
+            - redis_data:/data
+
+    pgadmin:
+        container_name: pgadmin4_container
+        image: dpage/pgadmin4:latest
+        restart: unless-stopped
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@admin.com
+            PGADMIN_DEFAULT_PASSWORD: root
+        ports:
+            - "5050:80"
+        env_file:
+            - ./.env_pgadmin
+        volumes:
+            - pgadmin_data:/var/lib/pgadmin
+    web:
+        restart: unless-stopped
+        build:
+            context: .
+        container_name: frontend
+        expose:
+            - "3000:3000"
+        ports:
+            - "3000:3000"
+        environment:
+            - DATABASE_URL=${DATABASE_URL}
+            - REDIS_URL=${REDIS_URL}
+            - SECRET=${SECRET}
+            - DOMAIN=${DOMAIN}
+            - EMAIL=${EMAIL}
+            - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+        networks:
+            - default
+        depends_on:
+            - postgres
+            - redis
+            # postgres:
+            #     condition: service_healthy
+
+            # redis:
+            #     condition: "service_started"
+volumes:
+    postgres_data:
+    redis_data:
+    pgadmin_data:

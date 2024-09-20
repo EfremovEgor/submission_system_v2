@@ -3,6 +3,7 @@
     import { invalidateAll } from "$app/navigation";
     import AccountInfoRow from "$components/account/accountInfoRow.svelte";
     import AccountLayout from "$components/layout/account/accountLayout.svelte";
+    import { titles } from "$src/lib/aliases.js";
     import type { ActionResult } from "@sveltejs/kit";
     export let data;
     $: user = data.userProfile;
@@ -42,7 +43,9 @@
         >
             <AccountInfoRow name="Title" value={user.title} {isEditing}>
                 <select name="title" class="w-full max-w-56">
-                    <option value="mr">Mr</option>
+                    {#each Object.entries(titles) as [value, alias]}
+                        <option {value}>{alias}</option>
+                    {/each}
                 </select>
             </AccountInfoRow>
             <AccountInfoRow
@@ -147,7 +150,7 @@
         <div class="flex flex-col gap-2">
             <AccountInfoRow name="Email" value={user.email} />
 
-            <AccountInfoRow name="Title" value={user.title} />
+            <AccountInfoRow name="Title" value={titles[user.title]} />
             <AccountInfoRow
                 name="First name"
                 value={user.first_name}
