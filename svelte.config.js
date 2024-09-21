@@ -21,6 +21,7 @@ const config = {
             checkOrigin: false,
         },
         adapter: adapter(),
+        outDir: "build",
     },
     preprocess: vitePreprocess(),
 };
