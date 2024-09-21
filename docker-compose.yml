@@ -25,7 +25,6 @@ services:
             - "6380"
         volumes:
             - redis_data:/data
-
     pgadmin:
         container_name: pgadmin4_container
         image: dpage/pgadmin4:latest
@@ -39,33 +38,9 @@ services:
             - ./.env_pgadmin
         volumes:
             - pgadmin_data:/var/lib/pgadmin
-    web:
-        restart: unless-stopped
-        build:
-            context: .
-        container_name: frontend
-        expose:
-            - "3000:3000"
-        ports:
-            - "3000:3000"
-        environment:
-            - DATABASE_URL=${DATABASE_URL}
-            - REDIS_URL=${REDIS_URL}
-            - SECRET=${SECRET}
-            - DOMAIN=${DOMAIN}
-            - EMAIL=${EMAIL}
-            - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-        networks:
-            - default
-        depends_on:
-            - postgres
-            - redis
-            # postgres:
-            #     condition: service_healthy
 
-            # redis:
-            #     condition: "service_started"
 volumes:
     postgres_data:
     redis_data:
     pgadmin_data:
+    web_data:

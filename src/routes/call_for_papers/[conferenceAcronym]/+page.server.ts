@@ -36,6 +36,5 @@ export const load: Load = async ({ parent, params }) => {
     if (conference == null) {
         error(404);
     }
-    console.log(conference);
     return { conference };
 };

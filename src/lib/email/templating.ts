@@ -5,10 +5,7 @@ export const enum EmailTemplates {
     createSubmission = "create_submission.html",
 }
 export const readEmailTemplate = async (template: EmailTemplates) => {
-    return await readFile(
-        `src/lib/email/templates/${template.toString()}`,
-        "utf-8",
-    );
+    return await readFile(`email_templates/${template.toString()}`, "utf-8");
 };
 
 export const renderTemplateString = (templateString: string, data: object) => {

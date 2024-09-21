@@ -4,5 +4,4 @@ echo "Apply database migrations"
 
 npx prisma migrate deploy
 
-
-node build
+node -r dotenv/config build

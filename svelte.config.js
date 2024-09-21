@@ -17,7 +17,9 @@ const config = {
             $src: "./src",
             $email: "./src/lib/email",
         },
-
+        csrf: {
+            checkOrigin: false,
+        },
         adapter: adapter(),
     },
     preprocess: vitePreprocess(),

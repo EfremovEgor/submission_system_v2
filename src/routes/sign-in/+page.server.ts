@@ -69,7 +69,6 @@ export const actions: Actions = {
                 maxAge: SESSION_EXPIRATION_TIME,
             });
         } catch (error: any) {
-            console.log(error);
             const { ...rest } = formData;
             const { fieldErrors: errors } = error.flatten();
             return {

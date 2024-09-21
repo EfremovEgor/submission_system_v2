@@ -1,4 +1,4 @@
-FROM node:18 AS build
+FROM node:20 AS build
 
 WORKDIR /app
 
@@ -11,13 +11,14 @@ RUN npx prisma generate
 RUN npm run build
 RUN npm prune --production
 
-FROM node:18 AS run
+FROM node:20 AS run
 
 ENV NODE_ENV=production
 
 WORKDIR /app
 COPY .env ./
 COPY ./scripts ./scripts
+COPY ./email_templates ./email_templates
 COPY --from=build /app/build ./build
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/node_modules ./node_modules
