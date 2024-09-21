@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: "confchair",
-            script: "build/output/server/index.js",
+            script: "build/index.js",
             autorestart: true,
             watch: false,
             env_production: {
