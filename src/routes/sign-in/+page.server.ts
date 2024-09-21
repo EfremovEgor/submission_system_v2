@@ -66,7 +66,7 @@ export const actions: Actions = {
             });
             cookies.set("SESSION", sessionToken, {
                 path: "/",
-                secure: true,
+                secure: false,
                 httpOnly: true,
                 maxAge: SESSION_EXPIRATION_TIME,
             });
