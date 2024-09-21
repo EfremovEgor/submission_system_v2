@@ -54,7 +54,7 @@
                             href="/account/author">{$t(`menu.author`)}</a
                         >
                     </li>
-                    <li>
+                    <!-- <li>
                         <a
                             class="nav-link {$page.url.pathname ===
                             '/account/reviewer'
@@ -71,7 +71,7 @@
                                 : ''}"
                             href="/account/chair">{$t(`menu.chair`)}</a
                         >
-                    </li>
+                    </li> -->
                 {/if}
             </ul>
             <div
@@ -92,8 +92,8 @@
                         href="/account"
                         >{user.first_name}
                         {user.last_name ? user.last_name[0] : ""}.
-                        {user.middle_name ? user.middle_name[0] : ""}.</a
-                    >
+                        {user.middle_name ? user.middle_name[0] : ""}.
+                    </a>
                     <div>
                         <a
                             class="reverse-nav-link"
