@@ -48,6 +48,10 @@
                     Don't have an account?
                     <a class="bare-link" href="/sign-up">Sign up now</a>.
                 </p>
+                <p class="mt-3">
+                    Forgot password?
+                    <a class="bare-link" href="/recovery">Recover</a>.
+                </p>
             </form>
         </div>
     </div>

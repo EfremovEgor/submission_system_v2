@@ -1,8 +1,4 @@
-import {
-    getConferenceByAcronym,
-    getConferences,
-} from "$src/lib/database/conferences";
-import { getUserProfile } from "$src/lib/database/users";
+import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import { error, type Load } from "@sveltejs/kit";
 
 /** @type {import('@sveltejs/kit').Load} */

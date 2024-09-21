@@ -3,6 +3,7 @@ import { render } from "ejs";
 export const enum EmailTemplates {
     registration = "registration.html",
     createSubmission = "create_submission.html",
+    recoverPassword = "password_recovery.html",
 }
 export const readEmailTemplate = async (template: EmailTemplates) => {
     return await readFile(`email_templates/${template.toString()}`, "utf-8");
@@ -55,4 +56,15 @@ export const renderCreateSubmissionTemplate = async (
     data: CreateSubmissionTemplateData,
 ) => {
     return renderEmailTemplate(EmailTemplates.createSubmission, data);
+};
+export interface RecoverPasswordTemplateData {
+    title: string;
+    first_name: string;
+    last_name: string;
+    link: string;
+}
+export const renderRecoverPasswordTemplate = async (
+    data: RecoverPasswordTemplateData,
+) => {
+    return renderEmailTemplate(EmailTemplates.recoverPassword, data);
 };

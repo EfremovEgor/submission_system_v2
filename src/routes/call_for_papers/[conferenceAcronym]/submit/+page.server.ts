@@ -1,11 +1,13 @@
 import { EMAIL } from "$env/static/private";
 import { titles } from "$src/lib/aliases";
+import { getUserFromCookies } from "$src/lib/auth.sever";
 import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import prisma from "$src/lib/database/prisma";
 import { createSubmission } from "$src/lib/database/submissions";
 import { getUserProfile } from "$src/lib/database/users";
 import transporter from "$src/lib/email/setup.server";
 import { renderCreateSubmissionTemplate } from "$src/lib/email/templating";
+import { redis } from "$src/lib/redis/redis";
 import { Prisma } from "@prisma/client";
 import { error, redirect, type Actions, type Load } from "@sveltejs/kit";
 import { z } from "zod";
@@ -57,6 +59,8 @@ export const load: Load = async ({ parent, params }) => {
 const englishSubmissionFormSchema = z.object({});
 export const actions: Actions = {
     default: async ({ request, cookies, params }) => {
+        const user = await getUserFromCookies(cookies, redis);
+        if (user == null) error(403);
         const formData = Object.fromEntries(await request.formData());
         let authors: Prisma.AuthorCreateWithoutSubmissionInput[] = [];
         const rawAuthors = JSON.parse(formData.authors);
@@ -90,6 +94,11 @@ export const actions: Actions = {
             { id: true, name: true, email: true, short_name: true },
         );
         const submission: Prisma.SubmissionCreateInput = {
+            created_by: {
+                connect: {
+                    id: user.id,
+                },
+            },
             title: formData.title,
             abstract: formData.abstract,
             keywords: formData.keywords,

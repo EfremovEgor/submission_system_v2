@@ -90,8 +90,8 @@
                             ? 'active'
                             : ''}"
                         href="/account"
-                        >{user.first_name}
-                        {user.last_name ? user.last_name[0] : ""}.
+                        >{user.last_name}
+                        {user.first_name ? user.first_name[0] : ""}.
                         {user.middle_name ? user.middle_name[0] : ""}.
                     </a>
                     <div>

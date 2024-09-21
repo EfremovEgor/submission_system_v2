@@ -23,3 +23,24 @@ export const createSubmission = async (
 
     return submission;
 };
+
+export const getUserSubmissions = async (
+    userId: number,
+    fields: Prisma.SubmissionSelect,
+) => {
+    const submissions = await prisma.submission.findMany({
+        where: { created_by_id: userId },
+        select: fields,
+    });
+    return submissions;
+};
+export const getSubmissionById = async (
+    submissionId: number,
+    fields: Prisma.SubmissionSelect = {},
+) => {
+    const submissions = await prisma.submission.findFirst({
+        where: { id: submissionId },
+        ...(Object.keys(fields).length && { select: fields }),
+    });
+    return submissions;
+};

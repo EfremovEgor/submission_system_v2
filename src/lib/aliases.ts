@@ -9,3 +9,9 @@ export const presentation_formats = {
     online: "Online",
     offline: "On-Sight",
 };
+export const submission_statuses = {
+    submitted: "Submitted",
+    reviewing: "In review",
+    rejected: "Rejected",
+    accepted: "Accepted",
+};
