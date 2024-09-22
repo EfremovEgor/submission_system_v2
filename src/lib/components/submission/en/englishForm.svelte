@@ -69,6 +69,15 @@
     <form
         method="POST"
         use:enhance={({ formElement, formData, action, cancel }) => {
+            let anyIsCorresponding = false;
+            authors.forEach((author) => {
+                if (author.is_corresponding) anyIsCorresponding = true;
+            });
+            if (!anyIsCorresponding) {
+                alert("You should specify at least one corresponding author");
+                cancel();
+                return;
+            }
             formData.append("authors", JSON.stringify(authors));
             busy = true;
             return async ({ result }) => {

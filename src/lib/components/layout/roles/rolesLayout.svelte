@@ -1,11 +1,11 @@
 <script lang="ts">
-    // import { page } from "$app/stores";
-    // import SideBar from "$components/account/sideBar/sideBar.svelte";
-    // export let userProfile;
-    // export let header: string = "Account";
+    import { page } from "$app/stores";
+    import SideBar from "$components/account/sideBar/sideBar.svelte";
+    export let userProfile;
+    export let header: string = "Account";
 </script>
 
-<!-- <div class="container">
+<div class="container">
     <h1 class="page-heading">{header}</h1>
     <div class="flex flex-row gap-6">
         <SideBar>
@@ -27,9 +27,9 @@
                     >
                 </li>
             {/if}
-            <li><a class="nav-link" href="account/reviewer">Reviewer</a></li>
+            <!-- <li><a class="nav-link" href="account/reviewer">Reviewer</a></li>
             <li><a class="nav-link" href="account/co_chair">Co-Chair</a></li>
-            <li><a class="nav-link" href="account/loc">LOC</a></li>
+            <li><a class="nav-link" href="account/loc">LOC</a></li> -->
             <li>
                 <a
                     class="nav-link {$page.url.pathname === '/account/author'
@@ -39,13 +39,8 @@
                 >
             </li>
         </SideBar>
-        <section class="p-2 w-full"></section>
-    </div>
-</div>  -->
-
-<div class="container">
-    <h1 class="page-heading">Account details</h1>
-    <div class="mt-5">
-        <slot />
+        <section class="p-2 w-full">
+            <slot />
+        </section>
     </div>
 </div>

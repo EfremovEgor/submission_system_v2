@@ -15,6 +15,28 @@
     <h1 class="heading">
         {conference.name}
     </h1>
+    <div class="flex flex-row gap-5 mt-5">
+        {#if conference.allow_ru}
+            <button
+                on:click={() => (modalIsOpen = !modalIsOpen)}
+                class="reverse-nav-link w-full">Submit an abstract</button
+            >
+        {:else}
+            <a
+                href="{conference.acronym}/submit?lang=en"
+                rel="noopener noreferrer"
+                class="reverse-nav-link w-fit"
+                ><button class="flex">Submit an abstract</button></a
+            >
+        {/if}
+        <a
+            href={conference.site_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="reverse-nav-link w-fit"
+            ><button class="flex">Learn more</button></a
+        >
+    </div>
     <div class="flex flex-row justify-between gap-4 mt-8">
         <aside class="basis-1/3">
             <p class=" text-slate-900 p-2 rounded-xl font-medium">
@@ -23,25 +45,6 @@
             <p class=" text-slate-900 p-2 rounded-xl font-medium">
                 Start Date: {conference.start_date?.toLocaleDateString()}
             </p>
-            {#if conference.allow_ru}
-                <button
-                    on:click={() => (modalIsOpen = !modalIsOpen)}
-                    class="nav-link w-full">Submit an abstract</button
-                >
-            {:else}
-                <a
-                    href="{conference.acronym}/submit?lang=en"
-                    rel="noopener noreferrer"
-                    class="nav-link"
-                    ><button class="flex">Submit an abstract</button></a
-                >
-            {/if}
-            <a
-                href={conference.site_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="nav-link"><button class="flex">Learn more</button></a
-            >
         </aside>
         <section class="p-2">
             <article class="text-justify">

@@ -33,7 +33,7 @@
 <svelte:head>
     <title>Account</title>
 </svelte:head>
-<AccountLayout userProfile={user}>
+<AccountLayout>
     {#if isEditing}
         <form
             use:enhance={formSubmitHandler}
@@ -42,7 +42,7 @@
             class="flex flex-col gap-2"
         >
             <AccountInfoRow name="Title" value={user.title} {isEditing}>
-                <select name="title" class="w-full max-w-56">
+                <select name="title" value={user.title} class="w-full max-w-56">
                     {#each Object.entries(titles) as [value, alias]}
                         <option {value}>{alias}</option>
                     {/each}
@@ -149,7 +149,6 @@
     {:else}
         <div class="flex flex-col gap-2">
             <AccountInfoRow name="Email" value={user.email} />
-
             <AccountInfoRow name="Title" value={titles[user.title]} />
             <AccountInfoRow
                 name="First name"

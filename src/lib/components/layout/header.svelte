@@ -2,6 +2,7 @@
     import { t, locale, locales } from "$translations/index";
     import logo from "$images/logo.png";
     import { page } from "$app/stores";
+    import { UserRound } from "lucide-svelte";
     interface User {
         id: number;
         first_name: string;
@@ -47,11 +48,10 @@
                 {#if user}
                     <li>
                         <a
-                            class="nav-link {$page.url.pathname ===
-                            '/account/author'
+                            class="nav-link {$page.url.pathname === '/author'
                                 ? 'active'
                                 : ''}"
-                            href="/account/author">{$t(`menu.author`)}</a
+                            href="/author">{$t(`menu.author`)}</a
                         >
                     </li>
                     <!-- <li>
@@ -90,20 +90,21 @@
                             ? 'active'
                             : ''}"
                         href="/account"
-                        >{user.last_name}
+                    >
+                        <UserRound />
+                        {user.last_name}
                         {user.first_name ? user.first_name[0] : ""}.
-                        {user.middle_name ? user.middle_name[0] : ""}.
                     </a>
                     <div>
                         <a
                             class="reverse-nav-link"
                             data-sveltekit-reload
-                            href="/logout">Logout</a
+                            href="/logout">Sign-out</a
                         >
                     </div>
                 {/if}
 
-                <div>
+                <!-- <div>
                     <select
                         class="uppercase flex items-center text-slate-900 hover:text-blue-700 font-medium hover:bg-slate-50 p-2 rounded-xl transition-all ease-in-out"
                         bind:value={$locale}
@@ -115,7 +116,7 @@
                             >
                         {/each}
                     </select>
-                </div>
+                </div> -->
             </div>
         </div>
     </nav>

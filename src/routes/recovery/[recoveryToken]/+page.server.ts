@@ -1,4 +1,4 @@
-import { error, redirect, type Actions, type Load } from "@sveltejs/kit";
+import { error, redirect, type Actions } from "@sveltejs/kit";
 import { z } from "zod";
 import { redis } from "$lib/redis/redis";
 import { updateUserById } from "$src/lib/database/users.js";
@@ -34,7 +34,6 @@ export const actions: Actions = {
             userId = parseInt(userId);
             await updateUserById(userId, { password: results.password });
         } catch (error: any) {
-            console.log(error);
             const { ...rest } = formData;
             const { fieldErrors: errors } = error.flatten();
             return {

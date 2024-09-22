@@ -7,8 +7,8 @@
 <section class="flex items-center flex-row justify-between gap-4">
     <span class="basis-1/3">{name}</span>
     {#if isEditing}
-    <div class="basis-2/3"> <slot/> </div>
+        <div class="basis-2/3"><slot /></div>
     {:else}
-    <span class="basis-2/3">{value ?? ""}</span>
+        <span class="basis-2/3">{value ?? ""}</span>
     {/if}
 </section>

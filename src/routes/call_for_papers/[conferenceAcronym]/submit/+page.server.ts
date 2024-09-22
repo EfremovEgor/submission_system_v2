@@ -151,7 +151,7 @@ export const actions: Actions = {
             });
         });
 
-        redirect(302, "/account/author");
+        redirect(302, "/author");
         //     try {
         //         const results = await signInSchema.parseAsync(formData);
         //         const user: any = await getUserByEmail(results.email);

@@ -11,7 +11,7 @@ export const presentation_formats = {
 };
 export const submission_statuses = {
     submitted: "Submitted",
-    reviewing: "In review",
+    under_review: "Under review",
     rejected: "Rejected",
     accepted: "Accepted",
 };
