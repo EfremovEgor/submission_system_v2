@@ -7,7 +7,7 @@ import { error, redirect } from "@sveltejs/kit";
 export const load = async ({ parent }: { parent: any }) => {
     const data = await parent();
 
-    if (data.user == null) redirect(300, "/sign-in");
+    if (data.user == null) redirect(302, "/sign-in");
     const userProfile = await getUserProfile(data.user.id);
     const conferencesSubmittedIn = await prisma.conference.findMany({
         select: {

@@ -10,7 +10,7 @@ import { error, redirect, type Load } from "@sveltejs/kit";
 export const load: Load = async ({ parent, params }) => {
     const data = await parent();
 
-    if (data.user == null) redirect(300, "/sign-in");
+    if (data.user == null) redirect(302, "/sign-in");
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
         id: true,
         short_name: true,
