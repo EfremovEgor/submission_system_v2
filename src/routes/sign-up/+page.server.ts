@@ -99,7 +99,6 @@ export const actions: Actions = {
 
             return { emailIsSent: true };
         } catch (error: any) {
-            console.log(error);
             const { ...rest } = formData;
             const { fieldErrors: errors } = error.flatten();
             return {

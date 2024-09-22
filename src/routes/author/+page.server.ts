@@ -19,6 +19,5 @@ export const load = async ({ parent }: { parent: any }) => {
             submissions: { some: { created_by_id: data.user.id } },
         },
     });
-    console.log(conferencesSubmittedIn);
     return { userProfile, conferencesSubmittedIn };
 };
