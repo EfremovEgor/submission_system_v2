@@ -239,20 +239,38 @@
                 <table class="striped">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Authors</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Topic</th>
-                            <th scope="col">Presentation Format</th>
-                            <th scope="col">Submitted At</th>
-                            <th scope="col">View</th>
-                            <th scope="col">Review Status</th>
+                            <th scope="col" class="text-center"
+                                ><button>#</button></th
+                            >
+                            <th scope="col" class="text-center"
+                                ><button>Authors</button></th
+                            >
+                            <th scope="col" class="text-center"
+                                ><button>Title</button></th
+                            >
+                            <th scope="col" class="text-center"
+                                ><button>Topic</button></th
+                            >
+                            <th scope="col" class="text-center">
+                                <button>Presentation Format</button>
+                            </th>
+                            <th scope="col" class="text-center"
+                                ><button>Submitted At</button></th
+                            >
+                            <th scope="col" class="text-center"
+                                ><button>View</button></th
+                            >
+                            <th scope="col" class="text-center"
+                                ><button>Review Status</button></th
+                            >
                         </tr>
                     </thead>
                     <tbody>
                         {#each data.submissions as submission}
                             <tr>
-                                <td> {submission.local_id} </td>
+                                <td class="text-center">
+                                    {submission.local_id}
+                                </td>
                                 <td>
                                     {#each submission.authors as author}
                                         <span>
@@ -267,12 +285,12 @@
                                 <td>
                                     {submission.topic.name}
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     {presentation_formats[
                                         submission.presentation_format
                                     ]}
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     {submission.created_at.toLocaleString()}
                                 </td>
                                 <td>
@@ -280,12 +298,12 @@
                                         href="/call_for_papers/{data
                                             .conference_data
                                             .acronym}/submissions/{submission.id}/author"
-                                        class="icon-button"
+                                        class="icon-button text-center"
                                     >
                                         <Search class="mx-auto" />
                                     </a>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     {submission_statuses[submission.status]}
                                 </td>
                             </tr>

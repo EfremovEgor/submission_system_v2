@@ -79,13 +79,27 @@
         <table class="striped">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center"> First name </th>
-                    <th scope="col" class="text-center"> Last name </th>
-                    <th scope="col" class="text-center"> Email </th>
-                    <th scope="col" class="text-center"> Country </th>
-                    <th scope="col" class="text-center"> Affiliation </th>
-                    <th scope="col" class="text-center"> Corresponding </th>
-                    <th scope="col" class="text-center"> Presenter </th>
+                    <th scope="col" class="text-center">
+                        <button>First name</button>
+                    </th>
+                    <th scope="col" class="text-center">
+                        <button>Last name</button>
+                    </th>
+                    <th scope="col" class="text-center">
+                        <button>Email</button>
+                    </th>
+                    <th scope="col" class="text-center">
+                        <button>Country</button>
+                    </th>
+                    <th scope="col" class="text-center">
+                        <button>Affiliation</button>
+                    </th>
+                    <th scope="col" class="text-center">
+                        <button>Corresponding</button>
+                    </th>
+                    <th scope="col" class="text-center">
+                        <button>Presenter</button>
+                    </th>
                 </tr>
             </thead>
             <tbody>

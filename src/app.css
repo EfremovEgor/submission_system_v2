@@ -41,6 +41,7 @@ input[type=checkbox] {
 }
 
 .icon-button {
+    display: block;
     cursor: pointer;
 }
 
@@ -74,4 +75,11 @@ input[type=checkbox] {
 .button-red.outline:hover {
     background-color: var(--red-hover);
     color: white
+}
+
+th>button {
+    background-color: transparent;
+    color: var(--pico-primary);
+    border: none;
+    padding: 0;
 }
