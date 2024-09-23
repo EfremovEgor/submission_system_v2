@@ -17,34 +17,35 @@
     };
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <section class="min-w-[400px] px-5 min-h-20 flex flex-col shadow-lg pb-8">
-    <div class="min-h-7 mt-4">
+    <div class="min-h-9 mt-4">
         {#if deleteCallback}
-            <button
-                class="text-3xl float-end flex items-center justify-center leading-6"
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span
+                class="float-end text-3xl cursor-pointer hover:text-[#0172ad]"
                 on:click={() => {
                     deleteCallback(author.id);
                 }}
-                type="button"
             >
                 &times;
-            </button>
+            </span>
         {/if}
     </div>
-    <h1 class="text-center">Author {author.id + 1}</h1>
+    <h4 class="text-center mb-0">Author {author.id + 1}</h4>
 
-    <button
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <span
+        class="mb-3 text-sm cursor-pointer text-center text-[#0172ad] hover:underline"
         on:click={putUserDetails}
-        type="button"
-        class="text-blue-700 hover:underline text-sm"
     >
         Click here to add yourself
-    </button>
+    </span>
     <AuthorSelect
         placeholder="Choose"
         bind:value={author.title}
-        label="First name"
-        name="#{author.id}#_first_name"
+        label="Title"
+        name="#{author.id}#_title"
         options={titles}
     />
     <AuthorInput

@@ -12,10 +12,10 @@
 </svelte:head>
 
 <div class="container">
-    <h1 class="heading">
+    <h3>
         {conference.name}
-    </h1>
-    <div class="flex flex-row gap-5 mt-5">
+    </h3>
+    <div class="flex flex-row gap-5">
         {#if conference.allow_ru}
             <button
                 on:click={() => (modalIsOpen = !modalIsOpen)}
@@ -37,27 +37,29 @@
             ><button class="flex">Learn more</button></a
         >
     </div>
-    <div class="flex flex-row justify-between gap-4 mt-8">
-        <aside class="basis-1/3">
-            <p class=" text-slate-900 p-2 rounded-xl font-medium">
+    <div class="flex flex-row justify-between mt-8">
+        <article class="basis-1/3 mt-2 h-fit">
+            <p>
                 Submission Deadline: {conference.submission_deadline?.toLocaleDateString()}
             </p>
-            <p class=" text-slate-900 p-2 rounded-xl font-medium">
+            <p>
                 Start Date: {conference.start_date?.toLocaleDateString()}
             </p>
-        </aside>
+        </article>
         <section class="p-2">
-            <article class="text-justify">
-                {@html conference.description}
+            <article>
+                <div class="text-justify">
+                    {@html conference.description}
+                </div>
+                {#each conference.symposiums as symposium}
+                    <b class="mt-2 font-bold">{symposium.name}</b>
+                    <ul class="pl-10 list-disc">
+                        {#each symposium.topics as topic}
+                            <li>{topic.name}</li>
+                        {/each}
+                    </ul>
+                {/each}
             </article>
-            {#each conference.symposiums as symposium}
-                <h2 class="mt-2 font-bold">{symposium.name}</h2>
-                <ul class="pl-10 list-disc">
-                    {#each symposium.topics as topic}
-                        <li>{topic.name}</li>
-                    {/each}
-                </ul>
-            {/each}
         </section>
     </div>
 </div>

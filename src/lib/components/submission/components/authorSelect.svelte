@@ -7,13 +7,11 @@
     export let options: object;
 </script>
 
-<label
-    class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
->
+<label class="flex flex-row justify-between font-normal items-center gap-5">
     <span>
         {label}{#if required}<span class="text-red-500">*</span>{/if}
     </span>
-    <select class="w-52" {required} {placeholder} {value} {name}>
+    <select {required} {placeholder} {value} {name} style="width: 200px;">
         <option selected disabled value hidden>{placeholder}</option>
         {#each Object.entries(options) as [_value, alias]}
             <option value={_value}>{alias}</option>

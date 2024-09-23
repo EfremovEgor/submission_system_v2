@@ -14,7 +14,7 @@
 
 <div class="relative w-full">
     <input
-        class="pr-12 w-full {maximumWords != null
+        class="pr-12 w-full m-0 {maximumWords != null
             ? wordCount >= maximumWords
                 ? 'invalid'
                 : ''

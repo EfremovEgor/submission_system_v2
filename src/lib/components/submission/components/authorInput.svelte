@@ -6,14 +6,12 @@
     export let value: string;
 </script>
 
-<label
-    class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
->
+<label class="flex flex-row justify-between font-normal items-center gap-5">
     <span>
         {label}{#if required}<span class="text-red-500">*</span>{/if}
     </span>
     <input
-        class="w-52"
+        style="width: 200px;"
         bind:value
         type="text"
         {placeholder}

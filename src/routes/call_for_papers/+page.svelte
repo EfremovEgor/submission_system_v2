@@ -13,38 +13,33 @@
     <title>Call For Papers</title>
 </svelte:head>
 <div class="container">
-    <h1 class="page-heading">Call For Papers</h1>
-    <div class="overflow-x-auto min-h-36 mt-5 rounded-lg">
-        <table class="w-full text-left text-sm">
-            <thead class="bg-slate-50 uppercase font-bold">
+    <h3>Call For Papers</h3>
+    <div class="overflow-auto">
+        <table class="striped">
+            <thead>
                 <tr>
-                    <th scope="col" class="px-4 py-3">Short Name</th>
-                    <th scope="col" class="px-4 py-3">Name</th>
-                    <th scope="col" class="px-4 py-3 text-center"
-                        >Submission deadline</th
-                    >
-                    <th scope="col" class="px-4 py-3 text-center">Start date</th
-                    >
+                    <th scope="col">Short Name</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Submission deadline</th>
+                    <th scope="col">Start date</th>
                 </tr>
             </thead>
 
             <tbody>
                 {#each conferences as conference}
-                    <tr
-                        on:click={() =>
-                            goto(`/call_for_papers/${conference.acronym}`)}
-                        class="border-b last:border-none cursor-pointer hover:bg-slate-50"
-                    >
-                        <th scope="row" class="px-4 py-3">
-                            {conference.short_name}
+                    <tr>
+                        <th scope="row">
+                            <a href="/call_for_papers/{conference.acronym}"
+                                >{conference.short_name}</a
+                            >
                         </th>
-                        <td class="px-4 py-3">
+                        <td>
                             {conference.name}
                         </td>
-                        <td class="px-4 py-3 text-center">
+                        <td>
                             {conference.start_date?.toLocaleDateString()}
                         </td>
-                        <td class="px-4 py-3 text-center">
+                        <td>
                             {conference.submission_deadline?.toLocaleDateString()}
                         </td>
                     </tr>

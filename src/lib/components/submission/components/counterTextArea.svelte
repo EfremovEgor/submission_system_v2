@@ -33,7 +33,7 @@
 
 <div class="relative w-full">
     <textarea
-        class="pr-8 w-full {maximumWords != null
+        class="m-0 pr-8 w-full {maximumWords != null
             ? wordCount >= maximumWords
                 ? 'invalid'
                 : ''

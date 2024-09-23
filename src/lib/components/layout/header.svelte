@@ -18,106 +18,112 @@
 </script>
 
 <header>
-    <nav class="border-gray-200 px-6 py-4 shadow-sm">
-        <div
-            class="flex justify-center flex-wrap gap-4 sm:justify-between items-center mx-auto max-w-screen-xl"
-        >
-            <ul
-                class="flex justify-between items-center flex-row flex-wrap gap-4"
-            >
+    <div class="container">
+        <nav>
+            <ul>
                 <li>
-                    <div>
+                    <div class="logo-container">
                         <a href="/">
-                            <img
-                                class="mr-3 h-10 sm:h-15"
-                                src={logo}
-                                alt="ConfChair Logo"
-                            />
+                            <img class="logo" src={logo} alt="ConfChair Logo" />
                         </a>
                     </div>
                 </li>
-                <li>
-                    <a
-                        class="nav-link {$page.url.pathname ===
-                        '/call_for_papers'
-                            ? 'active'
-                            : ''}"
-                        href="/call_for_papers">{$t(`menu.call_for_papers`)}</a
-                    >
+                <li
+                    aria-current={$page.url.pathname === "/call_for_papers"
+                        ? "page"
+                        : undefined}
+                >
+                    {#if $page.url.pathname.includes("call_for_papers")}
+                        <a
+                            style="text-decoration: underline;"
+                            href="/call_for_papers">Call For Papers</a
+                        >
+                    {:else}
+                        <a href="/call_for_papers">Call For Papers</a>
+                    {/if}
+
+                    <!-- else content here -->
                 </li>
                 {#if user}
-                    <li>
-                        <a
-                            class="nav-link {$page.url.pathname === '/author'
-                                ? 'active'
-                                : ''}"
-                            href="/author">{$t(`menu.author`)}</a
-                        >
+                    <li
+                        aria-current={$page.url.pathname === "/author"
+                            ? "page"
+                            : undefined}
+                    >
+                        {#if $page.url.pathname.includes("author")}
+                            <a
+                                style="text-decoration: underline;"
+                                href="/author">Author</a
+                            >
+                        {:else}
+                            <a href="/author">Author</a>
+                        {/if}
                     </li>
-                    <!-- <li>
-                        <a
-                            class="nav-link {$page.url.pathname ===
-                            '/account/reviewer'
-                                ? 'active'
-                                : ''}"
-                            href="/account/reviewer">{$t(`menu.reviewer`)}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            class="nav-link {$page.url.pathname ===
-                            '/account/chair'
-                                ? 'active'
-                                : ''}"
-                            href="/account/chair">{$t(`menu.chair`)}</a
-                        >
-                    </li> -->
                 {/if}
             </ul>
-            <div
-                class="flex w-full justify-between sm:w-fit items-center flex-row gap-2"
-            >
-                {#if !user}
-                    <a class="nav-link" href="/sign-in">{$t(`menu.sign_in`)}</a>
-                    <div>
-                        <a class="reverse-nav-link" href="/sign-up"
-                            >{$t(`menu.sign_up`)}</a
-                        >
-                    </div>
-                {:else}
-                    <a
-                        class="nav-link {$page.url.pathname === '/account'
-                            ? 'active'
-                            : ''}"
-                        href="/account"
+            {#if user}
+                <ul>
+                    <li
+                        aria-current={$page.url.pathname === "/logout"
+                            ? "page"
+                            : undefined}
                     >
-                        <UserRound />
-                        {user.last_name}
-                        {user.first_name ? user.first_name[0] : ""}.
-                    </a>
-                    <div>
-                        <a
-                            class="reverse-nav-link"
-                            data-sveltekit-reload
-                            href="/logout">Sign-out</a
-                        >
-                    </div>
-                {/if}
-
-                <!-- <div>
-                    <select
-                        class="uppercase flex items-center text-slate-900 hover:text-blue-700 font-medium hover:bg-slate-50 p-2 rounded-xl transition-all ease-in-out"
-                        bind:value={$locale}
-                        on:change={handleChange}
+                        <div class="logout-container">
+                            <a href="/logout">Logout</a>
+                            <span>{user.email}</span>
+                        </div>
+                    </li>
+                </ul>
+            {:else}
+                <ul>
+                    <li
+                        aria-current={$page.url.pathname === "/login"
+                            ? "page"
+                            : undefined}
                     >
-                        {#each $locales as value}
-                            <option {value} selected={$locale === value}
-                                >{$t(`lang.${value}`)}</option
-                            >
-                        {/each}
-                    </select>
-                </div> -->
-            </div>
-        </div>
-    </nav>
+                        <a href="/login">Sign in</a>
+                    </li>
+                    <li
+                        aria-current={$page.url.pathname === "/register"
+                            ? "page"
+                            : undefined}
+                    >
+                        <a href="/register">Create account</a>
+                    </li>
+                </ul>
+            {/if}
+        </nav>
+    </div>
 </header>
+
+<style>
+    .logo-container {
+        display: flex;
+        flex-direction: column;
+        margin-right: 20px;
+    }
+    .logo-container > a > * {
+        margin: 0;
+        white-space: nowrap;
+    }
+    .logo-container > a {
+        text-decoration: none;
+    }
+    header {
+        border-radius: var(--pico-border-radius);
+        background: var(--pico-card-background-color);
+        box-shadow: var(--pico-card-box-shadow);
+        margin-bottom: 40px;
+    }
+    .logo {
+        max-height: 70px;
+    }
+    .logout-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .logout-container > span {
+        font-size: 10px;
+    }
+</style>

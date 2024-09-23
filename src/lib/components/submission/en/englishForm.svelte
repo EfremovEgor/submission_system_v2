@@ -64,7 +64,9 @@
 </script>
 
 {#if busy}
-    <h1>Loading...</h1>
+    <article aria-busy="true">
+        Please wait while we are processing your submission...
+    </article>
 {:else}
     <form
         method="POST"
@@ -91,9 +93,9 @@
             };
         }}
     >
-        <h1 class="text-3xl">New Submission for {conference.short_name}</h1>
-        <h2 class="text-2xl mt-5">Authors Information</h2>
-        <article class="text-lg">
+        <h3>New Submission for {conference.short_name}</h3>
+        <h4 class="font-normal">Authors Information</h4>
+        <div class="ml-5">
             For each author, please fill out the form below. Some items on the
             form are explained here:
             <ul class="pl-10 mt-2 list-disc">
@@ -119,7 +121,7 @@
                     one Corresponding author.
                 </li>
             </ul>
-        </article>
+        </div>
         <div class="mt-5 flex items-center flex-wrap gap-4">
             {#each authors as author, index}
                 <AuthorForm
@@ -132,22 +134,22 @@
         </div>
         <button
             type="button"
-            class="button mt-5"
+            class="primary-button-hover mt-3 outline"
             on:click={() => {
                 addNewAuthor();
-            }}>Add new author</button
+            }}>Add more authors</button
         >
-        <h2 class="text-2xl mt-5">Title and Abstract</h2>
-        <article class="text-lg">
+        <h4 class="font-normal">Title and Abstract</h4>
+        <div class="ml-5">
             <p>
                 Abstracts must be written in plain text and must not contain
                 tables, figures, photographs or HTML elements.
             </p>
-        </article>
-        <section class="shadow-lg p-5 mt-5">
+        </div>
+        <section class="shadow-lg p-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label
-                class="flex flex-row justify-between font-normal items-center gap-5"
+                class="mt-0 flex flex-row justify-between font-normal items-center gap-5"
             >
                 <span>Title<span class="text-red-500">*</span></span>
                 <div class="basis-5/6">
@@ -162,10 +164,10 @@
             </label>
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label
-                class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
+                class="flex flex-row justify-between font-normal items-center gap-5 mt-3"
             >
                 <span>Abstract<span class="text-red-500">*</span></span>
-                <div class="basis-5/6">
+                <div class="basis-5/6 min-h-56">
                     <CounterTextArea
                         bind:data={submission.abstarct}
                         minimumWords={3}
@@ -176,10 +178,18 @@
                 </div>
             </label>
         </section>
-        <section class="shadow-lg p-5 mt-5">
+        <h4 class="font-normal">Keywords</h4>
+        <div class="ml-5">
+            <p>
+                Type a list of keywords (also known as key phrases or key
+                terms), one per line to characterize your submission. You should
+                specify at least three keywords.
+            </p>
+        </div>
+        <section class="shadow-lg p-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label
-                class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
+                class="mt-0 flex flex-row justify-between font-normal items-center gap-5 mt-5"
             >
                 <span>Keywords<span class="text-red-500">*</span></span>
                 <div class="basis-5/6">
@@ -193,20 +203,18 @@
                 </div>
             </label>
         </section>
-        <h2 class="text-2xl mt-5">Topics<span class="text-red-500">*</span></h2>
-        <article class="text-lg">
+        <h4 class="font-normal">Topics<span class="text-red-500">*</span></h4>
+        <div class="ml-5">
             <p>Choose preferable topic for your paper.</p>
-        </article>
+        </div>
         <section class="shadow-lg p-5 mt-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <div class="flex flex-col gap-2">
                 {#each conference.symposiums as symposium}
-                    <div>
-                        <h2 class="font-bold">{symposium.name}</h2>
+                    <fieldset>
+                        <legend class="font-bold">{symposium.name}</legend>
                         {#each symposium.topics as topic}
-                            <label
-                                class="font-normal flex flex-row align-middle gap-3 mt-1"
-                            >
+                            <label class="">
                                 <input
                                     bind:group={submission.topic}
                                     type="radio"
@@ -217,15 +225,16 @@
                                 {topic.name}
                             </label>
                         {/each}
-                    </div>
+                    </fieldset>
                 {/each}
             </div>
         </section>
-        <label class="font-normal flex flex-row align-middle gap-3 mt-5"
-            ><h2 class="text-2xl">
+        <label class="font-normal flex flex-row items-center align-middle gap-3"
+            ><h4 class="font-normal">
                 Presentation format<span class="text-red-500">*</span>
-            </h2>
+            </h4>
             <select
+                class="w-[200px]"
                 required
                 bind:value={submission.presentation_format}
                 name="presentation_format"
@@ -238,36 +247,39 @@
                 {/each}
             </select>
         </label>
-        <h2 class="text-2xl mt-5">
+        <h4 class="font-normal">
             Important Notice<span class="text-red-500">*</span>
-        </h2>
-        <article class="text-lg">
+        </h4>
+        <div class="ml-5">
             <p>
                 It is the responsibility of authors to obtain any required
                 government or company reviews and/or clearances of their paper
                 prior to submission, as well as any necessary reprinting
                 permissions.
             </p>
-        </article>
-        <label class="font-normal flex flex-row align-middle gap-3 mt-5">
-            <input type="checkbox" name="can_be_published" required />
-            Paper can be published
-        </label>
-        <h2 class="text-2xl mt-5">Finished?</h2>
-        <article class="text-lg">
-            <p>If you filled out the form, press the 'Submit' button below.</p>
-            <p>
+            <label>
+                <input type="checkbox" name="can_be_published" required />
+                Paper can be published
+            </label>
+        </div>
+
+        <h4 class="font-normal">Finished?</h4>
+        <div class="ml-5">
+            <span
+                >If you filled out the form, press the 'Submit' button below.</span
+            >
+            <span>
                 <strong>
                     Do not press the button twice: uploading may take time!
                 </strong>
-            </p>
+            </span>
             <p>
                 <strong
                     >Please note that abstracts could be edited during 24 hours
                     after submission</strong
                 >
             </p>
-        </article>
+        </div>
         <button class="button mt-5" type="submit">Submit</button>
     </form>
 {/if}

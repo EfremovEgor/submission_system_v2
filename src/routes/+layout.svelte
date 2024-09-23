@@ -2,6 +2,7 @@
     import Footer from "$components/layout/footer.svelte";
     import Header from "$components/layout/header.svelte";
     import "../app.css";
+    import "@picocss/pico";
     export let data;
 </script>
 
