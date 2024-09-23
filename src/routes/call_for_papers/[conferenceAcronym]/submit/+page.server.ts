@@ -15,7 +15,7 @@ import { z } from "zod";
 /** @type {import('@sveltejs/kit').Load} */
 export const load: Load = async ({ parent, params }) => {
     const data = await parent();
-    if (data.user == null) error(403);
+    if (data.user == null) redirect(302, "/sign-in");
     const userProfile = await getUserProfile(data.user.id);
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
         short_name: true,

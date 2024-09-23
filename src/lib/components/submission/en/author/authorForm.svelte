@@ -5,6 +5,7 @@
     import AuthorInput from "./../../components/authorInput.svelte";
     import type { IAuthor, IUserDetails } from "./interfaces";
     import { titles } from "$src/lib/aliases";
+    import AuthorCountrySelect from "$components/submission/components/authorCountrySelect.svelte";
 
     export let userDetails: IUserDetails;
     export let author: IAuthor;
@@ -19,11 +20,11 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <section class="min-w-[400px] px-5 min-h-20 flex flex-col shadow-lg pb-8">
-    <div class="min-h-9 mt-4">
+    <div class="min-h-9 mt-4 flex flex-row justify-end">
         {#if deleteCallback}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <span
-                class="float-end text-3xl cursor-pointer hover:text-[#0172ad]"
+                class="text-3xl cursor-pointer hover:text-[#0172ad]"
                 on:click={() => {
                     deleteCallback(author.id);
                 }}
@@ -48,6 +49,7 @@
         name="#{author.id}#_title"
         options={titles}
     />
+
     <AuthorInput
         bind:value={author.first_name}
         label="First name"
@@ -63,7 +65,8 @@
         label="Email"
         name="#{author.id}#_email"
     />
-    <AuthorInput
+    <AuthorCountrySelect
+        placeholder="Choose"
         bind:value={author.country}
         label="Country"
         name="#{author.id}#_country"

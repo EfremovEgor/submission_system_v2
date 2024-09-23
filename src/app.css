@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --red: #D93526;
+    --red-hover: #9a251a;
+}
+
 input:not([type=submit],
     [type=button],
     [type=reset],
@@ -15,11 +20,13 @@ select {
     height: 50px !important;
     font-size: 0.875rem !important;
     line-height: 1.25rem !important;
+    margin: 0
 }
 
 textarea {
     font-size: 0.875rem !important;
     line-height: 1.25rem !important;
+    margin: 0
 }
 
 input[type=radio],
@@ -31,4 +38,36 @@ input[type=checkbox] {
 .primary-button-hover:hover {
     background-color: var(--pico-primary);
     color: #fff;
+}
+
+.icon-button {
+    cursor: pointer;
+}
+
+.icon-button>svg {
+    stroke: var(--pico-primary);
+}
+
+.icon-button:hover>svg {
+    stroke: var(--pico-primary-hover);
+}
+
+.button-red {
+    background-color: var(--red);
+    border-color: var(--red);
+}
+
+.button-red:hover {
+    background-color: var(--red-hover);
+    border-color: var(--red-hover);
+}
+
+.button-red.outline {
+    background-color: transparent;
+    color: var(--red)
+}
+
+.button-red.outline:hover {
+    background-color: var(--red-hover);
+    color: white
 }

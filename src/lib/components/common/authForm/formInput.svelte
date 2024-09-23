@@ -11,6 +11,8 @@
 
 <div class="input-container mt-2 w-full">
     <label for={id}>{label}{required ? "*" : ""}</label><input
+        aria-invalid={error ? true : undefined}
+        style="margin: 0;"
         class="w-full {error ? 'invalid' : 'valid'}"
         {type}
         {id}
@@ -18,9 +20,11 @@
         {required}
         {autocomplete}
     />
-    {#if error}
-        {#each error as err}
-            <span class="text-red-500">{err}</span>
-        {/each}
-    {/if}
+    <div>
+        {#if error}
+            {#each error as err}
+                <small style="color: var(--pico-del-color)">{err}</small> <br />
+            {/each}
+        {/if}
+    </div>
 </div>

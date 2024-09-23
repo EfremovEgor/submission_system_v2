@@ -18,7 +18,7 @@
 <div class="flex justify-center w-full self-center">
     <div class="shadow p-6 rounded w-11/12 sm:w-8/12 lg:w-1/2">
         <div class="lg:ml-10">
-            <h1>Sign In</h1>
+            <h3>Sign In</h3>
             <span>Please fill in your credentials to sign in</span>
             <form
                 use:enhance={formSubmitHandler}

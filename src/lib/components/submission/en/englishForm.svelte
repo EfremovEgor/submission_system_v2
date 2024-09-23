@@ -8,6 +8,7 @@
     import CounterTextArea from "../components/counterTextArea.svelte";
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
+
     let busy = false;
     let authors: Array<IAuthor> = [];
     let submission: form = {
@@ -207,7 +208,7 @@
         <div class="ml-5">
             <p>Choose preferable topic for your paper.</p>
         </div>
-        <section class="shadow-lg p-5 mt-5">
+        <section class="shadow-lg p-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <div class="flex flex-col gap-2">
                 {#each conference.symposiums as symposium}
@@ -263,8 +264,8 @@
             </label>
         </div>
 
-        <h4 class="font-normal">Finished?</h4>
-        <div class="ml-5">
+        <h4 class="font-normal mt-5" style="margin-top: 50px;">Finished?</h4>
+        <div class="mt-5">
             <span
                 >If you filled out the form, press the 'Submit' button below.</span
             >
@@ -276,10 +277,12 @@
             <p>
                 <strong
                     >Please note that abstracts could be edited during 24 hours
-                    after submission</strong
+                    after submission.</strong
                 >
             </p>
         </div>
-        <button class="button mt-5" type="submit">Submit</button>
+        <button class="primary-button-hover outline" type="submit">
+            Submit
+        </button>
     </form>
 {/if}

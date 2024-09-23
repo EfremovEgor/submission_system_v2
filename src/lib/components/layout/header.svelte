@@ -33,7 +33,7 @@
                         ? "page"
                         : undefined}
                 >
-                    {#if $page.url.pathname.includes("call_for_papers")}
+                    {#if $page.url.pathname === "/call_for_papers"}
                         <a
                             style="text-decoration: underline;"
                             href="/call_for_papers">Call For Papers</a
@@ -50,7 +50,7 @@
                             ? "page"
                             : undefined}
                     >
-                        {#if $page.url.pathname.includes("author")}
+                        {#if $page.url.pathname === "/author"}
                             <a
                                 style="text-decoration: underline;"
                                 href="/author">Author</a
@@ -71,24 +71,25 @@
                         <div class="logout-container">
                             <a href="/logout">Logout</a>
                             <span>{user.email}</span>
+                            <span>{user.first_name} {user.last_name}</span>
                         </div>
                     </li>
                 </ul>
             {:else}
                 <ul>
                     <li
-                        aria-current={$page.url.pathname === "/login"
+                        aria-current={$page.url.pathname === "/sign-in"
                             ? "page"
                             : undefined}
                     >
-                        <a href="/login">Sign in</a>
+                        <a href="/sign-in">Sign in</a>
                     </li>
                     <li
-                        aria-current={$page.url.pathname === "/register"
+                        aria-current={$page.url.pathname === "/sign-up"
                             ? "page"
                             : undefined}
                     >
-                        <a href="/register">Create account</a>
+                        <a href="/sign-up">Create account</a>
                     </li>
                 </ul>
             {/if}

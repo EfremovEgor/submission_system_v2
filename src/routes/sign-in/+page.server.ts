@@ -76,6 +76,6 @@ export const actions: Actions = {
                 errors,
             };
         }
-        redirect(302, "/account");
+        redirect(302, "/author");
     },
 };

@@ -1,14 +1,19 @@
 <script lang="ts">
     export let name: string;
     export let value: any | null;
-    export let isEditing = false;
+    export let isEditing: boolean = false;
+    export let required: boolean = false;
 </script>
 
-<section class="flex items-center flex-row justify-between gap-4">
-    <span class="basis-1/3">{name}</span>
+<tr>
+    <td class="basis-1/3"
+        >{name}{#if isEditing && required}
+            <span class="text-red-500">*</span>
+        {/if}</td
+    >
     {#if isEditing}
-        <div class="basis-2/3"><slot /></div>
+        <td><slot /></td>
     {:else}
-        <span class="basis-2/3">{value ?? ""}</span>
+        <td>{value ?? ""}</td>
     {/if}
-</section>
+</tr>

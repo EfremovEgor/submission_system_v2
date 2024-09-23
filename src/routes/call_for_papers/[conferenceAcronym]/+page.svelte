@@ -18,23 +18,24 @@
     <div class="flex flex-row gap-5">
         {#if conference.allow_ru}
             <button
+                class="primary-button-hover outline"
                 on:click={() => (modalIsOpen = !modalIsOpen)}
-                class="reverse-nav-link w-full">Submit an abstract</button
+                >Submit an abstract</button
             >
         {:else}
             <a
                 href="{conference.acronym}/submit?lang=en"
                 rel="noopener noreferrer"
-                class="reverse-nav-link w-fit"
-                ><button class="flex">Submit an abstract</button></a
+                class="primary-button-hover outline"
+                role="button">Submit an abstract</a
             >
         {/if}
         <a
             href={conference.site_url}
             target="_blank"
             rel="noopener noreferrer"
-            class="reverse-nav-link w-fit"
-            ><button class="flex">Learn more</button></a
+            class="primary-button-hover outline"
+            role="button">Learn more</a
         >
     </div>
     <div class="flex flex-row justify-between mt-8">
