@@ -128,29 +128,29 @@ export const actions: Actions = {
         authors.forEach((author) => {
             author.title = titles[author.title];
         });
-        authors.forEach(async (author) => {
-            const html = await renderCreateSubmissionTemplate({
-                conference_email: conference.email,
-                corresponding_title: author.title,
-                first_name: author.first_name,
-                last_name: author.last_name,
-                title: createdSubmission.title,
-                local_id: createdSubmission.local_id,
-                submission_id: createdSubmission.id,
-                presentation_format: createdSubmission.presentation_format,
-                topic: topic.name,
-                authors: authors,
-                conference_short_name: conference.short_name,
-                conference_name: conference.name,
-            });
-            transporter.sendMail({
-                from: `${EMAIL}`,
-                to: `${author.email}`,
-                subject: "Submission has been created",
-                html: html,
-            });
-        });
+        // authors.forEach(async (author) => {
 
+        // });
+        const html = await renderCreateSubmissionTemplate({
+            conference_email: user.email,
+            corresponding_title: user.title,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            title: createdSubmission.title,
+            local_id: createdSubmission.local_id,
+            submission_id: createdSubmission.id,
+            presentation_format: createdSubmission.presentation_format,
+            topic: topic.name,
+            authors: authors,
+            conference_short_name: conference.short_name,
+            conference_name: conference.name,
+        });
+        transporter.sendMail({
+            from: `${EMAIL}`,
+            to: `${user.email}`,
+            subject: "Submission has been created",
+            html: html,
+        });
         redirect(302, "/author");
         //     try {
         //         const results = await signInSchema.parseAsync(formData);

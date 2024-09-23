@@ -57,14 +57,14 @@
                             autocomplete="family-name"
                             error={form?.errors.last_name}
                         />
-                        <FormInput
+                        <!-- <FormInput
                             id="middle_name"
                             required={false}
                             name="middle_name"
                             label="Middle Name"
                             autocomplete="additional-name"
                             error={form?.errors.middle_name}
-                        />
+                        /> -->
                     </div>
                     <FormInput
                         type="password"

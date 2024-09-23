@@ -36,12 +36,6 @@ const registerSchema = z
             .trim()
             .min(1, { message: "Last name must be at least 1 character" })
             .max(64, { message: "Last name must be less than 64 characters" }),
-        middle_name: z
-            .string()
-            .trim()
-
-            .max(64, { message: "Middle name must be less than 64 characters" })
-            .optional(),
         password: z
             .string({ required_error: "Password is required" })
             .min(8, { message: "Password must be at least 8 characters" })

@@ -10,7 +10,11 @@
 </script>
 
 <div class="input-container mt-2 w-full">
-    <label for={id}>{label}{required ? "*" : ""}</label><input
+    <label for={id}
+        >{label}{#if required}
+            <span class="required_star">*</span>
+        {/if}</label
+    ><input
         aria-invalid={error ? true : undefined}
         style="margin: 0;"
         class="w-full {error ? 'invalid' : 'valid'}"

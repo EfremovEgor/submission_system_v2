@@ -37,10 +37,10 @@
                             {conference.name}
                         </td>
                         <td>
-                            {conference.start_date?.toLocaleDateString()}
+                            {conference.submission_deadline?.toLocaleDateString()}
                         </td>
                         <td>
-                            {conference.submission_deadline?.toLocaleDateString()}
+                            {conference.start_date?.toLocaleDateString()}
                         </td>
                     </tr>
                 {/each}

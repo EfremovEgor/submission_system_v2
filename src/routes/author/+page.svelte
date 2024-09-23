@@ -231,65 +231,68 @@
             </button>
         </div>
     {/if}
-    <h3>My submissions</h3>
+    <h3>My Submissions</h3>
     {#each Object.entries(submissions) as [conference, data]}
-        <details>
+        <details open>
             <summary class="w-fit">{conference}</summary>
-            <table class="striped">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Authors</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Topic</th>
-                        <th scope="col">Presentation Format</th>
-                        <th scope="col">Submitted At</th>
-                        <th scope="col">View</th>
-                        <th scope="col">Review Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {#each data.submissions as submission}
+            <div class="overflow-auto">
+                <table class="striped">
+                    <thead>
                         <tr>
-                            <td> {submission.local_id} </td>
-                            <td>
-                                {#each submission.authors as author}
-                                    <span>
-                                        {author.first_name}
-                                        {author.last_name}
-                                    </span><br />
-                                {/each}
-                            </td>
-                            <td>
-                                {submission.title}
-                            </td>
-                            <td>
-                                {submission.topic.name}
-                            </td>
-                            <td>
-                                {presentation_formats[
-                                    submission.presentation_format
-                                ]}
-                            </td>
-                            <td>
-                                {submission.created_at.toLocaleString()}
-                            </td>
-                            <td>
-                                <a
-                                    href="/call_for_papers/{data.conference_data
-                                        .acronym}/submissions/{submission.id}/author"
-                                    class="icon-button"
-                                >
-                                    <Search class="mx-auto" />
-                                </a>
-                            </td>
-                            <td>
-                                {submission_statuses[submission.status]}
-                            </td>
+                            <th scope="col">#</th>
+                            <th scope="col">Authors</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Topic</th>
+                            <th scope="col">Presentation Format</th>
+                            <th scope="col">Submitted At</th>
+                            <th scope="col">View</th>
+                            <th scope="col">Review Status</th>
                         </tr>
-                    {/each}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {#each data.submissions as submission}
+                            <tr>
+                                <td> {submission.local_id} </td>
+                                <td>
+                                    {#each submission.authors as author}
+                                        <span>
+                                            {author.first_name}
+                                            {author.last_name}
+                                        </span><br />
+                                    {/each}
+                                </td>
+                                <td>
+                                    {submission.title}
+                                </td>
+                                <td>
+                                    {submission.topic.name}
+                                </td>
+                                <td>
+                                    {presentation_formats[
+                                        submission.presentation_format
+                                    ]}
+                                </td>
+                                <td>
+                                    {submission.created_at.toLocaleString()}
+                                </td>
+                                <td>
+                                    <a
+                                        href="/call_for_papers/{data
+                                            .conference_data
+                                            .acronym}/submissions/{submission.id}/author"
+                                        class="icon-button"
+                                    >
+                                        <Search class="mx-auto" />
+                                    </a>
+                                </td>
+                                <td>
+                                    {submission_statuses[submission.status]}
+                                </td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
         </details>
     {/each}
 </div>

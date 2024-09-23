@@ -67,6 +67,10 @@ input[type=checkbox] {
     color: var(--red)
 }
 
+.required_star {
+    color: var(--red)
+}
+
 .button-red.outline:hover {
     background-color: var(--red-hover);
     color: white
