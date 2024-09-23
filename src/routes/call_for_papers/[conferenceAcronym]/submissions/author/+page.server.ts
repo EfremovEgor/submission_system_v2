@@ -16,6 +16,7 @@ export const load: Load = async ({ parent, params }) => {
             conference: {
                 acronym: params.conferenceAcronym,
             },
+            created_by_id: data.user.id,
         },
         include: {
             authors: {
