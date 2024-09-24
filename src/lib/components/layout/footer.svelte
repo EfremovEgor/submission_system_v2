@@ -1,7 +1,7 @@
-<footer>
+<footer style="margin-top:100px">
     <article
-        style="margin:0; margin-top:100px"
-        class="flex align-middle justify-center py-3"
+        style="margin:0;"
+        class="flex align-middle justify-center items-center py-3"
     >
         Copyright © 2024 ConfChair
     </article>
