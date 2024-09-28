@@ -20,15 +20,6 @@ export const renderEmailTemplate = async (
     const templateString = await readEmailTemplate(template);
     return renderTemplateString(templateString, data);
 };
-export interface RegistrationTemplateData {
-    name: string;
-    link: string;
-}
-export const renderRegistrationTemplate = async (
-    data: RegistrationTemplateData,
-) => {
-    renderEmailTemplate(EmailTemplates.registration, data);
-};
 
 export interface CreateSubmissionTemplateData {
     corresponding_title: string;

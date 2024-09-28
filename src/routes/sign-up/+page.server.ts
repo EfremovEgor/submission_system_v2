@@ -13,6 +13,7 @@ import {
     readEmailTemplate,
     renderEmailTemplate,
 } from "$src/lib/email/templating.js";
+import { sendRegistrationEmail } from "$src/lib/email/mailing.js";
 export const load = async ({ cookies }) => {
     const sessionToken = cookies.get("SESSION");
     if (sessionToken != null) {
@@ -69,15 +70,9 @@ export const actions: Actions = {
             const results = await registerSchema.parseAsync(formData);
             const registrationToken = createBase64UrlSafeString();
             const link = `${DOMAIN}/email_confirmation?token=${registrationToken}`;
-            const html = await renderEmailTemplate(
-                EmailTemplates.registration,
-                { link, name: results.first_name },
-            );
-            transporter.sendMail({
-                from: `${EMAIL}`,
-                to: `${results.email}`,
-                subject: "Registration",
-                html: html,
+            await sendRegistrationEmail(results.email, {
+                link,
+                name: results.first_name,
             });
             const { password_confirm, ...data } = results;
             const user = await getUserByEmail(data.email);
