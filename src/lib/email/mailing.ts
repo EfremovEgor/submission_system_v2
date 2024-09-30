@@ -14,7 +14,7 @@ export const sendRegistrationEmail = async (
 ) => {
     const subject = "Registration";
     const html = await renderEmailTemplate(EmailTemplates.registration, data);
-    transporter.sendMail({
+    await transporter.sendMail({
         from: MAILING_SETTINGS.from,
         to: to,
         subject: subject,
