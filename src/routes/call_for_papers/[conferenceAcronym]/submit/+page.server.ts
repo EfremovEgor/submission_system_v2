@@ -5,6 +5,7 @@ import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import prisma from "$src/lib/database/prisma";
 import { createSubmission } from "$src/lib/database/submissions";
 import { getUserProfile } from "$src/lib/database/users";
+import { sendCoAuthorSubmissionCreatedEmail } from "$src/lib/email/mailing";
 import transporter from "$src/lib/email/setup.server";
 import { renderCreateSubmissionTemplate } from "$src/lib/email/templating";
 import { redis } from "$src/lib/redis/redis";
@@ -128,12 +129,10 @@ export const actions: Actions = {
         authors.forEach((author) => {
             author.title = titles[author.title];
         });
-        // authors.forEach(async (author) => {
 
-        // });
         const html = await renderCreateSubmissionTemplate({
-            conference_email: user.email,
-            corresponding_title: user.title,
+            conference_email: conference.email,
+            corresponding_title: titles[user.title],
             first_name: user.first_name,
             last_name: user.last_name,
             title: createdSubmission.title,
@@ -150,6 +149,47 @@ export const actions: Actions = {
             to: `${user.email}`,
             subject: "Submission has been created",
             html: html,
+        });
+        authors.forEach(async (author) => {
+            if (author.email != user.email && author.is_corresponding) {
+                // await sendCoAuthorSubmissionCreatedEmail(author.email, {
+                //     authors: authors,
+                //     submittingAuthor: author,
+                //     correspondingAuthor: user,
+                //     submissionDetails: {
+                //         title: createdSubmission.title,
+                //         local_id: createdSubmission.local_id,
+                //         id: createdSubmission.id,
+                //         topic: (
+                //             await prisma.topic.findFirst({
+                //                 where: { id: createdSubmission.topic_id },
+                //             })
+                //         ).name,
+                //         presentation_format: "",
+                //     },
+                //     conferenceDetails: conference,
+                // });
+                const html = await renderCreateSubmissionTemplate({
+                    conference_email: conference.email,
+                    corresponding_title: author.title,
+                    first_name: author.first_name,
+                    last_name: author.last_name,
+                    title: createdSubmission.title,
+                    local_id: createdSubmission.local_id,
+                    submission_id: createdSubmission.id,
+                    presentation_format: createdSubmission.presentation_format,
+                    topic: topic.name,
+                    authors: authors,
+                    conference_short_name: conference.short_name,
+                    conference_name: conference.name,
+                });
+                transporter.sendMail({
+                    from: `${EMAIL}`,
+                    to: `${author.email}`,
+                    subject: "Submission has been created",
+                    html: html,
+                });
+            }
         });
         redirect(302, "/author");
         //     try {

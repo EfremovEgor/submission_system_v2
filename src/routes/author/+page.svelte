@@ -232,6 +232,12 @@
         </div>
     {/if}
     <h3>My Submissions</h3>
+    {#if rawSubmissions}
+        <p>
+            There are no submissions yet. To submit an abstract please proceed
+            to the <a href="/call_for_papers">Call for Papers</a>.
+        </p>
+    {/if}
     {#each Object.entries(submissions) as [conference, data]}
         <details open>
             <summary class="w-fit">{conference}</summary>

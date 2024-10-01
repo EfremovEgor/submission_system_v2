@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.18.3/dist/css/uikit.min.css" />
+
+<body>
+    <div class="uk-container" style="
+    margin-top: 10px;
+    margin-bottom: 25px;
+    max-width: 980px;
+    min-height: 320px;
+  ">
+
+        <h3 style="color: #0056a6">Submission <%= submissionDetails.local_id %> for <%= conferenceDetails.short_name %> has been created</h3>
+        <p style="color: black">Dear <%= submittingAuthor.title %>
+                <%= submittingAuthor.first_name %>
+                    <%= submittingAuthor.last_name %>, </p>
+        <p style="color: black">You have received this email, 
+            because  <%= correspondingAuthor.title %>  <%= correspondingAuthor.first_name %>  <%= correspondingAuthor.last_name %>
+            has added you as a co-author 
+            of the paper <%= submissionDetails.title %> submitted to the <%= conferenceDetails.name %>
+            through the ConfChair Event Management System.
+        </p>
+        <p style="color: black">
+            Brief abstract details could be found below:
+        </p>
+        <h3 style="color: #0056a6">Abstract Details</h3>
+        <table class="uk-table uk-table-striped">
+            <tbody>
+                <tr>
+                    <td>Paper Title</td>
+                    <td>
+                        <%= submissionDetails.title %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Paper Number</td>
+                    <td>
+                        <%= submissionDetails.local_id %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Presentation Format</td>
+                    <td>
+                        <%= submissionDetails.presentation_format %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Submission Topic</td>
+                    <td>
+                        <%= submissionDetails.topic %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Authors</td>
+                    <td>
+                        <% authors.forEach(function(author){ %>
+                            <%= author.title %>
+                                <%= author.last_name %>
+                                    <% if (author.is_presenter){ %>
+                                        presenter
+                                        <% } %>
+                                            <%=author.affiliation %>,
+                                                <%= author.country %>
+
+                                                    <% }); %>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <p style="color: black">To follow up the further review status 
+            of the submission in the <a href="https://www.confchair.ru/author">Author Profile</a>,
+            please sign in to your ConfChair account 
+            (or create one of you haven’t done it before).</p>
+        <p style="color: black">Please note, that abstract details update available during 48 hours after submission
+            before the review process starts.</p>
+
+        <p style="color: black">If you have any questions, please contact <%= conferenceDetails.short_name %> Program
+                Committee (<%= conferenceDetails.email %>).
+        </p>
+        <p style="color: black">We look forward to see you at <b>
+                <%= conferenceDetails.name %>
+            </b>.</p>
+        <p style="color: black">Best Regards,<br>ConfChair Team <br> support@confchair.org </p>
+
+
+    </div>
+</body>
+
+
+</html>

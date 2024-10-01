@@ -11,62 +11,73 @@
     min-height: 320px;
   ">
 
-        <h3 style="color: #0056a6">Submission <%= local_id %> for <%= conference_short_name %> has been created</h3>
+        <h3 style="color: #0056a6">Submission <%= local_id %> for  <%= conference_short_name %> has been created</h3>
         <p style="color: black">Dear <%= corresponding_title %>
                 <%= first_name %>
                     <%= last_name %>, </p>
-        <p style="color: black">Thank you for submitting your abstract to the <%= conference_name %>. Please find
+        <p style="color: black">Thank you for submitting your abstract to the <strong><%= conference_name %></strong>. Please find
                 below
                 your abstract details:</p>
-        <h3 style="color: #0056a6">Abstract Details</h3>
-        <table class="uk-table uk-table-striped">
+        <h3 style="color: black">Abstract Details</h3>
+        <table style="width:100%" class="uk-table">
             <tbody>
-                <tr>
-                    <td>Paper Title</td>
-                    <td>
+                <tr >
+                    <td style="border-top:0; padding: 10px 0; border-left:0">Paper Title</td>
+                    <td style="border-top:0;  padding: 10px 0; padding-left:10px; border-right:0" >
                         <%= title %>
                     </td>
                 </tr>
                 <tr>
-                    <td>Paper Number</td>
-                    <td>
+                    <td style="padding: 10px 0; border-left:0">Paper Number</td>
+                    <td style="padding: 10px 0; padding-left:10px; border-right:0" >
                         <%= local_id %>
                     </td>
                 </tr>
 
                 <tr>
-                    <td>Presentation Format</td>
-                    <td>
+                    <td style="padding: 10px 0; border-left:0">Presentation Format</td>
+                    <td style="padding: 10px 0; padding-left:10px; border-right:0">
                         <%= presentation_format %>
                     </td>
                 </tr>
                 <tr>
-                    <td>Submission Topic</td>
-                    <td>
+                    <td style="padding: 10px 0; border-left:0">Submission Topic</td>
+                    <td style="padding: 10px 0; padding-left:10px; border-right:0">
                         <%= topic %>
                     </td>
                 </tr>
                 <tr>
-                    <td>Authors</td>
-                    <td>
+                    <td style="padding: 10px 0; border-left:0">Authors</td>
+                    <td style="padding: 10px 0; padding-left:10px; border-right:0">
                         <% authors.forEach(function(author){ %>
+                            <p>
                             <%= author.title %>
+                                <%= author.first_name %>
                                 <%= author.last_name %>
                                     <% if (author.is_presenter){ %>
-                                        presenter
+                                        (presenter)
                                         <% } %>
-                                            <%=author.affiliation %>,
-                                                <%= author.country %>
 
-                                                    <% }); %>
+                                <br/>
+                                <%=author.affiliation %>,
+                                <%= author.country %>
+                                    </p>
+                                        <% }); %>
                     </td>
 
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-left:0; border-bottom:0;">Submission Status</td>
+                    <td style="padding: 10px 0; padding-left:10px; border-right:0; border-bottom:0;">
+                         Submitted
+                    </td>
                 </tr>
             </tbody>
         </table>
         <p style="color: black">In case the above mentioned details are not correct, please access <a target="_blank"
                 href="http://confchair.org/submission/<%= submission_id %>">Submission Page</a> and update your
             abstract.</p>
+
         <p style="color: black">Please note, that abstract details update available during 48 hours after submission
             before the review process starts.</p>
 
@@ -81,6 +92,17 @@
 
     </div>
 </body>
-
+<style>
+    table  td:last-child{
+        padding-left:20px !important;
+    }
+    table {
+        border-collapse: collapse;
+      }
+      table td, table th {
+        border: 1px solid black;
+      }
+    
+</style>
 
 </html>

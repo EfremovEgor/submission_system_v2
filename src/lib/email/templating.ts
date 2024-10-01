@@ -4,6 +4,7 @@ export const enum EmailTemplates {
     registration = "registration.html",
     createSubmission = "create_submission.html",
     recoverPassword = "password_recovery.html",
+    coAuthorSubmissionCreated = "create_submission_co_author.html",
 }
 export const readEmailTemplate = async (template: EmailTemplates) => {
     return await readFile(`email_templates/${template.toString()}`, "utf-8");

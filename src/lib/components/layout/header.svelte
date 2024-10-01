@@ -37,10 +37,10 @@
                     {#if $page.url.pathname === "/call_for_papers"}
                         <a
                             style="text-decoration: underline;"
-                            href="/call_for_papers">Call For Papers</a
+                            href="/call_for_papers">Call for Papers</a
                         >
                     {:else}
-                        <a href="/call_for_papers">Call For Papers</a>
+                        <a href="/call_for_papers">Call for Papers</a>
                     {/if}
 
                     <!-- else content here -->
@@ -118,10 +118,10 @@
                     {#if $page.url.pathname === "/call_for_papers"}
                         <a
                             style="text-decoration: underline;"
-                            href="/call_for_papers">Call For Papers</a
+                            href="/call_for_papers">Call for Papers</a
                         >
                     {:else}
-                        <a href="/call_for_papers">Call For Papers</a>
+                        <a href="/call_for_papers">Call for Papers</a>
                     {/if}
                 </li>
                 {#if user}
