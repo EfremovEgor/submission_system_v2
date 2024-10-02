@@ -3,6 +3,7 @@ import { render } from "ejs";
 export const enum EmailTemplates {
     registration = "registration.html",
     createSubmission = "create_submission.html",
+    updateSubmission = "update_submission.html",
     recoverPassword = "password_recovery.html",
     coAuthorSubmissionCreated = "create_submission_co_author.html",
 }
@@ -48,6 +49,13 @@ export const renderCreateSubmissionTemplate = async (
     data: CreateSubmissionTemplateData,
 ) => {
     return renderEmailTemplate(EmailTemplates.createSubmission, data);
+};
+export interface UpdateSubmissionTemplateData
+    extends CreateSubmissionTemplateData {}
+export const renderUpdateSubmissionTemplate = async (
+    data: UpdateSubmissionTemplateData,
+) => {
+    return renderEmailTemplate(EmailTemplates.updateSubmission, data);
 };
 export interface RecoverPasswordTemplateData {
     title: string;

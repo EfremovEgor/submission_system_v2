@@ -80,7 +80,7 @@ model Submission {
   created_by          User       @relation(fields: [created_by_id], references: [id])
   created_by_id       Int
   created_at          DateTime   @default(now())
-  updated_at          DateTime   @default(now())
+  updated_at          DateTime   @default(now()) @updatedAt()
   status              String     @default("submitted")
 
   @@map("submissions")

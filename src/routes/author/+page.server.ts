@@ -15,7 +15,18 @@ export const load = async ({ parent }: { parent: any }) => {
     const userProfile = await getUserProfile(data.user.id);
     const submissions = await prisma.submission.findMany({
         where: {
-            created_by_id: data.user.id,
+            OR: [
+                {
+                    created_by_id: data.user.id,
+                },
+                {
+                    authors: {
+                        some: {
+                            email: data.user.email,
+                        },
+                    },
+                },
+            ],
         },
         orderBy: {
             created_at: "desc",

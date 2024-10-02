@@ -11,7 +11,7 @@
     <span>
         {label}{#if required}<span class="text-red-500">*</span>{/if}
     </span>
-    <select {required} {placeholder} {value} {name} style="width: 200px;">
+    <select bind:value {required} {placeholder} {name} style="width: 200px;">
         <option selected disabled value hidden>{placeholder}</option>
         {#each Object.entries(options) as [_value, alias]}
             <option value={_value}>{alias}</option>

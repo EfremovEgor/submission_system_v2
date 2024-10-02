@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { preventLanguages } from "$src/lib/utils.client";
+
     export let name: string;
     export let data: string = "";
     export let placeholder: string;
@@ -6,8 +8,10 @@
     export let required: boolean = true;
     export let maximumWords: number | null = null;
     export let minimumWords: number | null = null;
+    export let allowedLanguages: Array<string> | null = ["en"];
     wordCount = data?.trim().split(/\s+/).length;
     export let counterFunction: "whitespace" | "newline" = "whitespace";
+
     const counterFunctions = {
         whitespace: () => {
             wordCount = data.trim().split(/\s+/).length;
@@ -16,13 +20,15 @@
             wordCount = data.trim().split(/\r\n|\r|\n/).length;
         },
     };
+
     if (data.trim() == "") {
         wordCount = 0;
     } else {
         counterFunctions[counterFunction]();
     }
 
-    function handleChange() {
+    function handleChange(event) {
+        preventLanguages(allowedLanguages, event);
         if (data.trim() == "") {
             wordCount = 0;
         } else {
@@ -43,6 +49,9 @@
                 ? 'invalid'
                 : ''
             : ''}"
+        on:keydown={(event) => {
+            preventLanguages(allowedLanguages, event);
+        }}
         on:keyup={handleChange}
         on:change={handleChange}
         on:input={handleChange}

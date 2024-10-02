@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { preventLanguages } from "$src/lib/utils.client";
+
     export let name: string;
     export let data: string = "";
     export let placeholder: string;
@@ -6,9 +8,12 @@
     export let required: boolean = true;
     export let maximumWords: number | null = null;
     export let minimumWords: number | null = null;
+    export let allowedLanguages: Array<string> | null = ["en"];
     wordCount = data.trim() == "" ? 0 : data.trim().split(/\s+/).length;
-    function handleChange() {
+
+    function handleChange(event) {
         wordCount = data.trim() == "" ? 0 : data.trim().split(/\s+/).length;
+        preventLanguages(allowedLanguages, event);
     }
 </script>
 
@@ -25,6 +30,9 @@
                 : ''
             : ''}"
         type="text"
+        on:keydown={(event) => {
+            preventLanguages(allowedLanguages, event);
+        }}
         on:keyup={handleChange}
         on:change={handleChange}
         on:input={handleChange}

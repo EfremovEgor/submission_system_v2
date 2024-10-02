@@ -5,3 +5,6 @@ export interface form {
     topic: number;
     presentation_format: string;
 }
+export interface editForm extends form {
+    local_id: number;
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { presentation_formats } from "$lib/aliases";
-    import { type form } from "./interfaces";
+    import { type editForm, type form } from "./interfaces";
     import CounterInput from "./../components/counterInput.svelte";
     import { onMount } from "svelte";
     import AuthorForm from "./author/authorForm.svelte";
@@ -10,26 +10,30 @@
     import { goto } from "$app/navigation";
 
     let busy = false;
-    let authors: Array<IAuthor> = [];
-    let submission: form = {
+    export let authors: Array<IAuthor> = [];
+    export let submission: form | editForm = {
         title: "",
         abstarct: "",
         keywords: "",
         topic: -1,
         presentation_format: "",
     };
-
+    export let isEditing = false;
+    export let userDetails;
+    export let conference;
     const resolveAuthorsIds = () => {
         authors.forEach((author, index) => {
             author.id = index;
         });
         authors = authors;
     };
-    export let userDetails;
-    export let conference;
+
     onMount(() => {
-        addNewAuthor();
-        addNewAuthor();
+        if (!authors.length) {
+            addNewAuthor();
+            addNewAuthor();
+        }
+        resolveAuthorsIds();
     });
     const removeAuthor = (position: number) => {
         authors.splice(position, 1);
@@ -94,7 +98,11 @@
             };
         }}
     >
-        <h3>New Submission for {conference.short_name}</h3>
+        {#if isEditing}
+            <h3>
+                Edit Submission #{submission.local_id} for {conference.short_name}
+            </h3>
+        {/if}
         <h4 class="font-normal">Authors Information</h4>
         <div class="ml-5">
             For each author, please fill out the form below. Some items on the
@@ -248,39 +256,44 @@
                 {/each}
             </select>
         </label>
-        <h4 class="font-normal">
-            Important Notice<span class="text-red-500">*</span>
-        </h4>
-        <div class="ml-5">
-            <p>
-                It is the responsibility of authors to obtain any required
-                government or company reviews and/or clearances of their paper
-                prior to submission, as well as any necessary reprinting
-                permissions.
-            </p>
-            <label>
-                <input type="checkbox" name="can_be_published" required />
-                Paper can be published
-            </label>
-        </div>
-
-        <h4 class="font-normal mt-5" style="margin-top: 50px;">Finished?</h4>
-        <div class="mt-5">
-            <span
-                >If you filled out the form, press the 'Submit' button below.</span
-            >
-            <span>
-                <strong>
-                    Do not press the button twice: uploading may take time!
-                </strong>
-            </span>
-            <p>
-                <strong
-                    >Please note that abstracts could be edited during 24 hours
-                    after submission.</strong
+        {#if !isEditing}
+            <h4 class="font-normal">
+                Important Notice<span class="text-red-500">*</span>
+            </h4>
+            <div class="ml-5">
+                <p>
+                    It is the responsibility of authors to obtain any required
+                    government or company reviews and/or clearances of their
+                    paper prior to submission, as well as any necessary
+                    reprinting permissions.
+                </p>
+                <label>
+                    <input type="checkbox" name="can_be_published" required />
+                    Paper can be published
+                </label>
+            </div>
+            <h4 class="font-normal mt-5" style="margin-top: 50px;">
+                Finished?
+            </h4>
+            <div class="mt-5">
+                <span
+                    >If you filled out the form, press the 'Submit' button
+                    below.</span
                 >
-            </p>
-        </div>
+                <span>
+                    <strong>
+                        Do not press the button twice: uploading may take time!
+                    </strong>
+                </span>
+                <p>
+                    <strong
+                        >Please note that abstracts could be edited during 24
+                        hours after submission.</strong
+                    >
+                </p>
+            </div>
+        {/if}
+
         <button class="primary-button-hover outline" type="submit">
             Submit
         </button>
