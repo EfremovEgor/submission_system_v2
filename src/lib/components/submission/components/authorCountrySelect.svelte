@@ -14,7 +14,7 @@
     <span>
         {label}{#if required}<span class="text-red-500">*</span>{/if}
     </span>
-    <select {required} {placeholder} {value} {name} style="width: 200px;">
+    <select {required} {placeholder} bind:value {name} style="width: 200px;">
         <option selected disabled value hidden>{placeholder}</option>
         {#each countries as country}
             <option value={country}>{country}</option>
