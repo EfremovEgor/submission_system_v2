@@ -240,7 +240,9 @@
     {/if}
     {#each Object.entries(submissions) as [conference, data]}
         <details open>
-            <summary class="w-fit">{conference}</summary>
+            <summary class="w-fit" style="color:var(--pico-primary);"
+                >{conference}</summary
+            >
             <div class="overflow-auto">
                 <table class="striped">
                     <thead>

@@ -55,12 +55,12 @@ input[type=checkbox] {
 
 .button-red {
     background-color: var(--red);
-    border-color: var(--red);
+    border-color: var(--red) !important;
 }
 
 .button-red:hover {
     background-color: var(--red-hover);
-    border-color: var(--red-hover);
+    border-color: var(--red-hover) !important;
 }
 
 .button-red.outline {

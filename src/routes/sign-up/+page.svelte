@@ -24,8 +24,10 @@
     >
         <div class="lg:ml-10">
             {#if !emailIsSent}
-                <h1>Sign Up</h1>
-                <span>Please fill in your credentials to register</span>
+                <h1>Create account</h1>
+                <span
+                    >Please fill in your credentials to create new account</span
+                >
                 <form
                     use:enhance={formSubmitHandler}
                     autocomplete="off"

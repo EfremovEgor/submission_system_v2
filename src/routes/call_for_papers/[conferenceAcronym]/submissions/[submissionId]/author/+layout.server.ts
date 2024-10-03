@@ -28,5 +28,9 @@ export const load: Load = async ({ parent, params }) => {
     if (submission == null) error(404);
     if (submission.conference_id != conference.id) error(404);
     if (submission.created_by_id != data.user.id) error(403);
+    const rights = {
+        canDelete: false,
+        canEdit: false,
+    };
     return { submission, conference };
 };

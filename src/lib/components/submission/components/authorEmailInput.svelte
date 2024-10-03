@@ -23,7 +23,7 @@
         on:change={(event) => {
             preventLanguages(allowedLanguages, event);
         }}
-        type="text"
+        type="email"
         {placeholder}
         {name}
         {required}

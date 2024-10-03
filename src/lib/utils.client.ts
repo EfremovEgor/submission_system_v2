@@ -1,5 +1,5 @@
 export const getPatternFromLanguages = (languages: Array<string>) => {
-    const pattern = /^[a-zA-Z0-9()*_\-!#$%^&*,."\'\][\s]+$/;
+    const pattern = /^[a-zA-Z0-9()@*_\-!#$%^&*,."\'\][\s]+$/;
     return pattern;
 };
 export const preventLanguages = (

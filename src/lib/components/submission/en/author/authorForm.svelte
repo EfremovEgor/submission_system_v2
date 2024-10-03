@@ -6,6 +6,7 @@
     import type { IAuthor, IUserDetails } from "./interfaces";
     import { titles } from "$src/lib/aliases";
     import AuthorCountrySelect from "$components/submission/components/authorCountrySelect.svelte";
+    import AuthorEmailInput from "$components/submission/components/authorEmailInput.svelte";
 
     export let userDetails: IUserDetails;
     export let author: IAuthor;
@@ -60,7 +61,7 @@
         label="Last name"
         name="#{author.id}#_last_name"
     />
-    <AuthorInput
+    <AuthorEmailInput
         bind:value={author.email}
         label="Email"
         name="#{author.id}#_email"
