@@ -1,5 +1,5 @@
 import { EMAIL } from "$env/static/private";
-import { titles } from "$src/lib/aliases";
+import { presentation_formats, titles } from "$src/lib/aliases";
 import { getUserFromCookies } from "$src/lib/auth.sever";
 import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import prisma from "$src/lib/database/prisma";
@@ -177,7 +177,10 @@ export const actions: Actions = {
                     title: createdSubmission.title,
                     local_id: createdSubmission.local_id,
                     submission_id: createdSubmission.id,
-                    presentation_format: createdSubmission.presentation_format,
+                    presentation_format:
+                        presentation_formats[
+                            createdSubmission.presentation_format
+                        ],
                     topic: topic.name,
                     authors: authors,
                     conference_short_name: conference.short_name,
