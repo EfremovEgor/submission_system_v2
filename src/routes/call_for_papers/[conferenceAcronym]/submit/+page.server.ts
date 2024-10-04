@@ -5,9 +5,9 @@ import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import prisma from "$src/lib/database/prisma";
 import { createSubmission } from "$src/lib/database/submissions";
 import { getUserProfile } from "$src/lib/database/users";
-import { sendCoAuthorSubmissionCreatedEmail } from "$src/lib/email/mailing";
 import transporter from "$src/lib/email/setup.server";
 import { renderCreateSubmissionTemplate } from "$src/lib/email/templating";
+import { SubmissionReviewProcessQueueManager } from "$src/lib/queue/consumers/submissions";
 import { redis } from "$src/lib/redis/redis";
 import { Prisma } from "@prisma/client";
 import { error, redirect, type Actions, type Load } from "@sveltejs/kit";
@@ -193,6 +193,9 @@ export const actions: Actions = {
                     html: html,
                 });
             }
+        });
+        SubmissionReviewProcessQueueManager.timeoutSubmissionReviewProcess({
+            id: createdSubmission.id,
         });
         redirect(302, "/author");
         //     try {

@@ -1,5 +1,6 @@
 import type { Prisma, Submission, User } from "@prisma/client";
 import { Roles, type BaseSubmissionRights } from "../base.server";
+import { SubmissionStatues } from "$src/lib/enums";
 
 const creatorRights: BaseSubmissionRights = {
     role: Roles.creator,
@@ -29,13 +30,21 @@ export const resolveAuthorRights = (
     user: User,
     submission: {
         created_by_id: number;
+        status: SubmissionStatues;
         authors: {
             is_corresponding: boolean;
 
             email: string;
         }[];
     },
-) => {
+): BaseSubmissionRights => {
+    if (submission.status != SubmissionStatues.submitted)
+        return {
+            role: Roles.any,
+            canAccess: true,
+            canEdit: false,
+            canDelete: false,
+        };
     if (submission.created_by_id == user.id) return creatorRights;
     let rights = userRights;
     submission.authors.forEach((author) => {

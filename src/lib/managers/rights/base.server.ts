@@ -5,6 +5,7 @@ export interface BaseSubmissionRights {
     canDelete: boolean;
 }
 export enum Roles {
+    any = "any",
     creator = "creator",
     correspondingAuthor = "corresponding",
     coAuthor = "co_author",

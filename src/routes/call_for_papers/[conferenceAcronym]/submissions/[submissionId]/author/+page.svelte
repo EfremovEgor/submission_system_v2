@@ -79,6 +79,10 @@
                 <td>Presentation Format</td>
                 <td>{presentation_formats[submission.presentation_format]}</td>
             </tr>
+            <tr>
+                <td>Review Status</td>
+                <td>{submission_statuses[submission.status]}</td>
+            </tr>
         </tbody>
     </table>
     <h4 class="text-2xl font-bold">Authors</h4>
