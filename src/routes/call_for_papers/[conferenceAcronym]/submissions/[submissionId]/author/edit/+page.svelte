@@ -5,6 +5,8 @@
     const conference = data.conference;
     const submission = data.submission;
     const authors = data.authors;
+    if (submission != data.submission) {
+    }
 </script>
 
 <svelte:head>

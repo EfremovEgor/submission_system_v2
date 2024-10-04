@@ -7,6 +7,7 @@
     import { presentation_formats, titles } from "$src/lib/aliases.js";
     import type { ActionResult } from "@sveltejs/kit";
     import { getNames } from "country-list";
+    import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     let countries = getNames();
     countries.sort();
     export let data;
@@ -53,6 +54,15 @@
 <div class="container">
     <h3>Author Profile</h3>
     {#if isEditing}
+        <div class="mb-4">
+            <button class="primary-button-hover outline mr-2"> Save </button>
+            <button
+                on:click={() => (isEditing = false)}
+                class="button-red outline"
+            >
+                Cancel
+            </button>
+        </div>
         <form
             use:enhance={formSubmitHandler}
             autocomplete="off"
@@ -185,20 +195,16 @@
                     />
                 </AccountInfoRow>
             </table>
-
-            <div>
-                <button class="primary-button-hover outline mt-4">
-                    Save
-                </button>
-                <button
-                    on:click={() => (isEditing = false)}
-                    class="button-red outline"
-                >
-                    Cancel
-                </button>
-            </div>
         </form>
     {:else}
+        <div class="mb-4">
+            <button
+                on:click={() => (isEditing = true)}
+                class="primary-button-hover outline"
+            >
+                Edit
+            </button>
+        </div>
         <table class="w-fit">
             <AccountInfoRow name="Email" value={user.email} />
             <AccountInfoRow name="Title" value={titles[user.title]} />
@@ -221,104 +227,109 @@
                 <AccountInfoRow name="Web page" value={user?.web_page} />
             {/if}
         </table>
-
-        <div>
-            <button
-                on:click={() => (isEditing = true)}
-                class="primary-button-hover outline mt-4"
-            >
-                Edit
-            </button>
-        </div>
     {/if}
-    <h3>My Submissions</h3>
-    {#if rawSubmissions}
-        <p>
-            There are no submissions yet. To submit an abstract please proceed
-            to the <a href="/call_for_papers">Call for Papers</a>.
-        </p>
-    {/if}
-    {#each Object.entries(submissions) as [conference, data]}
-        <details open>
-            <summary class="w-fit" style="color:var(--pico-primary);"
-                >{conference}</summary
-            >
-            <div class="overflow-auto">
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center"
-                                ><button>#</button></th
-                            >
-                            <th scope="col" class="text-center"
-                                ><button>Authors</button></th
-                            >
-                            <th scope="col" class="text-center"
-                                ><button>Title</button></th
-                            >
-                            <th scope="col" class="text-center"
-                                ><button>Topic</button></th
-                            >
-                            <th scope="col" class="text-center">
-                                <button>Presentation Format</button>
-                            </th>
-                            <th scope="col" class="text-center"
-                                ><button>Submitted At</button></th
-                            >
-                            <th scope="col" class="text-center"
-                                ><button>View</button></th
-                            >
-                            <th scope="col" class="text-center"
-                                ><button>Review Status</button></th
-                            >
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {#each data.submissions as submission}
+    {#if !isEditing}
+        <h3>My Submissions</h3>
+        {#if !rawSubmissions}
+            <p>
+                There are no submissions yet. To submit a new abstract, please
+                proceed to the <a href="/call_for_papers">Call for Papers</a>.
+            </p>
+        {:else}
+            <p>
+                To submit a new abstract, please proceed to the <a
+                    href="/call_for_papers">Call for Papers</a
+                >.
+            </p>
+        {/if}
+        {#each Object.entries(submissions) as [conference, data]}
+            <details open>
+                <summary class="w-fit" style="color:var(--pico-primary);"
+                    >{conference}</summary
+                >
+                <div class="overflow-auto">
+                    <table class="striped">
+                        <thead>
                             <tr>
-                                <td class="text-center">
-                                    {submission.local_id}
-                                </td>
-                                <td>
-                                    {#each submission.authors as author}
-                                        <span>
-                                            {author.first_name}
-                                            {author.last_name}
-                                        </span><br />
-                                    {/each}
-                                </td>
-                                <td>
-                                    {submission.title}
-                                </td>
-                                <td>
-                                    {submission.topic.name}
-                                </td>
-                                <td class="text-center">
-                                    {presentation_formats[
-                                        submission.presentation_format
-                                    ]}
-                                </td>
-                                <td class="text-center">
-                                    {submission.created_at.toLocaleString()}
-                                </td>
-                                <td>
-                                    <a
-                                        href="/call_for_papers/{data
-                                            .conference_data
-                                            .acronym}/submissions/{submission.id}/author"
-                                        class="icon-button text-center"
+                                <th scope="col" class="text-center"
+                                    ><span class="sortable">#</span></th
+                                >
+                                <th scope="col" class="text-center"
+                                    ><span class="sortable">Authors</span></th
+                                >
+                                <th scope="col" class="text-center"
+                                    ><span class="sortable">Title</span></th
+                                >
+                                <th scope="col" class="text-center"
+                                    ><span class="sortable">Topic</span></th
+                                >
+                                <th scope="col" class="text-center">
+                                    <span class="sortable"
+                                        >Presentation Format</span
                                     >
-                                        <Search class="mx-auto" />
-                                    </a>
-                                </td>
-                                <td class="text-center">
-                                    {submission_statuses[submission.status]}
-                                </td>
+                                </th>
+                                <th scope="col" class="text-center"
+                                    ><span class="sortable">Submitted At</span
+                                    ></th
+                                >
+                                <th scope="col" class="text-center"
+                                    ><span class="sortable">View</span></th
+                                >
+                                <th scope="col" class="text-center"
+                                    ><span class="sortable">Review Status</span
+                                    ></th
+                                >
                             </tr>
-                        {/each}
-                    </tbody>
-                </table>
-            </div>
-        </details>
-    {/each}
+                        </thead>
+                        <tbody>
+                            {#each data.submissions as submission}
+                                <tr>
+                                    <td class="text-center">
+                                        {submission.local_id}
+                                    </td>
+                                    <td>
+                                        {#each submission.authors as author}
+                                            <span>
+                                                {author.first_name}
+                                                {author.last_name}
+                                            </span><br />
+                                        {/each}
+                                    </td>
+                                    <td>
+                                        {submission.title}
+                                    </td>
+                                    <td>
+                                        {submission.topic.name}
+                                    </td>
+                                    <td class="text-center">
+                                        {presentation_formats[
+                                            submission.presentation_format
+                                        ]}
+                                    </td>
+                                    <td class="text-center">
+                                        {submission.created_at.toLocaleString()}
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="/call_for_papers/{data
+                                                .conference_data
+                                                .acronym}/submissions/{submission.id}/author"
+                                            class="icon-button text-center"
+                                        >
+                                            <Search class="mx-auto" />
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <SubmissionStatusText
+                                            status={submission.status}
+                                        />
+                                    </td>
+                                </tr>
+                            {/each}
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        {/each}
+    {/if}
 </div>

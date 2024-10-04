@@ -7,7 +7,10 @@ import { createSubmission } from "$src/lib/database/submissions";
 import { getUserProfile } from "$src/lib/database/users";
 import transporter from "$src/lib/email/setup.server";
 import { renderCreateSubmissionTemplate } from "$src/lib/email/templating";
-import { SubmissionReviewProcessQueueManager } from "$src/lib/queue/consumers/submissions";
+import {
+    SubmissionReviewProcessQueueManager,
+    submissionReviewProcessWorker,
+} from "$src/lib/queue/consumers/submissions";
 import { redis } from "$src/lib/redis/redis";
 import { Prisma } from "@prisma/client";
 import { error, redirect, type Actions, type Load } from "@sveltejs/kit";
@@ -147,7 +150,7 @@ export const actions: Actions = {
         transporter.sendMail({
             from: `${EMAIL}`,
             to: `${user.email}`,
-            subject: "Submission has been created",
+            subject: `Your paper ${createdSubmission.local_id} for the ${conference.short_name} has been created`,
             html: html,
         });
         authors.forEach(async (author) => {
@@ -189,7 +192,7 @@ export const actions: Actions = {
                 transporter.sendMail({
                     from: `${EMAIL}`,
                     to: `${author.email}`,
-                    subject: "Submission has been created",
+                    subject: `Your paper ${createdSubmission.local_id} for the ${conference.short_name} has been created`,
                     html: html,
                 });
             }

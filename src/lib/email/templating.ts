@@ -6,6 +6,7 @@ export const enum EmailTemplates {
     updateSubmission = "update_submission.html",
     recoverPassword = "password_recovery.html",
     coAuthorSubmissionCreated = "create_submission_co_author.html",
+    submissionUnderReview = "submission_under_review.html",
 }
 export const readEmailTemplate = async (template: EmailTemplates) => {
     return await readFile(`email_templates/${template.toString()}`, "utf-8");
@@ -67,4 +68,12 @@ export const renderRecoverPasswordTemplate = async (
     data: RecoverPasswordTemplateData,
 ) => {
     return renderEmailTemplate(EmailTemplates.recoverPassword, data);
+};
+
+export interface SubmissionUnderReviewTemplateData
+    extends CreateSubmissionTemplateData {}
+export const renderSubmissionUnderReviewTemplate = async (
+    data: SubmissionUnderReviewTemplateData,
+) => {
+    return renderEmailTemplate(EmailTemplates.submissionUnderReview, data);
 };

@@ -65,6 +65,7 @@
         });
         authors = authors;
     };
+    let isEdited = false;
 </script>
 
 {#if busy}
@@ -74,6 +75,9 @@
 {:else}
     <form
         method="POST"
+        on:change={() => {
+            isEdited = true;
+        }}
         use:enhance={({ formElement, formData, action, cancel }) => {
             let anyIsCorresponding = false;
             authors.forEach((author) => {
@@ -253,7 +257,12 @@
                 {/each}
             </select>
         </label>
-        <button class="primary-button-hover outline" type="submit">
+
+        <button
+            class="primary-button-hover outline"
+            disabled={!isEdited}
+            type="submit"
+        >
             Save
         </button>
         <button

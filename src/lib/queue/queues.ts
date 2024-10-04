@@ -1,5 +1,11 @@
-import Queue from "bull";
+import { Queue } from "bullmq";
+export const connection = {
+    port: 6380,
+    host: "localhost",
+};
 export const submissionReviewProcessQueue = new Queue(
     "submission_review_process",
-    "redis://127.0.0.1:6380",
+    {
+        connection: connection,
+    },
 );

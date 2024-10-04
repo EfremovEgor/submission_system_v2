@@ -152,6 +152,9 @@ export const actions: Actions = {
             where: { id: updatedSubmissionData.topic_id },
             select: { name: true },
         });
+        authors.forEach((author) => {
+            author.title = titles[author.title];
+        });
         const html = await renderUpdateSubmissionTemplate({
             conference_email: conference.email,
             corresponding_title: titles[user.title],
@@ -172,6 +175,7 @@ export const actions: Actions = {
             subject: "Submission has been updated",
             html: html,
         });
+
         authors.forEach(async (author) => {
             if (author.email != user.email && author.is_corresponding) {
                 const html = await renderUpdateSubmissionTemplate({
@@ -192,7 +196,7 @@ export const actions: Actions = {
                 transporter.sendMail({
                     from: `${EMAIL}`,
                     to: `${author.email}`,
-                    subject: "Submission has been updated",
+                    subject: `Your paper ${submission.local_id} for the ${conference.short_name} has been updated`,
                     html: html,
                 });
             }

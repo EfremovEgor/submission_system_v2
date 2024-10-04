@@ -5,6 +5,8 @@
 :root {
     --red: #D93526;
     --red-hover: #9a251a;
+    --orange: #c09b5c;
+    --green: #16a34a;
 }
 
 input:not([type=submit],
@@ -38,6 +40,12 @@ input[type=checkbox] {
 .primary-button-hover:hover {
     background-color: var(--pico-primary);
     color: #fff;
+}
+
+button,
+[role=button],
+[type=button] {
+    min-width: 10rem;
 }
 
 .icon-button {
@@ -77,9 +85,13 @@ input[type=checkbox] {
     color: white
 }
 
-th>button {
+th>* {
     background-color: transparent;
     color: var(--pico-primary);
     border: none;
     padding: 0;
+}
+
+th>.sortable {
+    cursor: pointer;
 }
