@@ -5,6 +5,7 @@
     export let data;
     const conference = data.conference;
     const submission = data.submission;
+    const rights = data.rights;
 </script>
 
 <svelte:head>
@@ -15,23 +16,29 @@
         {conference.short_name} Submission #{submission.local_id}
     </h3>
     <div>
-        <a
-            href="author/edit"
-            rel="noopener noreferrer"
-            class="primary-button-hover outline"
-            role="button"
-        >
-            Edit
+        <a href="/author" class="primary-button-hover outline" role="button">
+            Back
         </a>
-        <button
-            on:click={async () => {
-                if (confirm("Do you want to delete submission?"))
-                    goto("author/delete");
-            }}
-            class="button-red outline"
-        >
-            Delete
-        </button>
+        {#if rights.canEdit}
+            <a
+                href="author/edit"
+                class="primary-button-hover outline"
+                role="button"
+            >
+                Edit
+            </a>
+        {/if}
+        {#if rights.canDelete}
+            <button
+                on:click={async () => {
+                    if (confirm("Do you want to delete submission?"))
+                        goto("author/delete");
+                }}
+                class="button-red outline"
+            >
+                Delete
+            </button>
+        {/if}
     </div>
     <table class="w-fit mt-5">
         <tbody>

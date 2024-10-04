@@ -1,9 +1,12 @@
 import { getConferenceByAcronym } from "$src/lib/database/conferences";
+import prisma from "$src/lib/database/prisma";
 import {
     getSubmissionById,
     getUserSubmissions,
 } from "$src/lib/database/submissions";
 import { getUserProfile } from "$src/lib/database/users";
+import { resolveAuthorRights } from "$src/lib/managers/rights/submission/authors";
+import type { Prisma } from "@prisma/client";
 import { error, redirect, type Load } from "@sveltejs/kit";
 
 /** @type {import('@sveltejs/kit').Load} */
@@ -27,10 +30,7 @@ export const load: Load = async ({ parent, params }) => {
     });
     if (submission == null) error(404);
     if (submission.conference_id != conference.id) error(404);
-    if (submission.created_by_id != data.user.id) error(403);
-    const rights = {
-        canDelete: false,
-        canEdit: false,
-    };
-    return { submission, conference };
+    const rights = resolveAuthorRights(data.user, submission);
+    if (!rights.canAccess) error(403);
+    return { submission, conference, rights };
 };

@@ -15,6 +15,7 @@ import { z } from "zod";
 /** @type {import('@sveltejs/kit').Load} */
 export const load: Load = async ({ parent, params }) => {
     const data = await parent();
+    if (!data.rights.canEdit) error(403);
     if (data.user == null) redirect(302, "/sign-in");
     const userProfile = await getUserProfile(data.user.id);
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
@@ -57,11 +58,12 @@ export const load: Load = async ({ parent, params }) => {
     return { conference, userProfile, authors };
 };
 
-const englishSubmissionFormSchema = z.object({});
 export const actions: Actions = {
     default: async ({ request, cookies, params }) => {
         const user = await getUserFromCookies(cookies, redis);
+
         if (user == null) error(403);
+
         const formData = Object.fromEntries(await request.formData());
         const updatedSubmissionData: Prisma.SubmissionUpdateInput = {
             title: formData.title,
@@ -172,23 +174,6 @@ export const actions: Actions = {
         });
         authors.forEach(async (author) => {
             if (author.email != user.email && author.is_corresponding) {
-                // await sendCoAuthorSubmissionCreatedEmail(author.email, {
-                //     authors: authors,
-                //     submittingAuthor: author,
-                //     correspondingAuthor: user,
-                //     submissionDetails: {
-                //         title: createdSubmission.title,
-                //         local_id: createdSubmission.local_id,
-                //         id: createdSubmission.id,
-                //         topic: (
-                //             await prisma.topic.findFirst({
-                //                 where: { id: createdSubmission.topic_id },
-                //             })
-                //         ).name,
-                //         presentation_format: "",
-                //     },
-                //     conferenceDetails: conference,
-                // });
                 const html = await renderUpdateSubmissionTemplate({
                     conference_email: conference.email,
                     corresponding_title: author.title,
