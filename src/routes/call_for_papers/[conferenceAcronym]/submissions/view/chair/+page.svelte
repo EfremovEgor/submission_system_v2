@@ -1,5 +1,4 @@
 <script lang="ts">
-    import SortableTable from "$components/common/sortableTable/sortableTable.svelte";
     import {
         presentation_formats,
         submission_statuses,
