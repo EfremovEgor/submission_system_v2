@@ -20,7 +20,10 @@ export const getLayoutUser = async (id: number) => {
         END AS is_chair
         FROM users WHERE users.id = ${id}
         `;
+    console.log(rawUser.length);
     if (!rawUser.length) return null;
+    console.log(rawUser[0]);
+
     const user = rawUser[0];
     return user;
 };
