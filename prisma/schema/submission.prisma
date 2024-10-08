@@ -1,0 +1,42 @@
+model Submission {
+    id                  Int        @id @default(autoincrement())
+    local_id            Int
+    title               String
+    title_ru            String?
+    abstract            String
+    abstract_ru         String?
+    keywords            String
+    keywords_ru         String?
+    presentation_format String
+    topic_id            Int
+    topic               Topic      @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+    conference_id       Int
+    conference          Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+    authors             Author[]
+    created_by          User       @relation(fields: [created_by_id], references: [id])
+    created_by_id       Int
+    created_at          DateTime   @default(now())
+    updated_at          DateTime   @default(now()) @updatedAt()
+    status              String     @default("submitted")
+
+    @@map("submissions")
+}
+
+model Author {
+    id               Int        @id @default(autoincrement())
+    email            String
+    first_name       String
+    last_name        String
+    title            String
+    affiliation      String
+    web_page         String?
+    country          String
+    is_corresponding Boolean    @default(false)
+    is_presenter     Boolean    @default(false)
+    first_name_ru    String?
+    last_name_ru     String?
+    submission_id    Int
+    submission       Submission @relation(fields: [submission_id], references: [id], onDelete: Cascade)
+
+    @@map("authors")
+}

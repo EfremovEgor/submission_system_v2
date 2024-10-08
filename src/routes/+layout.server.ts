@@ -1,4 +1,4 @@
-import { getUserById } from "$src/lib/database/users.js";
+import { getLayoutUser, getUserById } from "$src/lib/database/users.js";
 import { redis } from "$src/lib/redis/redis.js";
 import { includeOnlyProperties } from "$src/lib/utils.js";
 import {
@@ -41,17 +41,11 @@ export const load = async ({ url, cookies, request }) => {
         } catch (error) {}
         return data;
     }
-    let user: any = await getUserById(parseInt(userId));
-    if (user == null){
+    let user = await getLayoutUser(parseInt(userId));
+    if (user == null) {
         cookies.delete("SESSION", { path: "/" });
-        return data
-    };
-    user = includeOnlyProperties(user, [
-        "id",
-        "email",
-        "first_name",
-        "last_name",
-        "middle_name",
-    ]);
+        return data;
+    }
+
     return { ...data, user: user };
 };

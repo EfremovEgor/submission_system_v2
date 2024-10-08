@@ -1,4 +1,5 @@
 <script lang="ts">
+    import BackButton from "$components/common/buttons/backButton.svelte";
     import { presentation_formats } from "$lib/aliases";
     import { Check } from "lucide-svelte";
     import { goto } from "$app/navigation";
@@ -13,13 +14,13 @@
     <title>{conference.short_name} Submission #{submission.local_id}</title>
 </svelte:head>
 <div class="container">
+    <div class="mb-2">
+        <BackButton url="/author" />
+    </div>
     <h3>
         {conference.short_name} Submission #{submission.local_id}
     </h3>
     <div>
-        <a href="/author" class="primary-button-hover outline" role="button">
-            Back
-        </a>
         {#if rights.canEdit}
             <a
                 href="author/edit"

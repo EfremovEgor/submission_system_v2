@@ -3,14 +3,8 @@
     import logo from "$images/logo.png";
     import { page } from "$app/stores";
     import { UserRound } from "lucide-svelte";
-    interface User {
-        email: string;
-        id: number;
-        first_name: string;
-        last_name: string;
-        middle_name: string;
-    }
-    export let user: User;
+    import type { layoutUser } from "$src/lib/types/interfaces";
+    export let user: layoutUser;
     const handleChange = ({ currentTarget }: { currentTarget: any }) => {
         const { value } = currentTarget;
 
@@ -58,6 +52,21 @@
                             >
                         {:else}
                             <a href="/author">Author</a>
+                        {/if}
+                    </li>
+                {/if}
+                {#if user.is_chair}
+                    <li
+                        aria-current={$page.url.pathname === "/chair"
+                            ? "page"
+                            : undefined}
+                    >
+                        {#if $page.url.pathname === "/chair"}
+                            <a style="text-decoration: underline;" href="/chair"
+                                >Chair</a
+                            >
+                        {:else}
+                            <a href="/chair">Chair</a>
                         {/if}
                     </li>
                 {/if}

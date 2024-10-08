@@ -1,0 +1,57 @@
+model Conference {
+    id                  Int                 @id @default(autoincrement())
+    name                String
+    name_ru             String?
+    allow_ru            Boolean             @default(false)
+    site_url            String?
+    description         String?
+    start_date          DateTime?           @db.Date
+    submission_deadline DateTime?           @db.Date
+    acronym             String              @unique
+    short_name          String
+    email               String?
+    creator_id          Int?
+    creator             User?               @relation(fields: [creator_id], references: [id], onDelete: SetNull)
+    symposiums          Symposium[]
+    topics              Topic[]
+    settings            ConferenceSettings?
+    submissions         Submission[]
+    chairs              Chair[]
+
+    @@map("conferences")
+}
+
+model ConferenceSettings {
+    id                   Int        @id @default(autoincrement())
+    conference_id        Int        @unique
+    conference           Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+    presentation_formats String[]   @default(["online", "offline"])
+
+    @@map("conference_settings")
+}
+
+model Symposium {
+    id            Int        @id @default(autoincrement())
+    conference_id Int
+    conference    Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+    topics        Topic[]
+    name          String
+    name_ru       String?
+    position      Int        @default(0)
+
+    @@map("symposiums")
+}
+
+model Topic {
+    id            Int          @id @default(autoincrement())
+    symposium_id  Int?
+    symposium     Symposium?   @relation(fields: [symposium_id], references: [id], onDelete: Cascade)
+    name          String
+    name_ru       String?
+    position      Int          @default(0)
+    conference_id Int?
+    conference    Conference?  @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+    Submission    Submission[]
+
+    @@map("topics")
+}

@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-
     export let data;
     const goBackUrl = data.goBackUrl;
     const submission = data.submission;

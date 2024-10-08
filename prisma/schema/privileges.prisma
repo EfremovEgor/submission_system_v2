@@ -1,0 +1,27 @@
+model Chair {
+    id            Int        @id @default(autoincrement())
+    user_id       Int
+    user          User       @relation(fields: [user_id], references: [id])
+    conference_id Int
+    conference    Conference @relation(fields: [conference_id], references: [id])
+
+    @@map("chairs")
+}
+
+model Reviewer {
+    id Int @id @default(autoincrement())
+
+    @@map("reviewers")
+}
+
+model LOC {
+    id Int @id @default(autoincrement())
+
+    @@map("locs")
+}
+
+model CoChair {
+    id Int @id @default(autoincrement())
+
+    @@map("co_chairs")
+}

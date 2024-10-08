@@ -54,21 +54,23 @@
 <div class="container">
     <h3>Author Profile</h3>
     {#if isEditing}
-        <div class="mb-4">
-            <button class="primary-button-hover outline mr-2"> Save </button>
-            <button
-                on:click={() => (isEditing = false)}
-                class="button-red outline"
-            >
-                Cancel
-            </button>
-        </div>
         <form
             use:enhance={formSubmitHandler}
             autocomplete="off"
             method="post"
             class="flex flex-col gap-2"
         >
+            <div class="mb-4">
+                <button class="primary-button-hover outline mr-2">
+                    Save
+                </button>
+                <button
+                    on:click={() => (isEditing = false)}
+                    class="button-red outline"
+                >
+                    Cancel
+                </button>
+            </div>
             <table class="w-fit">
                 <AccountInfoRow name="Title" value={user.title} {isEditing}>
                     <select

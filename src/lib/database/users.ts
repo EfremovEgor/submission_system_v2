@@ -1,12 +1,29 @@
 import type { Prisma } from "@prisma/client";
 import prisma from "./prisma";
 import { hashString } from "$lib/utils";
+import type { layoutUser } from "../types/interfaces";
 
 export const getUserByEmail = async (email: string) => {
     const user = await prisma.user.findFirst({ where: { email: email } });
     return user;
 };
-
+export const getLayoutUser = async (id: number) => {
+    const rawUser: Array<layoutUser> = await prisma.$queryRaw`
+        SELECT id,
+        email,
+        first_name,
+        last_name,
+        middle_name,
+        CASE WHEN EXISTS 
+        (SELECT * from chairs WHERE user_id=1) 
+        THEN 1 ELSE 0 
+        END AS is_chair
+        FROM users WHERE users.id = 1
+        `;
+    if (!rawUser.length) return null;
+    const user = rawUser[0];
+    return user;
+};
 export const getUserById = async (id: number) => {
     const user = await prisma.user.findFirst({
         where: { id: id },
