@@ -15,10 +15,10 @@ export const getLayoutUser = async (id: number) => {
         last_name,
         middle_name,
         CASE WHEN EXISTS 
-        (SELECT * from chairs WHERE user_id=1) 
+        (SELECT * from chairs WHERE user_id=${id}) 
         THEN 1 ELSE 0 
         END AS is_chair
-        FROM users WHERE users.id = 1
+        FROM users WHERE users.id = ${id}
         `;
     if (!rawUser.length) return null;
     const user = rawUser[0];
