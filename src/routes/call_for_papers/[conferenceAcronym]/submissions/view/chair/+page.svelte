@@ -56,5 +56,4 @@
 </svelte:head>
 <div class="container">
     <h3>{conference.name}</h3>
-    <SortableTable data={mutableSubmissions} {fields} />
 </div>
