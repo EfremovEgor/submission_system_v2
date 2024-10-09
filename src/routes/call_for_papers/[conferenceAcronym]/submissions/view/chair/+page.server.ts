@@ -19,6 +19,11 @@ export const load: ServerLoad = async ({ url, cookies, request, parent }) => {
             topic: {
                 select: {
                     name: true,
+                    symposium: {
+                        select: {
+                            name: true,
+                        },
+                    },
                 },
             },
             presentation_format: true,

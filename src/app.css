@@ -57,6 +57,15 @@ button,
     stroke: var(--pico-primary);
 }
 
+.bare-button {
+    background-color: unset;
+    color: var(--pico-primary);
+    border: none;
+    min-width: fit-content;
+    width: fit-content;
+    padding: 0;
+}
+
 .icon-button:hover>svg {
     stroke: var(--pico-primary-hover);
 }
@@ -89,9 +98,24 @@ th>* {
     background-color: transparent;
     color: var(--pico-primary);
     border: none;
-    padding: 0;
+}
+
+th.centered {
+    flex-direction: row;
+    text-align: center;
 }
 
 th>.sortable {
     cursor: pointer;
+    user-select: none;
+
+}
+
+th:hover>.sortable {
+    color: var(--pico-primary-hover)
+}
+
+th>.bare-button.sortable {
+    width: 100%;
+
 }

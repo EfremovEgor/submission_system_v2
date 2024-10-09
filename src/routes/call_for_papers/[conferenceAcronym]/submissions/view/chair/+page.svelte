@@ -1,24 +1,35 @@
 <script lang="ts">
-    import {
-        presentation_formats,
-        submission_statuses,
-    } from "$src/lib/aliases.js";
-    import { formatAuthors } from "$src/lib/utils.client.js";
+    import EnglishSubmissionsTable from "$components/common/tables/submissions/englishSubmissionsTable.svelte";
     export let data;
-    let submissions = [];
+    const submissions = data.submissions;
     const conference = data.conference;
     let mutableSubmissions = submissions;
-    data.submissions.forEach((submission) => {
-        submissions.push({
-            ...submission,
-            authors: formatAuthors(submission.authors),
-            topic: submission.topic.name,
-            created_at: submission.created_at.toLocaleString(),
-            status: submission_statuses[submission.status],
-            presentation_format:
-                presentation_formats[submission.presentation_format],
-        });
+    const topics = {};
+    const symposiums = {};
+    submissions.forEach((submission) => {
+        if (submission.topic.symposium.name) {
+            symposiums[submission.topic.symposium.name] = {};
+            if (
+                !(
+                    submission.topic.name in
+                    symposiums[submission.topic.symposium.name]
+                )
+            )
+                symposiums[submission.topic.symposium.name][
+                    submission.topic.name
+                ] = 1;
+            else
+                symposiums[submission.topic.symposium.name][
+                    submission.topic.name
+                ] += 1;
+        } else {
+            if (!(submission.topic.name in topics))
+                topics[submission.topic.name] = 1;
+            else topics[submission.topic.name] += 1;
+        }
     });
+    console.log(symposiums);
+    console.log(topics);
     let fields = [
         {
             name: "#",
@@ -56,4 +67,9 @@
 </svelte:head>
 <div class="container">
     <h3>{conference.name}</h3>
+    <EnglishSubmissionsTable
+        submissions={mutableSubmissions}
+        {topics}
+        {symposiums}
+    />
 </div>

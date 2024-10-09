@@ -21,7 +21,6 @@ export const formatAuthors = (
     }[],
 ) => {
     let authorsArray = [];
-    console.log(rawAuthors);
     rawAuthors.forEach((author) => {
         authorsArray.push(`${author.last_name} ${author.first_name}`);
     });
