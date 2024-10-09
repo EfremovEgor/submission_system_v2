@@ -3,8 +3,11 @@
     import { presentation_formats } from "$src/lib/aliases";
     import { formatAuthors } from "$src/lib/utils.client";
     import { Search } from "lucide-svelte";
-
+    export let conference: {
+        acronym: string;
+    };
     export let submissions: {
+        id: number;
         local_id: number;
         title: string;
         presentation_format: string;
@@ -20,6 +23,13 @@
     }[];
     export let topics: object = {};
     export let symposiums: object = {};
+
+    let submissionsToDisplay = submissions;
+
+    let showedTopics = {};
+    Object.values(symposiums).forEach((symposium) => {
+        Object.keys(symposium).forEach((topic) => (showedTopics[topic] = true));
+    });
     function sortSubmissions(field, reverse = 0) {
         function compare(a, b) {
             let compareBy = field;
@@ -38,9 +48,17 @@
             }
             return 0;
         }
-        submissions.sort(compare);
-        if (reverse) submissions.reverse();
-        submissions = submissions;
+        submissionsToDisplay.sort(compare);
+        if (reverse) submissionsToDisplay.reverse();
+        submissionsToDisplay = submissionsToDisplay;
+    }
+
+    function filterByTopics() {
+        submissionsToDisplay = [];
+        submissions.forEach((submission) => {
+            if (showedTopics[submission.topic.name])
+                submissionsToDisplay.push(submission);
+        });
     }
 </script>
 
@@ -58,7 +76,16 @@
                             <tbody>
                                 {#each Object.keys(symposiums[symposium]) as topic}
                                     <tr>
-                                        <td><input type="checkbox" /></td>
+                                        <td
+                                            ><input
+                                                bind:checked={showedTopics[
+                                                    topic
+                                                ]}
+                                                on:change={() =>
+                                                    filterByTopics()}
+                                                type="checkbox"
+                                            /></td
+                                        >
                                         <td>{topic}</td>
                                         <td style="padding-left: 10px;"
                                             >{symposiums[symposium][topic]}</td
@@ -73,6 +100,9 @@
         </div>
     </details>
 {/if}
+<span>Displayed: {submissionsToDisplay.length}/{submissions.length} <br /></span
+>
+<button class="bare-button">Export to Excel</button>
 <div class="overflow-auto">
     <table class="striped">
         <thead>
@@ -189,7 +219,7 @@
         </thead>
 
         <tbody>
-            {#each submissions as submission}
+            {#each submissionsToDisplay as submission}
                 <tr>
                     <td>
                         {submission.local_id}
@@ -210,7 +240,10 @@
                         {submission.created_at.toLocaleString()}
                     </td>
                     <td>
-                        <a href="/" class="icon-button text-center">
+                        <a
+                            href="/call_for_papers/{conference.acronym}/submissions/{submission.id}/chair"
+                            class="icon-button text-center"
+                        >
                             <Search class="mx-auto" />
                         </a>
                     </td>
@@ -236,8 +269,5 @@
     }
     table * {
         padding: 10px;
-    }
-    .id-column {
-        width: 20px;
     }
 </style>

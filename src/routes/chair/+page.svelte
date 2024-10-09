@@ -11,7 +11,7 @@
         {#each data.conferences as conference}
             <li>
                 <a
-                    href="call_for_papers/{conference.acronym}/submissions/view/chair"
+                    href="/call_for_papers/{conference.acronym}/submissions/view/chair"
                     >{conference.name}</a
                 >
             </li>

@@ -1,5 +1,5 @@
 import type { Prisma, Submission, User } from "@prisma/client";
-import { Roles, type BaseSubmissionRights } from "../base.server";
+import { Roles, userRights, type BaseSubmissionRights } from "../base.server";
 import { SubmissionStatuses } from "$src/lib/enums";
 
 const creatorRights: BaseSubmissionRights = {
@@ -20,12 +20,7 @@ const coAuthorRights: BaseSubmissionRights = {
     canEdit: false,
     canDelete: false,
 };
-const userRights: BaseSubmissionRights = {
-    role: Roles.user,
-    canAccess: false,
-    canEdit: false,
-    canDelete: false,
-};
+
 export const resolveAuthorRights = (
     user: User,
     submission: {

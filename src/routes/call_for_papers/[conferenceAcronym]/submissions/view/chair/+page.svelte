@@ -1,14 +1,14 @@
 <script lang="ts">
     import EnglishSubmissionsTable from "$components/common/tables/submissions/englishSubmissionsTable.svelte";
     export let data;
-    const submissions = data.submissions;
+    let submissions = data.submissions;
     const conference = data.conference;
-    let mutableSubmissions = submissions;
     const topics = {};
     const symposiums = {};
     submissions.forEach((submission) => {
         if (submission.topic.symposium.name) {
-            symposiums[submission.topic.symposium.name] = {};
+            if (!(submission.topic.symposium.name in symposiums))
+                symposiums[submission.topic.symposium.name] = {};
             if (
                 !(
                     submission.topic.name in
@@ -28,8 +28,7 @@
             else topics[submission.topic.name] += 1;
         }
     });
-    console.log(symposiums);
-    console.log(topics);
+
     let fields = [
         {
             name: "#",
@@ -67,9 +66,5 @@
 </svelte:head>
 <div class="container">
     <h3>{conference.name}</h3>
-    <EnglishSubmissionsTable
-        submissions={mutableSubmissions}
-        {topics}
-        {symposiums}
-    />
+    <EnglishSubmissionsTable {submissions} {topics} {symposiums} {conference} />
 </div>
