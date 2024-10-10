@@ -11,15 +11,18 @@
     min-height: 320px;
   ">
 
-        <h3 style="color: #0056a6">Submission <%= submissionDetails.local_id %> for <%= conferenceDetails.short_name %> has been created</h3>
+        <h3 style="color: #0056a6">Submission <%= submissionDetails.local_id %> for <%= conferenceDetails.short_name %>
+                    has been created</h3>
         <p style="color: black">Dear <%= submittingAuthor.title %>
                 <%= submittingAuthor.first_name %>
                     <%= submittingAuthor.last_name %>, </p>
-        <p style="color: black">You have received this email, 
-            because  <%= correspondingAuthor.title %>  <%= correspondingAuthor.first_name %>  <%= correspondingAuthor.last_name %>
-            has added you as a co-author 
-            of the paper <%= submissionDetails.title %> submitted to the <%= conferenceDetails.name %>
-            through the ConfChair Event Management System.
+        <p style="color: black">You have received this email,
+            because <%= correspondingAuthor.title %>
+                <%= correspondingAuthor.first_name %>
+                    <%= correspondingAuthor.last_name %>
+                        has added you as a co-author
+                        of the paper <%= submissionDetails.title %> submitted to the <%= conferenceDetails.name %>
+                                through the ConfChair Event Management System.
         </p>
         <p style="color: black">
             Brief abstract details could be found below:
@@ -70,9 +73,9 @@
                 </tr>
             </tbody>
         </table>
-        <p style="color: black">To follow up the further review status 
+        <p style="color: black">To follow up the further review status
             of the submission in the <a href="https://www.confchair.ru/author">Author Profile</a>,
-            please sign in to your ConfChair account 
+            please sign in to your ConfChair account
             (or create one of you haven’t done it before).</p>
         <p style="color: black">Please note, that abstract details update available during 48 hours after submission
             before the review process starts.</p>

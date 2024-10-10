@@ -1,9 +1,9 @@
 model Chair {
     id            Int        @id @default(autoincrement())
     user_id       Int
-    user          User       @relation(fields: [user_id], references: [id])
+    user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
     conference_id Int
-    conference    Conference @relation(fields: [conference_id], references: [id])
+    conference    Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
 
     @@map("chairs")
 }

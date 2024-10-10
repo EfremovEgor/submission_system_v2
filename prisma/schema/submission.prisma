@@ -18,6 +18,7 @@ model Submission {
     created_at          DateTime   @default(now())
     updated_at          DateTime   @default(now()) @updatedAt()
     status              String     @default("submitted")
+    deleted             Boolean    @default(false)
 
     @@map("submissions")
 }

@@ -7,7 +7,7 @@
     export let data;
     const conference = data.conference;
     const submission = data.submission;
-    // const rights = data.rights;
+    const rights = data.rights;
 </script>
 
 <svelte:head>
