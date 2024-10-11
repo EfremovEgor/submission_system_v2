@@ -11,16 +11,16 @@
     min-height: 320px;
   ">
 
-        <h3 style="color: #0056a6">Submission <%= local_id %> for <%= conference_short_name %> has been created</h3>
+        <!-- <h3 style="color: #0056a6">Submission <%= local_id %> for <%= conference_short_name %> has been created</h3> -->
         <p style="color: black">Dear <%= corresponding_title %>
                 <%= first_name %>
                     <%= last_name %>, </p>
-        <p style="color: black">Thank you for submitting your abstract to the <strong>
+        <p style="color: black">Thank you for submitting your paper to the <strong>
                 <%= conference_name %>
             </strong>. Please find
             below
-            your abstract details:</p>
-        <h3 style="color: black">Abstract Details</h3>
+            your paper details:</p>
+        <h3 style="color: black">Paper Details</h3>
         <table style="width:100%" class="uk-table">
             <tbody>
                 <tr>
@@ -77,9 +77,11 @@
                 </tr>
             </tbody>
         </table>
-        <p style="color: black">In case the above mentioned details are not correct, please access <a target="_blank"
-                href="http://confchair.org/submission/<%= submission_id %>">Submission Page</a> and update your
-            abstract.</p>
+        <p style="color: black">In case the above mentioned details are not correct, please access your <a
+                target="_blank" href="http://confchair.org/submission/<%= submission_id %>">submission</a> and update
+            your
+            paper. Please sign in to your ConfChair account (or create one of you haven’t done it before)
+        </p>
 
         <p style="color: black">Please note, that abstract details update available during 48 hours after submission
             before the review process starts.</p>
@@ -87,9 +89,9 @@
         <p style="color: black">If you have any questions, please contact <%= conference_short_name %> Program
                 Committee (<%= conference_email %>).
         </p>
-        <p style="color: black">We look forward to see you at <b>
-                <%= conference_name %>
-            </b>.</p>
+        <p style="color: black">We look forward to see you at
+            <%= conference_name %>.
+        </p>
         <p style="color: black">Best Regards,<br>ConfChair Team <br> support@confchair.org </p>
 
 

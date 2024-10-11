@@ -53,7 +53,7 @@ export class SubmissionReviewProcessQueueManager {
             transporter.sendMail({
                 from: `${EMAIL}`,
                 to: `${author.email}`,
-                subject: `Your paper ${submission.local_id} for the  ${submission.conference.short_name} is under review`,
+                subject: `Your paper #${submission.local_id} for the  ${submission.conference.short_name} is under review`,
                 html: html,
             });
         });

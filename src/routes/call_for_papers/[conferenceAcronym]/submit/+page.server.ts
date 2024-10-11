@@ -150,7 +150,7 @@ export const actions: Actions = {
         transporter.sendMail({
             from: `${EMAIL}`,
             to: `${user.email}`,
-            subject: `Your paper ${createdSubmission.local_id} for the ${conference.short_name} has been created`,
+            subject: `Your paper #${createdSubmission.local_id} for the ${conference.short_name} has been created`,
             html: html,
         });
         authors.forEach(async (author) => {
@@ -192,7 +192,7 @@ export const actions: Actions = {
                 transporter.sendMail({
                     from: `${EMAIL}`,
                     to: `${author.email}`,
-                    subject: `Your paper ${createdSubmission.local_id} for the ${conference.short_name} has been created`,
+                    subject: `Your paper #${createdSubmission.local_id} for the ${conference.short_name} has been created`,
                     html: html,
                 });
             }

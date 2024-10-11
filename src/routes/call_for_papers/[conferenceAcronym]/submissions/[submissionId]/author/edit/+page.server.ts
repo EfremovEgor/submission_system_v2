@@ -172,7 +172,7 @@ export const actions: Actions = {
         transporter.sendMail({
             from: `${EMAIL}`,
             to: `${user.email}`,
-            subject: `Your paper ${submission.local_id} for the ${conference.short_name} has been updated`,
+            subject: `Your paper #${submission.local_id} for the ${conference.short_name} has been updated`,
             html: html,
         });
 
@@ -196,7 +196,7 @@ export const actions: Actions = {
                 transporter.sendMail({
                     from: `${EMAIL}`,
                     to: `${author.email}`,
-                    subject: `Your paper ${submission.local_id} for the ${conference.short_name} has been updated`,
+                    subject: `Your paper #${submission.local_id} for the ${conference.short_name} has been updated`,
                     html: html,
                 });
             }
