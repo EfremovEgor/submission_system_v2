@@ -1,0 +1,52 @@
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage[
+	includehead,
+	includefoot,
+	top=1cm, 
+	bottom=1.5cm, 
+	right=1.5cm, 
+	left=2cm,
+	headsep=92pt
+]{geometry}
+
+\usepackage{ragged2e}
+
+
+
+\begin{document}
+\fancypagestyle{firstpage}{\renewcommand{\headrulewidth}{0pt}}
+\newpage
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{\$\{conference.shortName\} }
+	\\Submission \#\$\{submission.localId\}
+	\\Session: \$\{session.name\}
+	\\Submitted at: \$\{submission.createdAt\}
+	\\Status: \$\{submission.status\}
+}
+
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyfoot[R]{
+	Generated at: 11.10.2024, 20:54:02
+	\\Confchair Event Management System
+	\\confchair.org}
+
+\centering{\textbf{\uppercase{\$\{submission.title\}
+		}}}
+\\[24pt]
+\centering{\$\{submission.authors\}}
+\\[24pt]
+\centering{\textbf{Abstract}}
+\\[12pt]
+\justifying{
+	\$\{submission.abstract\}
+}
+\justifying{
+
+	Key words: \$\{submission.keywords\} }
+
+\end{document}

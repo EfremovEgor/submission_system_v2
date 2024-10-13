@@ -1,4 +1,5 @@
 <script lang="ts">
+    import BackButton from "$components/common/buttons/backButton.svelte";
     import EnglishSubmissionsTable from "$components/common/tables/submissions/englishSubmissionsTable.svelte";
     export let data;
     let submissions = data.submissions;
@@ -34,6 +35,7 @@
     <title>Chair</title>
 </svelte:head>
 <div class="container">
+    <BackButton url="/chair" />
     <h3>{conference.name}</h3>
     <EnglishSubmissionsTable {submissions} {topics} {symposiums} {conference} />
 </div>

@@ -52,7 +52,21 @@
     <title>Author Profile</title>
 </svelte:head>
 <div class="container">
-    <h3>Author Profile</h3>
+    <h3>
+        Author Profile
+
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        {#if !isEditing}
+            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+            <span
+                tabindex="0"
+                on:keydown={() => (isEditing = true)}
+                on:click={() => (isEditing = true)}
+                class="edit-profile_button">Edit</span
+            >
+        {/if}
+    </h3>
+
     {#if isEditing}
         <form
             use:enhance={formSubmitHandler}
@@ -199,14 +213,6 @@
             </table>
         </form>
     {:else}
-        <div class="mb-4">
-            <button
-                on:click={() => (isEditing = true)}
-                class="primary-button-hover outline"
-            >
-                Edit
-            </button>
-        </div>
         <table class="w-fit">
             <AccountInfoRow name="Email" value={user.email} />
             <AccountInfoRow name="Title" value={titles[user.title]} />
@@ -250,7 +256,7 @@
                     >{conference}</summary
                 >
                 <div class="overflow-auto">
-                    <table class="striped">
+                    <table class="striped submissions">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center"
@@ -335,3 +341,21 @@
         {/each}
     {/if}
 </div>
+
+<style>
+    .submissions * {
+        font-size: 16px !important;
+    }
+    .submissions td,
+    .submissions th {
+        padding: 5px !important;
+    }
+    .edit-profile_button {
+        color: var(--pico-primary);
+    }
+    .edit-profile_button:hover {
+        color: var(--pico-primary-hover);
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>

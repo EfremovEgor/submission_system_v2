@@ -119,3 +119,7 @@ th>.bare-button.sortable {
     width: 100%;
 
 }
+
+details summary {
+    color: var(--pico-primary) !important;
+}

@@ -63,42 +63,34 @@
 </script>
 
 {#if symposiums}
-    <details open>
-        <summary class="w-fit">Choose Topic</summary>
-        <div>
-            {#each Object.keys(symposiums) as symposium}
-                <tr>
-                    <details>
-                        <summary style="width: fit-content;"
-                            >{symposium}</summary
-                        >
-                        <table class="striped">
-                            <tbody>
-                                {#each Object.keys(symposiums[symposium]) as topic}
-                                    <tr>
-                                        <td
-                                            ><input
-                                                bind:checked={showedTopics[
-                                                    topic
-                                                ]}
-                                                on:change={() =>
-                                                    filterByTopics()}
-                                                type="checkbox"
-                                            /></td
-                                        >
-                                        <td>{topic}</td>
-                                        <td style="padding-left: 10px;"
-                                            >{symposiums[symposium][topic]}</td
-                                        >
-                                    </tr>
-                                {/each}
-                            </tbody>
-                        </table>
-                    </details>
-                </tr>
-            {/each}
-        </div>
-    </details>
+    <div class="symposiums">
+        {#each Object.keys(symposiums) as symposium}
+            <tr>
+                <details>
+                    <summary style="width: fit-content;">{symposium}</summary>
+                    <table class="striped">
+                        <tbody>
+                            {#each Object.keys(symposiums[symposium]) as topic}
+                                <tr>
+                                    <td
+                                        ><input
+                                            bind:checked={showedTopics[topic]}
+                                            on:change={() => filterByTopics()}
+                                            type="checkbox"
+                                        /></td
+                                    >
+                                    <td>{topic}</td>
+                                    <td style="padding-left: 10px;"
+                                        >{symposiums[symposium][topic]}</td
+                                    >
+                                </tr>
+                            {/each}
+                        </tbody>
+                    </table>
+                </details>
+            </tr>
+        {/each}
+    </div>
 {/if}
 <span>Displayed: {submissionsToDisplay.length}/{submissions.length} <br /></span
 >
@@ -257,6 +249,12 @@
 </div>
 
 <style>
+    table * {
+        font-size: 16px !important;
+    }
+    td {
+        padding: 5px !important;
+    }
     details > div * {
         font-size: 16px;
     }
@@ -264,8 +262,8 @@
     table > thead * {
         padding: 5px !important;
     }
-    details > div * {
-        padding: 0;
+    .symposiums * {
+        padding: 0 !important;
     }
     table * {
         padding: 10px;
