@@ -6,9 +6,9 @@ import {
 } from "$src/lib/latex/templating";
 import { json } from "@sveltejs/kit";
 
-export async function GET({ url }) {
+export async function GET({ params }) {
     const rawSubmission = await prisma.submission.findFirst({
-        where: { id: parseInt(url.searchParams.get("submission")) },
+        where: { id: parseInt(params.id) },
         include: {
             authors: {
                 select: {

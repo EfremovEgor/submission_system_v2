@@ -1,4 +1,5 @@
 <script lang="ts">
+    import DownloadPdf from "$components/common/icons/downloadPDF.svelte";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import { presentation_formats } from "$src/lib/aliases";
     import { formatAuthors } from "$src/lib/utils.client";
@@ -237,6 +238,12 @@
                             class="icon-button text-center"
                         >
                             <Search class="mx-auto" />
+                        </a>
+                        <a
+                            href="/pdf/submissions/{submission.id}"
+                            class="icon-button text-center"
+                        >
+                            <DownloadPdf class="mx-auto" />
                         </a>
                     </td>
                     <td class="text-center">
