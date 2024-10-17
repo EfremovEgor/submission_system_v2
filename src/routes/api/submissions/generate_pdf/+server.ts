@@ -1,5 +1,5 @@
-import { submission_statuses, titles } from "$src/lib/aliases.js";
-import prisma from "$src/lib/database/prisma.js";
+import { submission_statuses, titles } from "$src/lib/aliases";
+import prisma from "$src/lib/database/prisma";
 import {
     generateSubmissionPDFBytes,
     type submissionPDFTemplateData,
