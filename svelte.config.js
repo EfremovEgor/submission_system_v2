@@ -17,6 +17,7 @@ const config = {
             $src: "./src",
             $email: "./src/lib/email",
             $static: "./static",
+            $server: "./src/lib/server",
         },
         csrf: {
             checkOrigin: false,

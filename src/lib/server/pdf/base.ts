@@ -1,9 +1,9 @@
-const pdfmake = require("pdfmake");
+import PdfPrinter from "pdfmake";
 import { fonts } from "./fonts";
 export const generatePDFStream = async (
     documentDefinition: any,
 ): Promise<Buffer> => {
-    const printer = new pdfmake.PdfPrinter(fonts);
+    const printer = new PdfPrinter(fonts);
     const doc = printer.createPdfKitDocument(documentDefinition);
 
     return new Promise((resolve, reject) => {

@@ -3,7 +3,7 @@ import prisma from "$src/lib/database/prisma.js";
 import {
     generateSubmissionPDFBytes,
     type submissionPDFTemplateData,
-} from "$src/lib/pdf/submission";
+} from "$src/lib/server/pdf/submission";
 
 import { json } from "@sveltejs/kit";
 
