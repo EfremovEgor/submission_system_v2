@@ -241,6 +241,7 @@
                         </a>
                         <a
                             href="/pdf/submissions/{submission.id}"
+                            target="_blank"
                             class="icon-button text-center"
                         >
                             <DownloadPdf class="mx-auto" />

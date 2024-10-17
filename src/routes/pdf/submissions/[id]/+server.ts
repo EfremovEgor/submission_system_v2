@@ -2,8 +2,9 @@ import { submission_statuses, titles } from "$src/lib/aliases.js";
 import prisma from "$src/lib/database/prisma.js";
 import {
     generateSubmissionPDFBytes,
-    type submissionPDFData,
-} from "$src/lib/latex/templating";
+    type submissionPDFTemplateData,
+} from "$src/lib/pdf/submission";
+
 import { json } from "@sveltejs/kit";
 
 export async function GET({ params }) {
@@ -22,26 +23,31 @@ export async function GET({ params }) {
             topic: {
                 select: { name: true },
             },
+            conference: {
+                select: { short_name: true },
+            },
         },
     });
-    const submission: submissionPDFData = {
+    const submission: submissionPDFTemplateData = {
         submission: {
             title: rawSubmission.title,
             localId: rawSubmission.local_id,
             status: submission_statuses[rawSubmission.status],
             createdAt: rawSubmission.created_at.toLocaleString(),
             abstract: rawSubmission.abstract,
-            keywords: rawSubmission.keywords.split("\n"),
+            keywords: rawSubmission.keywords.split("\n").join(", "),
             authors: rawSubmission.authors.map(
                 (author) =>
                     `${titles[author.title]} ${author.last_name} ${author.first_name}, ${author.affiliation}, ${author.country}`,
             ),
         },
+        conference: rawSubmission.conference,
         topic: {
             name: rawSubmission.topic.name,
         },
     };
-    const bytes = await generateSubmissionPDFBytes(submission);
+    const bytes: Buffer = await generateSubmissionPDFBytes(submission);
+    console.log(bytes);
     if (!bytes) return json({ error: true });
     return new Response(bytes, {
         headers: {

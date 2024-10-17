@@ -1,9 +1,14 @@
 <footer style="margin-top:100px">
     <article
         style="margin:0;"
-        class="flex align-middle justify-center items-center py-3"
+        class="flex align-middle justify-center items-center py-3 flex-col gap:0"
     >
-        Copyright © 2024 ConfChair
+        <span style="color:var(--pico-primary);">
+            Copyright © 2024 ConfChair
+        </span>
+        <a href="mailto:support@confchair.org" class="link"
+            >support@confchair.org</a
+        >
     </article>
 </footer>
 

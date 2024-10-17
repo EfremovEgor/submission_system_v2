@@ -18,6 +18,7 @@
         "@types/nodemailer": "^6.4.15",
         "autoprefixer": "^10.4.19",
         "nodemailer": "^6.9.15",
+        "pdfmake": "^0.2.14",
         "postcss": "^8.4.39",
         "prettier": "^3.3.3",
         "prettier-plugin-svelte": "^3.2.6",
@@ -35,6 +36,7 @@
     "dependencies": {
         "@prisma/client": "^5.19.1",
         "@types/ejs": "^3.1.5",
+        "@types/pdfmake": "^0.2.9",
         "bits-ui": "^0.21.12",
         "bullmq": "^5.15.0",
         "clsx": "^2.1.1",

@@ -2,8 +2,9 @@ import { submission_statuses, titles } from "$src/lib/aliases.js";
 import prisma from "$src/lib/database/prisma.js";
 import {
     generateSubmissionPDFBytes,
-    type submissionPDFData,
-} from "$src/lib/latex/templating";
+    type submissionPDFTemplateData,
+} from "$src/lib/pdf/submission";
+
 import { json } from "@sveltejs/kit";
 
 export async function GET({ url }) {
@@ -24,7 +25,7 @@ export async function GET({ url }) {
             },
         },
     });
-    const submission: submissionPDFData = {
+    const submission: submissionPDFTemplateData = {
         submission: {
             title: rawSubmission.title,
             localId: rawSubmission.local_id,

@@ -123,3 +123,12 @@ th>.bare-button.sortable {
 details summary {
     color: var(--pico-primary) !important;
 }
+.link{
+    color:var(--pico-primary);
+    text-decoration: none;
+}
+.link:hover{
+    color:var(--pico-primary-hover);
+    text-decoration: underline;
+    cursor: pointer;
+}

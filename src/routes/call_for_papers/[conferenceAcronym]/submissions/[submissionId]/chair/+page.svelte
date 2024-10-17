@@ -44,7 +44,9 @@
             </tr>
             <tr>
                 <td class="font-semibold">Abstract</td>
-                <td>{submission.abstract}</td>
+                <td style="white-space: pre-wrap; word-wrap: break-word;">
+                    {submission.abstract}
+                </td>
             </tr>
             <tr>
                 <td class="font-semibold">Submitted at</td>
