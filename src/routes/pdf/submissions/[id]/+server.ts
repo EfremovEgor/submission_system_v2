@@ -1,13 +1,11 @@
 import { submission_statuses, titles } from "$src/lib/aliases.js";
 import prisma from "$src/lib/database/prisma.js";
-import {
-    generateSubmissionPDFBytes,
-    type submissionPDFTemplateData,
-} from "$src/lib/server/pdf/submission";
+import { fetchPdfApi } from "$src/lib/server/fetch.js";
+import { type submissionPDFTemplateData } from "$src/lib/server/pdf/submission";
 
 import { json } from "@sveltejs/kit";
 
-export async function GET({ params }) {
+export async function GET({ params, fetch }) {
     const rawSubmission = await prisma.submission.findFirst({
         where: { id: parseInt(params.id) },
         include: {
@@ -46,7 +44,17 @@ export async function GET({ params }) {
             name: rawSubmission.topic.name,
         },
     };
-    const bytes: Buffer = await generateSubmissionPDFBytes(submission);
+    const response = await fetchPdfApi(fetch, "/pdf/submission", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submission),
+    });
+
+    const bytes: Buffer = Buffer.from(
+        await (await response.blob()).arrayBuffer(),
+    );
     if (!bytes) return json({ error: true });
     return new Response(bytes, {
         headers: {

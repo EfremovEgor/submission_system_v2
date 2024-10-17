@@ -38,7 +38,11 @@ services:
             - "5050:80"
         volumes:
             - pgadmin_data:/var/lib/pgadmin
-
+    pdf_api:
+        image: pdf_api:latest
+        restart: unless-stopped
+        ports:
+            - "127.0.0.1:5000:3000"
 volumes:
     postgres_data:
     redis_data:

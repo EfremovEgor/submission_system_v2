@@ -19,9 +19,7 @@ const config = {
             $static: "./static",
             $server: "./src/lib/server",
         },
-        files: {
-            assets: "./assets",
-        },
+
         csrf: {
             checkOrigin: false,
         },
