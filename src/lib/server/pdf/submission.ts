@@ -107,7 +107,7 @@ export const generateSubmissionPDFBytes = async (
         pageMargins: [50, 120, 50, 100],
         defaultStyle: {
             fontSize: 12,
-            font: "ComputerModern",
+            font: "Roboto",
         },
         info: {
             title: `${data.submission.title}`,
