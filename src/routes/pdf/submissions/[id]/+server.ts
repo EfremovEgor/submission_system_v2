@@ -47,7 +47,6 @@ export async function GET({ params }) {
         },
     };
     const bytes: Buffer = await generateSubmissionPDFBytes(submission);
-    console.log(bytes);
     if (!bytes) return json({ error: true });
     return new Response(bytes, {
         headers: {
