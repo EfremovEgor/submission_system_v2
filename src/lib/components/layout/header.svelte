@@ -134,14 +134,16 @@
                         <a href="/call_for_papers">Call for Papers</a>
                     {/if}
                 </li>
+
                 {#if user}
-                    <li>
-                        <details class="dropdown">
-                            <summary role="button" class="outline">
-                                Account
-                            </summary>
-                            <ul dir="rtl">
-                                {#if user}
+                    {#if user.is_chair}
+                        <li>
+                            <details class="dropdown">
+                                <summary role="button" class="outline">
+                                    Account
+                                </summary>
+
+                                <ul dir="rtl">
                                     <li
                                         aria-current={$page.url.pathname ===
                                         "/author"
@@ -157,11 +159,45 @@
                                             <a href="/author">Author</a>
                                         {/if}
                                     </li>
-                                {/if}
-                                <li><a href="/logout">Logout</a></li>
-                            </ul>
-                        </details>
-                    </li>
+
+                                    {#if user.is_chair}
+                                        <li
+                                            aria-current={$page.url.pathname ===
+                                            "/chair"
+                                                ? "page"
+                                                : undefined}
+                                        >
+                                            {#if $page.url.pathname === "/chair"}
+                                                <a
+                                                    style="text-decoration: underline;"
+                                                    href="/chair">Chair</a
+                                                >
+                                            {:else}
+                                                <a href="/chair">Chair</a>
+                                            {/if}
+                                        </li>
+                                    {/if}
+                                </ul>
+                            </details>
+                        </li>
+                        <li><a href="/logout">Logout</a></li>
+                    {:else}
+                        <li
+                            aria-current={$page.url.pathname === "/author"
+                                ? "page"
+                                : undefined}
+                        >
+                            {#if $page.url.pathname === "/author"}
+                                <a
+                                    style="text-decoration: underline;"
+                                    href="/author">Author</a
+                                >
+                            {:else}
+                                <a href="/author">Author</a>
+                            {/if}
+                        </li>
+                        <li><a href="/logout">Logout</a></li>
+                    {/if}
                 {:else}
                     <li
                         aria-current={$page.url.pathname === "/sign-in"

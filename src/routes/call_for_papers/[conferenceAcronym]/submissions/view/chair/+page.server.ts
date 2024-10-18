@@ -39,5 +39,22 @@ export const load: ServerLoad = async ({ url, cookies, request, parent }) => {
     });
     const rights = await checkForChairRights(conference.id, user.id);
     if (rights.role != Roles.chair) error(403);
-    return { submissions: submissions };
+    const symposiums = await prisma.symposium.findMany({
+        where: {
+            conference_id: conference.id,
+        },
+        select: {
+            name: true,
+            topics: {
+                select: { name: true },
+                orderBy: {
+                    position: "asc",
+                },
+            },
+        },
+        orderBy: {
+            position: "asc",
+        },
+    });
+    return { submissions: submissions, symposiums };
 };

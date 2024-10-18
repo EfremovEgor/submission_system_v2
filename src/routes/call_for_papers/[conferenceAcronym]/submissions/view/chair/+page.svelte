@@ -6,6 +6,14 @@
     const conference = data.conference;
     const topics = {};
     const symposiums = {};
+    if (data.symposiums)
+        data.symposiums.forEach((symposium) => {
+            symposiums[symposium.name] = {};
+            symposium.topics.forEach(
+                (topic) => (symposiums[symposium.name][topic.name] = 0),
+            );
+        });
+
     submissions.forEach((submission) => {
         if (submission.topic.symposium.name) {
             if (!(submission.topic.symposium.name in symposiums))
