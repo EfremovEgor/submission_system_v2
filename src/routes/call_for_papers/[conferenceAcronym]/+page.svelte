@@ -41,7 +41,8 @@
     <div class="flex flex-row justify-between mt-8">
         <article class="basis-1/3 mt-2 h-fit">
             <p>
-                Submission Deadline: {conference.submission_deadline?.toLocaleDateString()}
+                Submission Deadline (extended): <br />
+                {conference.submission_deadline?.toLocaleDateString()}
             </p>
             <p>
                 Start Date: {conference.start_date?.toLocaleDateString()}
