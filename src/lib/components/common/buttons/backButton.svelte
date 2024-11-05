@@ -5,6 +5,6 @@
     export let url;
 </script>
 
-<a href={url} class="no-underline text-lg {Class}">
+<a href={url} class="no-underline text-lg{Class}">
     <MoveLeft size={32} /> Back
 </a>

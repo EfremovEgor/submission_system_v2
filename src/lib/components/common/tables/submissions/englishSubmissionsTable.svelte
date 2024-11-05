@@ -7,6 +7,7 @@
     export let conference: {
         acronym: string;
     };
+    export let submissionViewRoleSuffix: string;
     export let submissions: {
         id: number;
         local_id: number;
@@ -234,7 +235,7 @@
                     </td>
                     <td>
                         <a
-                            href="/call_for_papers/{conference.acronym}/submissions/{submission.id}/chair"
+                            href="/call_for_papers/{conference.acronym}/submissions/{submission.id}/{submissionViewRoleSuffix}"
                             class="icon-button text-center"
                         >
                             <Search class="mx-auto" />
@@ -243,6 +244,7 @@
                             href="/pdf/submissions/{submission.id}"
                             target="_blank"
                             class="icon-button text-center"
+                            download="{conference.acronym}-abstract-{submission.local_id}.pdf"
                         >
                             <DownloadPdf class="mx-auto" />
                         </a>

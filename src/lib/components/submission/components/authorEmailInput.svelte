@@ -23,6 +23,9 @@
         on:change={(event) => {
             preventLanguages(allowedLanguages, event);
         }}
+        on:paste={(event) => {
+            preventLanguages(allowedLanguages, event);
+        }}
         type="email"
         {placeholder}
         {name}

@@ -8,6 +8,7 @@
     import type { ActionResult } from "@sveltejs/kit";
     import { getNames } from "country-list";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
+    import { formatAuthors } from "$src/lib/utils.client.js";
     let countries = getNames();
     countries.sort();
     export let data;
@@ -52,9 +53,11 @@
     <title>Author Profile</title>
 </svelte:head>
 <div class="container">
-    <h3>
-        Author Profile
-
+    <div
+        style="margin-bottom: var(--pico-typography-spacing-vertical);"
+        class="flex items-baseline gap-2"
+    >
+        <h3 class="mb-0">Author Profile</h3>
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         {#if !isEditing}
             <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -65,7 +68,7 @@
                 class="edit-profile_button">Edit</span
             >
         {/if}
-    </h3>
+    </div>
 
     {#if isEditing}
         <form
@@ -292,16 +295,11 @@
                         <tbody>
                             {#each data.submissions as submission}
                                 <tr>
-                                    <td class="text-center">
+                                    <td>
                                         {submission.local_id}
                                     </td>
                                     <td>
-                                        {#each submission.authors as author}
-                                            <span>
-                                                {author.first_name}
-                                                {author.last_name}
-                                            </span><br />
-                                        {/each}
+                                        {formatAuthors(submission.authors)}
                                     </td>
                                     <td>
                                         {submission.title}

@@ -8,7 +8,26 @@ export const chairRights: BaseSubmissionRights = {
     canDelete: true,
     canViewAll: true,
 };
-
+export const locRights: BaseSubmissionRights = {
+    role: Roles.chair,
+    canAccess: true,
+    canEdit: false,
+    canDelete: false,
+    canViewAll: false,
+};
+export const checkForLOCRights = async (
+    conferenceId: number,
+    userId: number,
+) => {
+    const loc = await prisma.lOC.findFirst({
+        where: {
+            conference_id: conferenceId,
+            user_id: userId,
+        },
+    });
+    if (loc == null) return structuredClone(userRights);
+    return structuredClone(locRights);
+};
 export const checkForChairRights = async (
     conferenceId: number,
     userId: number,
@@ -19,6 +38,6 @@ export const checkForChairRights = async (
             user_id: userId,
         },
     });
-    if (chair == null) return userRights;
-    return chairRights;
+    if (chair == null) return structuredClone(userRights);
+    return structuredClone(chairRights);
 };

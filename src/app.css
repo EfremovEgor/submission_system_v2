@@ -123,12 +123,32 @@ th>.bare-button.sortable {
 details summary {
     color: var(--pico-primary) !important;
 }
-.link{
-    color:var(--pico-primary);
+
+.link {
+    color: var(--pico-primary);
     text-decoration: none;
 }
-.link:hover{
-    color:var(--pico-primary-hover);
+
+.link:hover {
+    color: var(--pico-primary-hover);
     text-decoration: underline;
     cursor: pointer;
+}
+
+
+
+.small-table * {
+    font-size: 16px !important;
+}
+
+.small-table td {
+    padding: 5px !important;
+}
+
+.small-table>thead * {
+    padding: 5px !important;
+}
+
+.small-table td {
+    padding: 10px;
 }

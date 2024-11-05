@@ -1,5 +1,8 @@
 <script lang="ts">
-    import { preventLanguages } from "$src/lib/utils.client";
+    import {
+        languageIsAvailable,
+        preventLanguages,
+    } from "$src/lib/utils.client";
 
     export let name: string;
     export let data: string = "";
@@ -11,6 +14,7 @@
     export let allowedLanguages: Array<string> | null = ["en"];
     wordCount = data?.trim().split(/\s+/).length;
     export let counterFunction: "whitespace" | "newline" = "whitespace";
+    let isValid = false;
 
     const counterFunctions = {
         whitespace: () => {
@@ -34,27 +38,23 @@
         } else {
             counterFunctions[counterFunction]();
         }
+        isValid = languageIsAvailable(allowedLanguages, data);
     }
 </script>
 
 <div class="relative w-full">
     <textarea
-        class="m-0 pr-8 w-full {maximumWords != null
-            ? wordCount >= maximumWords
-                ? 'invalid'
-                : ''
-            : ''} 
-            {minimumWords != null
-            ? wordCount < minimumWords
-                ? 'invalid'
-                : ''
-            : ''}"
+        class="m-0 pr-8 w-full"
+        aria-invalid={!isValid ||
+            (maximumWords != null && wordCount > maximumWords) ||
+            (minimumWords != null && wordCount < minimumWords)}
         on:keydown={(event) => {
             preventLanguages(allowedLanguages, event);
         }}
         on:keyup={handleChange}
         on:change={handleChange}
         on:input={handleChange}
+        on:paste={handleChange}
         bind:value={data}
         {placeholder}
         {name}
@@ -63,5 +63,14 @@
         rows="10"
     />
 
-    <p class="absolute bottom-2 right-5">{wordCount}</p>
+    <p
+        class="absolute bottom-2 right-5"
+        style={!isValid ||
+        (maximumWords != null && wordCount > maximumWords) ||
+        (minimumWords != null && wordCount < minimumWords)
+            ? "color:var(--red)"
+            : "color:var(--green)"}
+    >
+        {wordCount}
+    </p>
 </div>

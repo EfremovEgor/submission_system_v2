@@ -15,7 +15,13 @@ model Reviewer {
 }
 
 model LOC {
-    id Int @id @default(autoincrement())
+    id            Int        @id @default(autoincrement())
+    user_id       Int
+    user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    conference_id Int
+    conference    Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+    topic_id      Int
+    topic         Topic      @relation(fields: [topic_id], references: [id], onDelete: Cascade)
 
     @@map("locs")
 }

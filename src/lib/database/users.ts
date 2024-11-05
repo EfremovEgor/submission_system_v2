@@ -17,7 +17,11 @@ export const getLayoutUser = async (id: number) => {
         CASE WHEN EXISTS 
         (SELECT * from chairs WHERE user_id=${id}) 
         THEN 1 ELSE 0 
-        END AS is_chair
+        END AS is_chair,
+        CASE WHEN EXISTS 
+        (SELECT * from locs WHERE user_id=${id}) 
+        THEN 1 ELSE 0 
+        END AS is_loc
         FROM users WHERE users.id = ${id}
         `;
     if (!rawUser.length) return null;

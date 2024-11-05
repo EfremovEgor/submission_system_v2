@@ -41,6 +41,14 @@
                 Delete
             </button>
         {/if}
+        <a
+            href="/pdf/submissions/{submission.id}"
+            target="_blank"
+            role="button"
+            class="primary-button-hover outline"
+        >
+            PDF
+        </a>
     </div>
     <table class="w-fit mt-5">
         <tbody>
@@ -91,7 +99,7 @@
     </table>
     <h4 class="text-2xl font-bold">Authors</h4>
     <div class="overflow-auto">
-        <table class="striped">
+        <table class="striped small-table">
             <thead>
                 <tr>
                     <th scope="col" class="text-center">

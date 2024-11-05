@@ -17,6 +17,7 @@ model Conference {
     settings            ConferenceSettings?
     submissions         Submission[]
     chairs              Chair[]
+    LOC                 LOC[]
 
     @@map("conferences")
 }
@@ -52,6 +53,7 @@ model Topic {
     conference_id Int?
     conference    Conference?  @relation(fields: [conference_id], references: [id], onDelete: Cascade)
     Submission    Submission[]
+    LOC           LOC[]
 
     @@map("topics")
 }

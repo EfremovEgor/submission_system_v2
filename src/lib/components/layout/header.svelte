@@ -54,6 +54,22 @@
                             <a href="/author">Author</a>
                         {/if}
                     </li>
+                    {#if user.is_loc}
+                        <li
+                            aria-current={$page.url.pathname === "/loc"
+                                ? "page"
+                                : undefined}
+                        >
+                            {#if $page.url.pathname === "/loc"}
+                                <a
+                                    style="text-decoration: underline;"
+                                    href="/loc">LOC</a
+                                >
+                            {:else}
+                                <a href="/loc">LOC</a>
+                            {/if}
+                        </li>
+                    {/if}
                     {#if user.is_chair}
                         <li
                             aria-current={$page.url.pathname === "/chair"
@@ -136,11 +152,11 @@
                 </li>
 
                 {#if user}
-                    {#if user.is_chair}
+                    {#if user.is_chair || user.is_loc}
                         <li>
                             <details class="dropdown">
                                 <summary role="button" class="outline">
-                                    Account
+                                    Role
                                 </summary>
 
                                 <ul dir="rtl">
@@ -174,6 +190,23 @@
                                                 >
                                             {:else}
                                                 <a href="/chair">Chair</a>
+                                            {/if}
+                                        </li>
+                                    {/if}
+                                    {#if user.is_loc}
+                                        <li
+                                            aria-current={$page.url.pathname ===
+                                            "/loc"
+                                                ? "page"
+                                                : undefined}
+                                        >
+                                            {#if $page.url.pathname === "/loc"}
+                                                <a
+                                                    style="text-decoration: underline;"
+                                                    href="/loc">LOC</a
+                                                >
+                                            {:else}
+                                                <a href="/loc">LOC</a>
                                             {/if}
                                         </li>
                                     {/if}

@@ -48,7 +48,7 @@
     </div>
     <h3>{conference.name}</h3>
     <EnglishSubmissionsTable
-        submissionViewRoleSuffix="chair"
+        submissionViewRoleSuffix="loc"
         {submissions}
         {topics}
         {symposiums}

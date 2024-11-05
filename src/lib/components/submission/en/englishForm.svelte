@@ -8,6 +8,7 @@
     import CounterTextArea from "../components/counterTextArea.svelte";
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
+    import { languageIsAvailable } from "$src/lib/utils.client";
 
     let busy = false;
     export let authors: Array<IAuthor> = [];
@@ -85,6 +86,62 @@
                 cancel();
                 return;
             }
+            const titleLength = submission.title.trim().split(/\s+/).length;
+            if (titleLength < 1) {
+                alert("Title must be at least 1 words long");
+                cancel();
+                return;
+            }
+            if (titleLength > 30) {
+                alert("Title must not exceed 30 words");
+                cancel();
+                return;
+            }
+
+            const abstractLength = submission.abstarct
+                .trim()
+                .split(/\s+/).length;
+            if (abstractLength < 1) {
+                alert("Abstract must be at least 1 word");
+                cancel();
+                return;
+            }
+            if (abstractLength > 500) {
+                alert("Title must not exceed 30 words");
+                cancel();
+                return;
+            }
+
+            const keywordsLength = submission.keywords
+                .trim()
+                .split(/\r\n|\r|\n/).length;
+            if (keywordsLength < 3) {
+                alert("You should specify at least three keywords.");
+                cancel();
+                return;
+            }
+            if (keywordsLength > 500) {
+                alert("Keywords must not exceed 20 words");
+                cancel();
+                return;
+            }
+
+            if (!languageIsAvailable(["en"], submission.title)) {
+                alert("Title must contain only english characters");
+                cancel();
+                return;
+            }
+            if (!languageIsAvailable(["en"], submission.abstarct)) {
+                alert("Abstract must contain only english characters");
+                cancel();
+                return;
+            }
+            if (!languageIsAvailable(["en"], submission.keywords)) {
+                alert("Keywords must contain only english characters");
+                cancel();
+                return;
+            }
+
             formData.append("authors", JSON.stringify(authors));
             busy = true;
             return async ({ result }) => {
@@ -179,7 +236,7 @@
                 <div class="basis-5/6 min-h-56">
                     <CounterTextArea
                         bind:data={submission.abstarct}
-                        minimumWords={3}
+                        minimumWords={1}
                         name="abstract"
                         maximumWords={500}
                         placeholder="Not more than 500 words"
@@ -192,7 +249,7 @@
             <p>
                 Type a list of keywords (also known as key phrases or key
                 terms), one per line to characterize your submission. You should
-                specify at least three keywords.
+                specify at least three keywords. <b>One per line</b>.
             </p>
         </div>
         <section class="shadow-lg p-5">
@@ -207,6 +264,7 @@
                         counterFunction="newline"
                         name="keywords"
                         minimumWords={3}
+                        maximumWords={20}
                         placeholder="Not less than 3 keywords. One per line"
                     />
                 </div>

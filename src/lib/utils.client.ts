@@ -7,12 +7,25 @@ export const preventLanguages = (
     event: KeyboardEvent,
 ) => {
     if (allowedLanguages == null) {
-        return;
+        return true;
     }
     const pattern = getPatternFromLanguages(allowedLanguages);
     if (!pattern.test(event.key)) {
         event.preventDefault();
+        return false;
     }
+    return true;
+};
+export const languageIsAvailable = (
+    allowedLanguages: Array<string> | null,
+    value: string,
+) => {
+    console.log(value);
+    if (allowedLanguages == null) {
+        return true;
+    }
+    const pattern = getPatternFromLanguages(allowedLanguages);
+    return pattern.test(value);
 };
 export const formatAuthors = (
     rawAuthors: {

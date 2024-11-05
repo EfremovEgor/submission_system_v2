@@ -22,6 +22,7 @@ model User {
     conferences        Conference[]
     submissions        Submission[]
     chair              Chair[]
+    LOC                LOC[]
 
     @@map("users")
 }
