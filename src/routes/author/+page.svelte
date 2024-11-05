@@ -8,9 +8,11 @@
     import type { ActionResult } from "@sveltejs/kit";
     import { getNames } from "country-list";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
+    import type { ActionData } from "./$types";
     import { formatAuthors } from "$src/lib/utils.client.js";
     let countries = getNames();
     countries.sort();
+    export let form: ActionData;
     export let data;
     $: user = data.userProfile;
     let isEditing = false;
@@ -40,9 +42,11 @@
             if (result.data.errors == undefined) {
                 isEditing = false;
                 await invalidateAll();
+                form.errors = {};
                 return;
             } else {
                 update({ reset: false });
+                form.errors = {};
                 return;
             }
         };
@@ -116,6 +120,14 @@
                         type="text"
                     />
                 </AccountInfoRow>
+                {#if form?.errors.first_name}
+                    {#each form?.errors.first_name as err}
+                        <small
+                            style="color: var(--pico-del-color) ; padding:calc(var(--pico-spacing) / 2) var(--pico-spacing);"
+                            >{err}</small
+                        > <br />
+                    {/each}
+                {/if}
                 <AccountInfoRow
                     required
                     name="Last name"
@@ -131,6 +143,14 @@
                         type="text"
                     />
                 </AccountInfoRow>
+                {#if form?.errors.last_name}
+                    {#each form?.errors.last_name as err}
+                        <small
+                            style="color: var(--pico-del-color) ; padding:calc(var(--pico-spacing) / 2) var(--pico-spacing);"
+                            >{err}</small
+                        > <br />
+                    {/each}
+                {/if}
                 <!-- <AccountInfoRow
                     name="Surname"
                     value={user.middle_name}
@@ -175,6 +195,14 @@
                         {/each}
                     </select>
                 </AccountInfoRow>
+                {#if form?.errors.affiliation}
+                    {#each form?.errors.affiliation as err}
+                        <small
+                            style="color: var(--pico-del-color) ; padding:calc(var(--pico-spacing) / 2) var(--pico-spacing);"
+                            >{err}</small
+                        > <br />
+                    {/each}
+                {/if}
                 <!-- <AccountInfoRow name="City" value={user.city} {isEditing}>
                     <input
                         name="city"

@@ -175,24 +175,6 @@
                                             <a href="/author">Author</a>
                                         {/if}
                                     </li>
-
-                                    {#if user.is_chair}
-                                        <li
-                                            aria-current={$page.url.pathname ===
-                                            "/chair"
-                                                ? "page"
-                                                : undefined}
-                                        >
-                                            {#if $page.url.pathname === "/chair"}
-                                                <a
-                                                    style="text-decoration: underline;"
-                                                    href="/chair">Chair</a
-                                                >
-                                            {:else}
-                                                <a href="/chair">Chair</a>
-                                            {/if}
-                                        </li>
-                                    {/if}
                                     {#if user.is_loc}
                                         <li
                                             aria-current={$page.url.pathname ===
@@ -207,6 +189,23 @@
                                                 >
                                             {:else}
                                                 <a href="/loc">LOC</a>
+                                            {/if}
+                                        </li>
+                                    {/if}
+                                    {#if user.is_chair}
+                                        <li
+                                            aria-current={$page.url.pathname ===
+                                            "/chair"
+                                                ? "page"
+                                                : undefined}
+                                        >
+                                            {#if $page.url.pathname === "/chair"}
+                                                <a
+                                                    style="text-decoration: underline;"
+                                                    href="/chair">Chair</a
+                                                >
+                                            {:else}
+                                                <a href="/chair">Chair</a>
                                             {/if}
                                         </li>
                                     {/if}

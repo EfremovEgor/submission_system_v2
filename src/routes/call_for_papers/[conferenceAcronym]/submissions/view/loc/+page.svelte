@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-    <title>Chair</title>
+    <title>LOC</title>
 </svelte:head>
 <div class="container">
     <div class="mb-2">

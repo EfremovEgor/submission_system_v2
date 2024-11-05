@@ -6,6 +6,10 @@ import { z } from "zod";
 import { getUserProfile } from "$src/lib/database/users";
 import { error, redirect } from "@sveltejs/kit";
 import prisma from "$src/lib/database/prisma";
+import {
+    getPatternFromLanguages,
+    languageIsAvailable,
+} from "$src/lib/utils.client";
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load = async ({ parent }: { parent: any }) => {
@@ -62,30 +66,41 @@ export const load = async ({ parent }: { parent: any }) => {
 };
 
 const profileChangeSchema = z.object({
-    title: z
-        .string()
-        .trim()
-        .max(64, { message: "Middle name must be less than 64 characters" }),
+    title: z.string().trim(),
     first_name: z
         .string({ required_error: "First name is required" })
         .trim()
         .min(1, { message: "First name must be at least 1 character" })
-        .max(64, { message: "First name must be less than 64 characters" }),
+        .max(64, { message: "First name must be less than 64 characters" })
+        .regex(
+            getPatternFromLanguages(["en"]),
+            "First name must contain only english characters",
+        ),
+
     last_name: z
         .string({ required_error: "Last name is required" })
         .trim()
         .min(1, { message: "Last name must be at least 1 character" })
-        .max(64, { message: "Last name must be less than 64 characters" }),
+        .max(64, { message: "Last name must be less than 64 characters" })
+        .regex(
+            getPatternFromLanguages(["en"]),
+            "Last name must contain only english characters",
+        ),
     middle_name: z
         .string()
         .trim()
         .max(64, { message: "Middle name must be less than 64 characters" })
         .optional(),
+
     affiliation: z
         .string()
         .trim()
         .min(1)
-        .max(64, { message: "Affiliation must be less than 64 characters" }),
+        .max(64, { message: "Affiliation must be less than 64 characters" })
+        .regex(
+            getPatternFromLanguages(["en"]),
+            "Affiliation must contain only english characters",
+        ),
     country: z
         .string()
         .trim()
@@ -123,8 +138,10 @@ export const actions: Actions = {
             updateUserById(user.id, results);
             return { message: "success" };
         } catch (error: any) {
+            const { ...rest } = formData;
+            const { fieldErrors: errors } = error.flatten();
             return {
-                data: formData,
+                data: rest,
                 errors,
             };
         }
