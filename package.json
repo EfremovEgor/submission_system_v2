@@ -48,6 +48,7 @@
         "roboto-font": "^0.1.0",
         "tailwind-merge": "^2.4.0",
         "tailwind-variants": "^0.2.1",
+        "xlsx": "^0.18.5",
         "zod": "^3.23.8"
     },
     "optionalDependencies": {

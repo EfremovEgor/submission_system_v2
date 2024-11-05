@@ -2,6 +2,7 @@
     import DownloadPdf from "$components/common/icons/downloadPDF.svelte";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import { presentation_formats } from "$src/lib/aliases";
+    import { generateSubmissionsXLSX } from "$src/lib/generators/excel/submissions_list";
     import { formatAuthors } from "$src/lib/utils.client";
     import { Search } from "lucide-svelte";
     export let conference: {
@@ -21,6 +22,8 @@
         authors: {
             first_name: string;
             last_name: string;
+            country: string;
+            affiliation: string;
         }[];
     }[];
     export let topics: object = {};
@@ -97,7 +100,21 @@
 <span>
     Displayed: {submissionsToDisplay.length}/{submissions.length} <br />
 </span>
-<button class="bare-button">Export to Excel</button>
+<button
+    on:click={() => {
+        const element = document.createElement("a");
+        const file = new Blob([generateSubmissionsXLSX(submissionsToDisplay)], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        element.setAttribute("href", window.URL.createObjectURL(file));
+        element.setAttribute("download", `${conference.acronym}-submissions`);
+        element.style.display = "none";
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }}
+    class="bare-button">Export to Excel</button
+>
 <div class="overflow-auto">
     <table class="striped">
         <thead>

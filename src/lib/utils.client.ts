@@ -27,16 +27,33 @@ export const languageIsAvailable = (
     const pattern = getPatternFromLanguages(allowedLanguages);
     return pattern.test(value);
 };
+interface formatAuthorsOptions {
+    additionalInfo?: boolean;
+    delimiter?: string;
+}
 export const formatAuthors = (
     rawAuthors: {
         first_name: string;
         last_name: string;
+        country: string | null;
+        affiliation: string | null;
     }[],
+    options: formatAuthorsOptions = {
+        additionalInfo: false,
+        delimiter: ", ",
+    },
 ) => {
     let authorsArray = [];
     rawAuthors.forEach((author) => {
-        authorsArray.push(`${author.last_name} ${author.first_name}`);
+        let additionalInfo = "";
+        if (author.country && author.affiliation && options.additionalInfo) {
+            additionalInfo = ` (${author.affiliation}, ${author.country})`;
+        }
+        authorsArray.push(
+            `${author.last_name} ${author.first_name}${additionalInfo}`,
+        );
     });
-    const authors = authorsArray.join(", ");
+
+    const authors = authorsArray.join(options.delimiter);
     return authors;
 };
