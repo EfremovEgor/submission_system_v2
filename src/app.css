@@ -7,6 +7,7 @@
     --red-hover: #9a251a;
     --orange: #c09b5c;
     --green: #16a34a;
+    --green-hover: #139844;
 }
 
 input:not([type=submit],
@@ -83,6 +84,27 @@ button,
 .button-red.outline {
     background-color: transparent;
     color: var(--red)
+}
+
+
+.button-green {
+    background-color: var(--green);
+    border-color: var(--green) !important;
+}
+
+.button-green:hover {
+    background-color: var(--green-hover);
+    border-color: var(--green-hover) !important;
+}
+
+.button-green.outline:hover {
+    background-color: var(--green-hover);
+    color: white
+}
+
+.button-green.outline {
+    background-color: transparent;
+    color: var(--green)
 }
 
 .required_star {

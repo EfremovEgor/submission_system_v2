@@ -68,7 +68,7 @@
     <div class="symposiums">
         {#each Object.keys(symposiums) as symposium}
             <tr>
-                <details>
+                <details open>
                     <summary style="width: fit-content;">{symposium}</summary>
                     <table class="striped">
                         <tbody>
@@ -94,8 +94,9 @@
         {/each}
     </div>
 {/if}
-<span>Displayed: {submissionsToDisplay.length}/{submissions.length} <br /></span
->
+<span>
+    Displayed: {submissionsToDisplay.length}/{submissions.length} <br />
+</span>
 <button class="bare-button">Export to Excel</button>
 <div class="overflow-auto">
     <table class="striped">

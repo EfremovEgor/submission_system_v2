@@ -10,6 +10,7 @@
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import type { ActionData } from "./$types";
     import { formatAuthors } from "$src/lib/utils.client.js";
+    import DownloadPdf from "$components/common/icons/downloadPDF.svelte";
     let countries = getNames();
     countries.sort();
     export let form: ActionData;
@@ -286,7 +287,7 @@
                 <summary class="w-fit" style="color:var(--pico-primary);"
                     >{conference}</summary
                 >
-                <div class="overflow-auto">
+                <!-- <div class="overflow-auto">
                     <table class="striped submissions">
                         <thead>
                             <tr>
@@ -332,7 +333,7 @@
                                     <td>
                                         {submission.title}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {submission.topic.name}
                                     </td>
                                     <td class="text-center">
@@ -351,6 +352,112 @@
                                             class="icon-button text-center"
                                         >
                                             <Search class="mx-auto" />
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <SubmissionStatusText
+                                            status={submission.status}
+                                        />
+                                    </td>
+                                </tr>
+                            {/each}
+                        </tbody>
+                    </table>
+                </div> -->
+                <div class="overflow-auto">
+                    <table class="striped small-table">
+                        <thead>
+                            <tr>
+                                <th scope="col"
+                                    ><button
+                                        class="sortable bare-button"
+                                        data-order={0}>#</button
+                                    ></th
+                                >
+                                <th scope="col"
+                                    ><button
+                                        class="sortable bare-button"
+                                        data-order={0}>Authors</button
+                                    ></th
+                                >
+                                <th scope="col"
+                                    ><button
+                                        class="sortable bare-button"
+                                        data-order={0}>Title</button
+                                    ></th
+                                >
+                                <th scope="col"
+                                    ><button
+                                        class="sortable bare-button"
+                                        data-order={0}>Topic</button
+                                    ></th
+                                >
+                                <th scope="col">
+                                    <button
+                                        class="sortable bare-button"
+                                        data-order={0}
+                                        >Presentation Format</button
+                                    >
+                                </th>
+                                <th scope="col"
+                                    ><button
+                                        class="sortable bare-button"
+                                        data-order={0}>Submitted at</button
+                                    ></th
+                                >
+                                <th scope="col"
+                                    ><button class="sortable bare-button"
+                                        >View</button
+                                    ></th
+                                >
+                                <th scope="col"
+                                    ><button
+                                        class="sortable bare-button"
+                                        data-order={0}>Review Status</button
+                                    ></th
+                                >
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {#each data.submissions as submission}
+                                <tr>
+                                    <td>
+                                        {submission.local_id}
+                                    </td>
+                                    <td>
+                                        {formatAuthors(submission.authors)}
+                                    </td>
+                                    <td>
+                                        {submission.title}
+                                    </td>
+                                    <td class="text-center">
+                                        {submission.topic.name}
+                                    </td>
+                                    <td class="text-center">
+                                        {presentation_formats[
+                                            submission.presentation_format
+                                        ]}
+                                    </td>
+                                    <td class="text-center">
+                                        {submission.created_at.toLocaleString()}
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="/call_for_papers/{data
+                                                .conference_data
+                                                .acronym}/submissions/{submission.id}/author"
+                                            class="icon-button text-center"
+                                        >
+                                            <Search class="mx-auto" />
+                                        </a>
+                                        <a
+                                            href="/pdf/submissions/{submission.id}"
+                                            target="_blank"
+                                            class="icon-button text-center"
+                                            download="{conference.acronym}-abstract-{submission.local_id}.pdf"
+                                        >
+                                            <DownloadPdf class="mx-auto" />
                                         </a>
                                     </td>
                                     <td class="text-center">

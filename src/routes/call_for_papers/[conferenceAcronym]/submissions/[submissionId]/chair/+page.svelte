@@ -24,14 +24,19 @@
     <h3>
         {conference.short_name} Submission #{submission.local_id}
     </h3>
-    <a
-        href="/pdf/submissions/{submission.id}"
-        target="_blank"
-        role="button"
-        class="primary-button-hover outline"
-    >
-        PDF
-    </a>
+    <h4 class="mt-4">Submission details</h4>
+    <div>
+        <a
+            href="/pdf/submissions/{submission.id}"
+            target="_blank"
+            role="button"
+            class="primary-button-hover outline"
+        >
+            PDF
+        </a>
+        <button class="button-green outline">Accept</button>
+        <button class="button-red outline">Reject</button>
+    </div>
     <table class="w-fit mt-5">
         <tbody>
             <tr>
@@ -79,7 +84,7 @@
             </tr>
         </tbody>
     </table>
-    <h4 class="text-2xl font-bold">Authors</h4>
+    <h4 class="font-bold">Authors</h4>
     <div class="overflow-auto">
         <table class="striped small-table">
             <thead>

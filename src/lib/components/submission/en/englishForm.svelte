@@ -162,8 +162,8 @@
         {/if}
         <h4 class="font-normal">Authors Information</h4>
         <div class="ml-5">
-            For each author, please fill out the form below. Some items on the
-            form are explained here:
+            For each author, please fill out the form below in <b>english</b>.
+            Some items on the form are explained here:
             <ul class="pl-10 mt-2 list-disc">
                 <li class="">
                     <strong>Email address</strong> will only be used for communication
@@ -208,8 +208,9 @@
         <h4 class="font-normal">Title and Abstract</h4>
         <div class="ml-5">
             <p>
-                Abstracts must be written in plain text and must not contain
-                tables, figures, photographs or HTML elements.
+                Title and abstract must be written in plain text in <b
+                    >english</b
+                > and must not contain tables, figures, photographs or HTML elements.
             </p>
         </div>
         <section class="shadow-lg p-5">
@@ -247,9 +248,9 @@
         <h4 class="font-normal">Keywords</h4>
         <div class="ml-5">
             <p>
-                Type a list of keywords (also known as key phrases or key
-                terms), one per line to characterize your submission. You should
-                specify at least three keywords. <b>One per line</b>.
+                Type a list of keywords in <b>english</b> (also known as key
+                phrases or key terms), <b>one per line</b> to characterize your submission.
+                You should specify at least three keywords.
             </p>
         </div>
         <section class="shadow-lg p-5">
@@ -338,14 +339,15 @@
                     >If you filled out the form, press the 'Submit' button
                     below.</span
                 >
+                <br />
                 <span>
                     <strong>
                         Do not press the button twice: uploading may take time!
                     </strong>
                 </span>
                 <p>
-                    <strong
-                        >Please note that abstracts could be edited during 24
+                    <strong>
+                        Please, note that abstracts could be edited during 48
                         hours after submission.</strong
                     >
                 </p>

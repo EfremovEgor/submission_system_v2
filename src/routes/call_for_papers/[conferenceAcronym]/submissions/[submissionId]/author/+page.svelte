@@ -50,6 +50,7 @@
             PDF
         </a>
     </div>
+    <h4 class="mt-4">Submission details</h4>
     <table class="w-fit mt-5">
         <tbody>
             <tr>
@@ -97,7 +98,7 @@
             </tr>
         </tbody>
     </table>
-    <h4 class="text-2xl font-bold">Authors</h4>
+    <h4 class="font-bold">Authors</h4>
     <div class="overflow-auto">
         <table class="striped small-table">
             <thead>

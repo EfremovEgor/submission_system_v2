@@ -44,6 +44,7 @@
 
 <div class="relative w-full">
     <textarea
+        style="background-image:none"
         class="m-0 pr-8 w-full"
         aria-invalid={!isValid ||
             (maximumWords != null && wordCount > maximumWords) ||
