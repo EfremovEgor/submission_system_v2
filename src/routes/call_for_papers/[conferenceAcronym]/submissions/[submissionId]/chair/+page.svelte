@@ -1,6 +1,6 @@
 <script lang="ts">
     import BackButton from "$components/common/buttons/backButton.svelte";
-    import { presentation_formats } from "$lib/aliases";
+    import { presentation_formats, submission_statuses } from "$lib/aliases";
     import { Check } from "lucide-svelte";
     import { goto } from "$app/navigation";
     import { Search } from "lucide-svelte";
@@ -34,8 +34,12 @@
         >
             PDF
         </a>
-        <button class="button-green outline">Accept</button>
-        <button class="button-red outline">Reject</button>
+        {#if submission.status != "accepted"}
+            <button class="button-green outline">Accept</button>
+        {/if}
+        {#if submission.status != "rejected"}
+            <button class="button-red outline">Reject</button>
+        {/if}
     </div>
     <table class="w-fit mt-5">
         <tbody>
