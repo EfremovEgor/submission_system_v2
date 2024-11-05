@@ -76,6 +76,7 @@
         bind:value={author.affiliation}
         label="Affiliation"
         name="#{author.id}#_affiliation"
+        placeholder="Organization name"
     />
     <AuthorInput
         bind:value={author.web_page}

@@ -23,6 +23,7 @@ export const generateSubmissionsXLSX = (
     const headers = [
         "#",
         "Authors",
+        "Countries",
         "Title",
         "Topic",
         "Presentation Format",
@@ -35,17 +36,15 @@ export const generateSubmissionsXLSX = (
     submissions.forEach((submission, index) => {
         const data = [
             submission.local_id,
-            formatAuthors(submission.authors, {
-                additionalInfo: true,
-            }),
+            formatAuthors(submission.authors),
+            submission.authors.map((author) => author.country).join(", "),
             submission.title,
-            submission.topic,
+            submission.topic.name,
             presentation_formats[submission.presentation_format],
             submission.created_at.toLocaleString(),
             submission_statuses[submission.status],
         ];
         utils.sheet_add_aoa(worksheet, [data], { origin: `A${index + 2}` });
     });
-    worksheet["!cols"];
     return write(workbook, { type: "buffer", bookType: "xlsx" });
 };

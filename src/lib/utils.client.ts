@@ -55,5 +55,6 @@ export const formatAuthors = (
     });
 
     const authors = authorsArray.join(options.delimiter);
+
     return authors;
 };
