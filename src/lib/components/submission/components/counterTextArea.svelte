@@ -14,7 +14,7 @@
     export let allowedLanguages: Array<string> | null = ["en"];
     wordCount = data?.trim().split(/\s+/).length;
     export let counterFunction: "whitespace" | "newline" = "whitespace";
-    let isValid = false;
+    let isValid = true;
 
     const counterFunctions = {
         whitespace: () => {

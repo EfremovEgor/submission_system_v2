@@ -36,7 +36,6 @@ export const resolveAuthorRights = (
     let rights = structuredClone(userRights);
     if (submission.created_by_id == user.id) {
         rights = structuredClone(creatorRights);
-        console.log("creator");
     } else {
         submission.authors.forEach((author) => {
             if (author.email == user.email)
@@ -48,7 +47,10 @@ export const resolveAuthorRights = (
         });
         console.log("co-author");
     }
-    if (submission.status != SubmissionStatuses.submitted) {
+    if (
+        submission.status != SubmissionStatuses.submitted &&
+        submission.status != SubmissionStatuses.under_review
+    ) {
         console.log(submission.status);
         rights.canEdit = false;
     }

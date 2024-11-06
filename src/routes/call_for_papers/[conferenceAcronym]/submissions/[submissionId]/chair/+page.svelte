@@ -25,6 +25,24 @@
         Submission #{submission.local_id} for {conference.short_name}
     </h3>
     <div>
+        <a href="chair/edit" class="primary-button-hover outline" role="button">
+            Edit
+        </a>
+        <button
+            on:click={async () => {
+                if (confirm("Do you want to delete submission?"))
+                    goto("chair/delete");
+            }}
+            class="button-red outline"
+        >
+            Delete
+        </button>
+        {#if submission.status != "accepted"}
+            <button class="button-green outline">Accept</button>
+        {/if}
+        {#if submission.status != "rejected"}
+            <button class="button-red outline">Reject</button>
+        {/if}
         <a
             href="/pdf/submissions/{submission.id}"
             target="_blank"
@@ -33,12 +51,6 @@
         >
             Download PDF
         </a>
-        {#if submission.status != "accepted"}
-            <button class="button-green outline">Accept</button>
-        {/if}
-        {#if submission.status != "rejected"}
-            <button class="button-red outline">Reject</button>
-        {/if}
     </div>
     <h4 class="mt-4">Submission details</h4>
     <table class="w-fit mt-5">

@@ -102,12 +102,12 @@
                 .trim()
                 .split(/\s+/).length;
             if (abstractLength < 300) {
-                alert("Abstract must be at least 1 word");
+                alert("Abstract must be at least 300 words");
                 cancel();
                 return;
             }
             if (abstractLength > 500) {
-                alert("Title must not exceed 30 words");
+                alert("Title must not exceed 500 words");
                 cancel();
                 return;
             }

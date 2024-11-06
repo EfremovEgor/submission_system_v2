@@ -8,6 +8,7 @@
     import CounterTextArea from "../components/counterTextArea.svelte";
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
+    import { languageIsAvailable } from "$src/lib/utils.client";
 
     let busy = false;
     export let authors: Array<IAuthor> = [];
@@ -85,6 +86,61 @@
             });
             if (!anyIsCorresponding) {
                 alert("You should specify at least one corresponding author");
+                cancel();
+                return;
+            }
+            const titleLength = submission.title.trim().split(/\s+/).length;
+            if (titleLength < 1) {
+                alert("Title must be at least 1 words long");
+                cancel();
+                return;
+            }
+            if (titleLength > 30) {
+                alert("Title must not exceed 30 words");
+                cancel();
+                return;
+            }
+
+            const abstractLength = submission.abstarct
+                .trim()
+                .split(/\s+/).length;
+            if (abstractLength < 300) {
+                alert("Abstract must be at least 300 words");
+                cancel();
+                return;
+            }
+            if (abstractLength > 500) {
+                alert("Title must not exceed 500 words");
+                cancel();
+                return;
+            }
+
+            const keywordsLength = submission.keywords
+                .trim()
+                .split(/\r\n|\r|\n/).length;
+            if (keywordsLength < 3) {
+                alert("You should specify at least three keywords.");
+                cancel();
+                return;
+            }
+            if (keywordsLength > 500) {
+                alert("Keywords must not exceed 20 words");
+                cancel();
+                return;
+            }
+
+            if (!languageIsAvailable(["en"], submission.title)) {
+                alert("Title must contain only english characters");
+                cancel();
+                return;
+            }
+            if (!languageIsAvailable(["en"], submission.abstarct)) {
+                alert("Abstract must contain only english characters");
+                cancel();
+                return;
+            }
+            if (!languageIsAvailable(["en"], submission.keywords)) {
+                alert("Keywords must contain only english characters");
                 cancel();
                 return;
             }
@@ -179,6 +235,7 @@
                         bind:data={submission.title}
                         name="title"
                         minimumWords={1}
+                        wordCount={submission.title.trim().split(/\s+/).length}
                         maximumWords={30}
                         placeholder="Not more than 30 words"
                     />
@@ -192,8 +249,10 @@
                 <div class="basis-5/6 min-h-56">
                     <CounterTextArea
                         bind:data={submission.abstarct}
-                        minimumWords={3}
+                        minimumWords={300}
                         name="abstract"
+                        wordCount={submission.abstarct.trim().split(/\s+/)
+                            .length}
                         maximumWords={500}
                         placeholder="Not more than 500 words"
                     />
@@ -220,6 +279,10 @@
                         counterFunction="newline"
                         name="keywords"
                         minimumWords={3}
+                        maximumWords={20}
+                        wordCount={submission.keywords
+                            .trim()
+                            .split(/\r\n|\r|\n/).length}
                         placeholder="Not less than 3 keywords. One per line"
                     />
                 </div>

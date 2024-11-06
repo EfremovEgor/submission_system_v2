@@ -13,7 +13,8 @@
     export let minimumWords: number | null = null;
     export let allowedLanguages: Array<string> | null = ["en"];
     wordCount = data.trim() == "" ? 0 : data.trim().split(/\s+/).length;
-    let isValid = false;
+    let isValid = true;
+
     function handleChange(event) {
         wordCount = data.trim() == "" ? 0 : data.trim().split(/\s+/).length;
         isValid = languageIsAvailable(allowedLanguages, data);
