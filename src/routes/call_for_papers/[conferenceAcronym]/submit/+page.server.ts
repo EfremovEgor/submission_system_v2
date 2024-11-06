@@ -40,6 +40,7 @@ export const load: Load = async ({ parent, params }) => {
                 position: true,
                 topics: {
                     select: {
+                        hint: true,
                         id: true,
                         name: true,
                     },

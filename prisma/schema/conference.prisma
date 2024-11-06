@@ -49,6 +49,7 @@ model Topic {
     symposium     Symposium?   @relation(fields: [symposium_id], references: [id], onDelete: Cascade)
     name          String
     name_ru       String?
+    hint          String?
     position      Int          @default(0)
     conference_id Int?
     conference    Conference?  @relation(fields: [conference_id], references: [id], onDelete: Cascade)

@@ -167,10 +167,35 @@ details summary {
     padding: 5px !important;
 }
 
+
 .small-table>thead * {
     padding: 5px !important;
 }
 
-.small-table td {
+.small-table *:not(svg) {
     padding: 10px;
+}
+
+
+
+.tooltiped::before {
+    width: 700px !important;
+    max-width: 100vw !important;
+    white-space: unset !important;
+    text-overflow: unset !important;
+    overflow: unset !important;
+}
+
+.tooltiped {
+    text-decoration: none !important;
+    border: 0 !important;
+    --pico-tooltip-background-color: #0172ad;
+}
+
+.tooltiped.icon-button>svg {
+    margin-bottom: 5px;
+}
+
+.tooltiped.icon-button:hover>svg {
+    stroke: var(--red-hover);
 }

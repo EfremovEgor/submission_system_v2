@@ -476,13 +476,6 @@
 </div>
 
 <style>
-    .submissions * {
-        font-size: 16px !important;
-    }
-    .submissions td,
-    .submissions th {
-        padding: 5px !important;
-    }
     .edit-profile_button {
         color: var(--pico-primary);
     }

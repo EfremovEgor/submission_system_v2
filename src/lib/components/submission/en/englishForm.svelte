@@ -9,6 +9,7 @@
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
     import { languageIsAvailable } from "$src/lib/utils.client";
+    import { CircleAlert } from "lucide-svelte";
 
     let busy = false;
     export let authors: Array<IAuthor> = [];
@@ -302,6 +303,15 @@
                                     name="topic"
                                 />
                                 {topic.name}
+                                {#if topic.hint}
+                                    <span
+                                        class="icon-button tooltiped"
+                                        style="display: inline;"
+                                        data-tooltip={topic.hint}
+                                    >
+                                        <CircleAlert />
+                                    </span>
+                                {/if}
                             </label>
                         {/each}
                     </fieldset>
