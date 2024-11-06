@@ -1,5 +1,14 @@
-export const getPatternFromLanguages = (languages: Array<string>) => {
-    const pattern = /^[a-zA-Z0-9()@*_\-\+!#$%^&*,:."\'\][\s]+$/;
+const languagePatterns = {
+    en: {
+        general: /^[a-zA-Z0-9()@*_\-\+!#$%^&*,:."\'\][\s]+$/,
+        onlyLettersAndNumbers: /^[a-zA-Z0-9\s]+$/,
+    },
+};
+export const getPatternFromLanguages = (
+    languages: Array<"en">,
+    type: "general" | "onlyLettersAndNumbers" = "onlyLettersAndNumbers",
+) => {
+    const pattern = languagePatterns.en[type];
     return pattern;
 };
 export const preventLanguages = (
@@ -19,12 +28,17 @@ export const preventLanguages = (
 export const languageIsAvailable = (
     allowedLanguages: Array<string> | null,
     value: string,
+    options: {
+        type: "general" | "onlyLettersAndNumbers";
+    } = {
+        type: "general",
+    },
 ) => {
     console.log(value);
     if (allowedLanguages == null) {
         return true;
     }
-    const pattern = getPatternFromLanguages(allowedLanguages);
+    const pattern = getPatternFromLanguages(allowedLanguages, options.type);
     return pattern.test(value);
 };
 interface formatAuthorsOptions {

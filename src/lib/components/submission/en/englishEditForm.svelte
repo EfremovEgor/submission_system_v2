@@ -140,7 +140,11 @@
                 cancel();
                 return;
             }
-            if (!languageIsAvailable(["en"], submission.keywords)) {
+            if (
+                !languageIsAvailable(["en"], submission.keywords, {
+                    type: "onlyLettersAndNumbers",
+                })
+            ) {
                 alert("Keywords must contain only english characters");
                 cancel();
                 return;

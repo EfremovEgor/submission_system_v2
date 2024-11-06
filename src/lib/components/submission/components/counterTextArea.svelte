@@ -38,6 +38,10 @@
         } else {
             counterFunctions[counterFunction]();
         }
+        if (counterFunction == "newline")
+            isValid = languageIsAvailable(allowedLanguages, data, {
+                type: "onlyLettersAndNumbers",
+            });
         isValid = languageIsAvailable(allowedLanguages, data);
     }
 </script>

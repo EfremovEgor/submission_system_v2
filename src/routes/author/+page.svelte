@@ -447,14 +447,14 @@
                                             href="/call_for_papers/{data
                                                 .conference_data
                                                 .acronym}/submissions/{submission.id}/author"
-                                            class="icon-button text-center"
+                                            class="icon-button text-center p-2.5"
                                         >
                                             <Search class="mx-auto" />
                                         </a>
                                         <a
                                             href="/pdf/submissions/{submission.id}"
                                             target="_blank"
-                                            class="icon-button text-center"
+                                            class="icon-button text-center p-2.5"
                                             download="{conference.acronym}-abstract-{submission.local_id}.pdf"
                                         >
                                             <DownloadPdf class="mx-auto" />
