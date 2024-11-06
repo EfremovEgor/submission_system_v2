@@ -115,6 +115,12 @@
                     conference.
                 </li>
                 <li>
+                    <strong>Affiliation</strong> must contain only the short
+                    official
+                    <strong>organization name</strong> which the author affiliated
+                    with.
+                </li>
+                <li>
                     <strong>Web page</strong> can be used on the conference web pages,
                     for example, for making the program. It should be a Web page
                     of the author, not the web page of her or his organization.
@@ -152,8 +158,14 @@
         <h4 class="font-normal">Title and Abstract</h4>
         <div class="ml-5">
             <p>
-                Abstracts must be written in plain text and must not contain
-                tables, figures, photographs or HTML elements.
+                Title and abstract must be written in plain text <strong
+                    >in English</strong
+                >
+                and <strong>must not contain</strong> non-enumerated or enumerated
+                lists, tables, figures, photographs or HTML elements. Abstract must
+                contain 300-500 words, revealing the essence of the study or research
+                with indicating of achieved results, that will help members of program
+                committee to evaluate the paper.
             </p>
         </div>
         <section class="shadow-lg p-5">
@@ -191,9 +203,9 @@
         <h4 class="font-normal">Keywords</h4>
         <div class="ml-5">
             <p>
-                Type a list of keywords (also known as key phrases or key
-                terms), one per line to characterize your submission. You should
-                specify at least three keywords.
+                Type a list of keywords <strong>in English</strong> (also known
+                as key phrases or key terms) <strong>one per line</strong> to characterize
+                your submission. At least three keywords must be specified.
             </p>
         </div>
         <section class="shadow-lg p-5">

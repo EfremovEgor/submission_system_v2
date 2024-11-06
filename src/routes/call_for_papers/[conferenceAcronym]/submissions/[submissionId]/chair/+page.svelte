@@ -22,9 +22,8 @@
         />
     </div>
     <h3>
-        {conference.short_name} Submission #{submission.local_id}
+        Submission #{submission.local_id} for {conference.short_name}
     </h3>
-    <h4 class="mt-4">Submission details</h4>
     <div>
         <a
             href="/pdf/submissions/{submission.id}"
@@ -32,7 +31,7 @@
             role="button"
             class="primary-button-hover outline"
         >
-            PDF
+            Download PDF
         </a>
         {#if submission.status != "accepted"}
             <button class="button-green outline">Accept</button>
@@ -41,6 +40,7 @@
             <button class="button-red outline">Reject</button>
         {/if}
     </div>
+    <h4 class="mt-4">Submission details</h4>
     <table class="w-fit mt-5">
         <tbody>
             <tr>

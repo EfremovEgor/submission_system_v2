@@ -18,7 +18,7 @@
         <BackButton url="/author" />
     </div>
     <h3>
-        {conference.short_name} Submission #{submission.local_id}
+        Submission #{submission.local_id} for {conference.short_name}
     </h3>
     <div>
         {#if rights.canEdit}
@@ -47,7 +47,7 @@
             role="button"
             class="primary-button-hover outline"
         >
-            PDF
+            Download PDF
         </a>
     </div>
     <h4 class="mt-4">Submission details</h4>

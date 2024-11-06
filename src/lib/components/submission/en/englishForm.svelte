@@ -101,7 +101,7 @@
             const abstractLength = submission.abstarct
                 .trim()
                 .split(/\s+/).length;
-            if (abstractLength < 1) {
+            if (abstractLength < 300) {
                 alert("Abstract must be at least 1 word");
                 cancel();
                 return;
@@ -162,13 +162,19 @@
         {/if}
         <h4 class="font-normal">Authors Information</h4>
         <div class="ml-5">
-            For each author, please fill out the form below in <b>english</b>.
-            Some items on the form are explained here:
+            For each author, please fill out the form below. Some items on the
+            form are explained here:
             <ul class="pl-10 mt-2 list-disc">
                 <li class="">
                     <strong>Email address</strong> will only be used for communication
                     with the authors. It will not appear in public Web pages of this
                     conference.
+                </li>
+                <li>
+                    <strong>Affiliation</strong> must contain only the short
+                    official
+                    <strong>organization name</strong> which the author affiliated
+                    with.
                 </li>
                 <li>
                     <strong>Web page</strong> can be used on the conference web pages,
@@ -208,9 +214,14 @@
         <h4 class="font-normal">Title and Abstract</h4>
         <div class="ml-5">
             <p>
-                Title and abstract must be written in plain text in <b
-                    >english</b
-                > and must not contain tables, figures, photographs or HTML elements.
+                Title and abstract must be written in plain text <strong
+                    >in English</strong
+                >
+                and <strong>must not contain</strong> non-enumerated or enumerated
+                lists, tables, figures, photographs or HTML elements. Abstract must
+                contain 300-500 words, revealing the essence of the study or research
+                with indicating of achieved results, that will help members of program
+                committee to evaluate the paper.
             </p>
         </div>
         <section class="shadow-lg p-5">
@@ -237,7 +248,7 @@
                 <div class="basis-5/6 min-h-56">
                     <CounterTextArea
                         bind:data={submission.abstarct}
-                        minimumWords={1}
+                        minimumWords={300}
                         name="abstract"
                         maximumWords={500}
                         placeholder="Not more than 500 words"
@@ -248,9 +259,9 @@
         <h4 class="font-normal">Keywords</h4>
         <div class="ml-5">
             <p>
-                Type a list of keywords in <b>english</b> (also known as key
-                phrases or key terms), <b>one per line</b> to characterize your submission.
-                You should specify at least three keywords.
+                Type a list of keywords <strong>in English</strong> (also known
+                as key phrases or key terms) <strong>one per line</strong> to characterize
+                your submission. At least three keywords must be specified.
             </p>
         </div>
         <section class="shadow-lg p-5">
@@ -345,12 +356,6 @@
                         Do not press the button twice: uploading may take time!
                     </strong>
                 </span>
-                <p>
-                    <strong>
-                        Please, note that abstracts could be edited during 48
-                        hours after submission.</strong
-                    >
-                </p>
             </div>
         {/if}
 
