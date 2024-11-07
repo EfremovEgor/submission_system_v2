@@ -42,7 +42,7 @@
             isValid = languageIsAvailable(allowedLanguages, data, {
                 type: "onlyLettersAndNumbers",
             });
-        isValid = languageIsAvailable(allowedLanguages, data);
+        else isValid = languageIsAvailable(allowedLanguages, data);
     }
 </script>
 

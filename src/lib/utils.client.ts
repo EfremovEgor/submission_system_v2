@@ -1,12 +1,12 @@
 const languagePatterns = {
     en: {
-        general: /^[a-zA-Z0-9()@*_\-\+!#$%^&*,:."\'\][\s]+$/,
+        general: /^[a-zA-Z0-9()@*_\-\\\+!=#$%^&*,?/:."\'\][\s]+$/,
         onlyLettersAndNumbers: /^[a-zA-Z0-9\s]+$/,
     },
 };
 export const getPatternFromLanguages = (
     languages: Array<"en">,
-    type: "general" | "onlyLettersAndNumbers" = "onlyLettersAndNumbers",
+    type: "general" | "onlyLettersAndNumbers" = "general",
 ) => {
     const pattern = languagePatterns.en[type];
     return pattern;
