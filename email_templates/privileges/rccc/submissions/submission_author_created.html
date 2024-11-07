@@ -19,7 +19,10 @@
             Submission #<%= submission.local_id %>
                 <strong>
                     <%= submission.title %>
-                </strong> (<%= authors %>) to the <%= conference.name %> has been deleted.
+                </strong> (<%= authors %>) to the <%= conference.name %> has been created.
+        </p>
+        <p>
+            To access this submission please use the following <a href="<%= submission.link %>">direct link</a>.
         </p>
         <p style="color: black">
             Best Regards,<br>

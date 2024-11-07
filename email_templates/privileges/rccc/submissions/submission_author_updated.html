@@ -17,8 +17,9 @@
                     <%= recipient.last_name %>, </p>
         <p style="color: black">
             Submission #<%= submission.local_id %>
-                "<%= submission.title %>" (<%= authors %>) to the
-                        <%= conference.name %> has been updated.
+                <strong>
+                    <%= submission.title %>
+                </strong> (<%= authors %>) to the <%= conference.name %> has been updated.
         </p>
         <p>
             To access this submission please use the following <a href="<%= submission.link %>">direct link</a>.

@@ -1,10 +1,15 @@
-import { EMAIL } from "$env/static/private";
-import { presentation_formats, titles } from "$src/lib/aliases";
+import { DOMAIN, EMAIL } from "$env/static/private";
+import { presentation_formats, PRIVILEGES, titles } from "$src/lib/aliases";
 import { getUserFromCookies } from "$src/lib/auth.sever";
 import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import prisma from "$src/lib/database/prisma";
+import { getUsersWithPrivileges } from "$src/lib/database/privileges";
 import { createSubmission } from "$src/lib/database/submissions";
 import { getUserProfile } from "$src/lib/database/users";
+import {
+    sendRCCCSubmissionAuthorCreated,
+    sendRCCCSubmissionAuthorUpdated,
+} from "$src/lib/email/priviliges.mailing";
 import transporter from "$src/lib/email/setup.server";
 import { renderCreateSubmissionTemplate } from "$src/lib/email/templating";
 import {
@@ -200,6 +205,25 @@ export const actions: Actions = {
         });
         SubmissionReviewProcessQueueManager.timeoutSubmissionReviewProcess({
             id: createdSubmission.id,
+        });
+        const recipients = await getUsersWithPrivileges(
+            conference.id,
+            { chairs: true },
+            { title: true, first_name: true, last_name: true, email: true },
+        );
+        recipients.chairs.forEach(async (recipient) => {
+            await sendRCCCSubmissionAuthorCreated(recipient.email, {
+                recipient,
+                submission: {
+                    ...createdSubmission,
+                    link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${createdSubmission.id}/${PRIVILEGES.chair}`,
+                },
+                conference: {
+                    name: conference.name,
+                    short_name: conference.short_name,
+                },
+                authors: rawAuthors,
+            });
         });
         redirect(302, "/author");
         //     try {
