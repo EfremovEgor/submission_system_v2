@@ -220,6 +220,7 @@ export const actions: Actions = {
                     name: conference.name,
                     short_name: conference.short_name,
                 },
+                authors: rawAuthors,
             });
         });
         redirect(

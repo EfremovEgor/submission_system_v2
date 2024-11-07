@@ -1,3 +1,4 @@
+import { formatAuthors } from "../utils.client";
 import { MAILING_SETTINGS } from "./mailing";
 import transporter from "./setup.server";
 import { renderEmailTemplate } from "./templating";
@@ -19,7 +20,7 @@ export const enum RCCCTemplates {
 }
 export const sendRCCCSubmissionAuthorUpdated = async (
     to: string,
-    data: {
+    rawData: {
         recipient: {
             title: string;
             first_name: string;
@@ -34,9 +35,19 @@ export const sendRCCCSubmissionAuthorUpdated = async (
             name: string;
             short_name: string;
         };
+        authors: {
+            first_name: string;
+            last_name: string;
+            title: string;
+        }[];
     },
 ) => {
-    const subject = `Update Submission ${data.submission.local_id} for ${data.conference.short_name}`;
+    const subject = `Update Submission #${rawData.submission.local_id} for ${rawData.conference.short_name}`;
+    const data = {
+        ...rawData,
+        authors: formatAuthors(rawData.authors, { convertTitle: true }),
+    };
+    console.log(data);
     const html = await renderEmailTemplate(
         RCCCTemplates.submission_author_updated,
         data,
@@ -50,7 +61,7 @@ export const sendRCCCSubmissionAuthorUpdated = async (
 };
 export const sendRCCCSubmissionAuthorDeleted = async (
     to: string,
-    data: {
+    rawData: {
         recipient: {
             title: string;
             first_name: string;
@@ -64,9 +75,18 @@ export const sendRCCCSubmissionAuthorDeleted = async (
             name: string;
             short_name: string;
         };
+        authors: {
+            first_name: string;
+            last_name: string;
+            title: string;
+        }[];
     },
 ) => {
-    const subject = `Delete Submission ${data.submission.local_id} for ${data.conference.short_name}`;
+    const subject = `Delete Submission #${rawData.submission.local_id} for ${rawData.conference.short_name}`;
+    const data = {
+        ...rawData,
+        authors: formatAuthors(rawData.authors, { convertTitle: true }),
+    };
     const html = await renderEmailTemplate(
         RCCCTemplates.submission_author_deleted,
         data,

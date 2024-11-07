@@ -3,6 +3,7 @@ import {
     getConferenceById,
     getConferences,
 } from "$src/lib/database/conferences";
+import prisma from "$src/lib/database/prisma";
 import { getUsersWithPrivileges } from "$src/lib/database/privileges";
 import {
     deleteSubmissionById,
@@ -24,12 +25,23 @@ export const load: Load = async ({ parent, params }) => {
         { chairs: true },
         { title: true, first_name: true, last_name: true, email: true },
     );
-    console.log(recipients);
+
+    let authors = await prisma.author.findMany({
+        select: {
+            first_name: true,
+            title: true,
+            last_name: true,
+        },
+        where: {
+            submission_id: data.submission.id,
+        },
+    });
     recipients.chairs.forEach(async (recipient) => {
         await sendRCCCSubmissionAuthorDeleted(recipient.email, {
             recipient,
             submission: data.submission,
             conference: conference,
+            authors,
         });
     });
     await deleteSubmissionById(parseInt(data.submission.id));

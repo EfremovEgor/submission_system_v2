@@ -1,3 +1,5 @@
+import { titles } from "./aliases";
+
 const languagePatterns = {
     en: {
         general: /^[a-zA-Z0-9()@*_\-\\\+!\;\:=#$%^&*,?/:."\'\][\s]+$/,
@@ -44,17 +46,20 @@ export const languageIsAvailable = (
 interface formatAuthorsOptions {
     additionalInfo?: boolean;
     delimiter?: string;
+    convertTitle?: boolean;
 }
 export const formatAuthors = (
     rawAuthors: {
         first_name: string;
         last_name: string;
-        country: string | null;
-        affiliation: string | null;
+        title?: string;
+        country?: string | null;
+        affiliation?: string | null;
     }[],
     options: formatAuthorsOptions = {
         additionalInfo: false,
         delimiter: ", ",
+        convertTitle: false,
     },
 ) => {
     let authorsArray = [];
@@ -63,8 +68,13 @@ export const formatAuthors = (
         if (author.country && author.affiliation && options.additionalInfo) {
             additionalInfo = ` (${author.affiliation}, ${author.country})`;
         }
+        const title = author.title
+            ? options.convertTitle
+                ? titles[author.title] + " "
+                : author.title + " "
+            : "";
         authorsArray.push(
-            `${author.last_name} ${author.first_name}${additionalInfo}`,
+            `${title}${author.last_name} ${author.first_name}${additionalInfo}`,
         );
     });
 

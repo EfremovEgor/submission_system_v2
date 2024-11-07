@@ -16,8 +16,8 @@
                 <%= recipient.first_name %>
                     <%= recipient.last_name %>, </p>
         <p style="color: black">
-            Submission <%= submission.local_id %>
-                <%= submission.title %> to the <%= conference.name %> has been deleted.
+            Submission #<%= submission.local_id %>
+                "<%= submission.title %>" (<%= authors %>) to the <%= conference.name %> has been deleted.
         </p>
         <p style="color: black">
             Best Regards,<br>
