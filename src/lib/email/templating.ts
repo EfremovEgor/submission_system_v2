@@ -8,7 +8,8 @@ export const enum EmailTemplates {
     coAuthorSubmissionCreated = "create_submission_co_author.html",
     submissionUnderReview = "submission_under_review.html",
 }
-export const readEmailTemplate = async (template: EmailTemplates) => {
+
+export const readEmailTemplate = async (template: string) => {
     return await readFile(`email_templates/${template.toString()}`, "utf-8");
 };
 
@@ -16,10 +17,7 @@ export const renderTemplateString = (templateString: string, data: object) => {
     return render(templateString, data);
 };
 
-export const renderEmailTemplate = async (
-    template: EmailTemplates,
-    data: object,
-) => {
+export const renderEmailTemplate = async (template: string, data: object) => {
     const templateString = await readEmailTemplate(template);
     return renderTemplateString(templateString, data);
 };

@@ -15,3 +15,10 @@ export const submission_statuses = {
     rejected: "Rejected",
     accepted: "Accepted",
 };
+export const PRIVILEGES = {
+    author: "author",
+    reviewer: "reviewer",
+    coChair: "co-chair",
+    chair: "chair",
+    loc: "loc",
+};

@@ -1,18 +1,12 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import { z } from "zod";
-import { DOMAIN, EMAIL } from "$env/static/private";
+import { DOMAIN } from "$env/static/private";
 import {
     createNewUser,
     getUserByEmail,
     updateUserById,
 } from "$lib/database/users";
 import { createBase64UrlSafeString } from "$lib/utils";
-import transporter from "$email/setup.server.js";
-import {
-    EmailTemplates,
-    readEmailTemplate,
-    renderEmailTemplate,
-} from "$src/lib/email/templating.js";
 import { sendRegistrationEmail } from "$src/lib/email/mailing.js";
 export const load = async ({ cookies }) => {
     const sessionToken = cookies.get("SESSION");

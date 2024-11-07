@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.18.3/dist/css/uikit.min.css" />
+
+<body>
+    <div class="uk-container" style="
+    margin-top: 10px;
+    margin-bottom: 25px;
+    max-width: 980px;
+    min-height: 320px;
+">
+
+        <p style="color: black">
+            Dear <%= recipient.title %>
+                <%= recipient.first_name %>
+                    <%= recipient.last_name %>, </p>
+        <p style="color: black">
+            Submission <%= submission.local_id %>
+                <%= submission.title %> to the <%= conference.name %> has been deleted.
+        </p>
+        <p style="color: black">
+            Best Regards,<br>
+            ConfChair Team<br>
+            support@confchair.org
+        </p>
+    </div>
+</body>
+<style>
+    table td:last-child {
+        padding-left: 20px !important;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    table td,
+    table th {
+        border: 1px solid black;
+    }
+</style>
+
+</html>

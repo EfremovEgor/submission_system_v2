@@ -7,7 +7,4 @@ export const redis = await createClient({
 });
 try {
     await redis.connect();
-    console.log("Redis connected");
-} catch (error) {
-    console.log(error);
-}
+} catch (error) {}

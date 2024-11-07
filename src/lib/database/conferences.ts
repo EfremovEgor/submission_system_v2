@@ -17,3 +17,13 @@ export const getConferenceByAcronym = async (
     });
     return conference;
 };
+export const getConferenceById = async (
+    id: string,
+    fields: Prisma.ConferenceSelect,
+) => {
+    const conference = await prisma.conference.findFirst({
+        where: { id: id },
+        select: fields,
+    });
+    return conference;
+};
