@@ -25,7 +25,11 @@ export const load: Load = async ({ parent, params }) => {
                     name: true,
                 },
             },
-            authors: true,
+            authors: {
+                orderBy: {
+                    id: "asc",
+                },
+            },
         },
     });
     if (submission == null) error(404);

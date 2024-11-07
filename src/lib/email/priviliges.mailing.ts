@@ -85,7 +85,10 @@ export const sendRCCCSubmissionAuthorDeleted = async (
     const subject = `Delete Submission #${rawData.submission.local_id} for ${rawData.conference.short_name}`;
     const data = {
         ...rawData,
-        authors: formatAuthors(rawData.authors, { convertTitle: true }),
+        authors: formatAuthors(rawData.authors, {
+            convertTitle: true,
+            delimiter: ", ",
+        }),
     };
     const html = await renderEmailTemplate(
         RCCCTemplates.submission_author_deleted,
