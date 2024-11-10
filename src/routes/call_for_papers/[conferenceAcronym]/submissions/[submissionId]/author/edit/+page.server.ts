@@ -87,6 +87,7 @@ export const actions: Actions = {
         let authors: Prisma.AuthorUpdateInput[] = [];
         let authorEmails = [];
         const rawAuthors = JSON.parse(formData.authors);
+        console.log(rawAuthors);
         rawAuthors.forEach(
             (author: {
                 title: any;

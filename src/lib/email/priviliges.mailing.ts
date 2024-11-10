@@ -1,4 +1,4 @@
-import { titles } from "../aliases";
+import { presentation_formats, titles } from "../aliases";
 import { formatAuthors } from "../utils.client";
 import { MAILING_SETTINGS } from "./mailing";
 import transporter from "./setup.server";
@@ -88,7 +88,7 @@ export const sendRCCCSubmissionAuthorDeleted = async (
         }[];
     },
 ) => {
-    const subject = `DELETED Submission #${rawData.submission.local_id} for ${rawData.conference.short_name}`;
+    const subject = `WITHDRAWN Submission #${rawData.submission.local_id} for ${rawData.conference.short_name}`;
     let data = {
         ...rawData,
         authors: formatAuthors(rawData.authors, {
@@ -121,6 +121,10 @@ export const sendRCCCSubmissionAuthorCreated = async (
             local_id: number;
             title: string;
             link: string;
+            topic: {
+                name: string;
+            };
+            presentation_format: string;
         };
         conference: {
             name: string;
@@ -130,17 +134,25 @@ export const sendRCCCSubmissionAuthorCreated = async (
             first_name: string;
             last_name: string;
             title: string;
+            country: string;
+            affiliation: string;
+            is_presenter: boolean;
         }[];
     },
 ) => {
     const subject = `NEW Submission #${rawData.submission.local_id} for ${rawData.conference.short_name}`;
     let data = {
         ...rawData,
-        authors: formatAuthors(rawData.authors, {
+        authorsString: formatAuthors(rawData.authors, {
             convertTitle: true,
             delimiter: ", ",
         }),
+        authors: rawData.authors.map((author) => {
+            return { ...author, title: titles[author.title] };
+        }),
     };
+    data.submission.presentation_format =
+        presentation_formats[data.submission.presentation_format];
     data.recipient.title = titles[data.recipient.title] ?? data.recipient.title;
     const html = await renderEmailTemplate(
         RCCCTemplates.submission_author_created,

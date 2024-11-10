@@ -216,6 +216,9 @@ export const actions: Actions = {
                 recipient,
                 submission: {
                     ...createdSubmission,
+                    topic: {
+                        name: topic.name,
+                    },
                     link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${createdSubmission.id}/${PRIVILEGES.chair}`,
                 },
                 conference: {
