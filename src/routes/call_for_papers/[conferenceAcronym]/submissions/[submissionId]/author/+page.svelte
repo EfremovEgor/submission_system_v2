@@ -33,12 +33,12 @@
         {#if rights.canDelete}
             <button
                 on:click={async () => {
-                    if (confirm("Do you want to delete submission?"))
+                    if (confirm("Do you want to withdraw submission?"))
                         goto("author/delete");
                 }}
                 class="button-red outline"
             >
-                Delete
+                Withdraw
             </button>
         {/if}
         <a

@@ -35,7 +35,7 @@
             }}
             class="button-red outline"
         >
-            Delete
+            Withdraw
         </button>
         {#if submission.status != "accepted"}
             <button class="button-green outline">Accept</button>
