@@ -4,7 +4,7 @@ import {
 } from "$env/static/private";
 import prisma from "$src/lib/database/prisma";
 import type { Actions } from "@sveltejs/kit";
-import { existsSync } from "fs";
+import { existsSync } from "node:fs";
 import { writeFile, mkdir } from "fs/promises";
 import { extname, join } from "path";
 
