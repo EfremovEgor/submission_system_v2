@@ -41,6 +41,15 @@
                 Withdraw
             </button>
         {/if}
+        {#if rights.canUpload && submission.status == "accepted"}
+            <a
+                href="#upload_manager"
+                class="primary-button-hover outline"
+                role="button"
+            >
+                Upload Files
+            </a>
+        {/if}
         <a
             href="/pdf/submissions/{submission.id}"
             target="_blank"
@@ -159,4 +168,17 @@
             </tbody>
         </table>
     </div>
+    {#if submission.status == "accepted"}
+        <h4 id="upload_manager" class="font-bold">Upload Manager</h4>
+        <form
+            class="max-w-xs"
+            action="?/presentation"
+            method="post"
+            enctype="multipart/form-data"
+        >
+            <h5>Presentation</h5>
+            <input required name="file" type="file" accept=".pptx" />
+            <input type="submit" value="Upload" />
+        </form>
+    {/if}
 </div>

@@ -2,13 +2,13 @@
     import BackButton from "$components/common/buttons/backButton.svelte";
     import { presentation_formats, submission_statuses } from "$lib/aliases";
     import { Check } from "lucide-svelte";
-    import { goto } from "$app/navigation";
+    import { goto, invalidateAll } from "$app/navigation";
     import { Search } from "lucide-svelte";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import DownloadPdf from "$components/common/icons/downloadPDF.svelte";
     export let data;
     const conference = data.conference;
-    const submission = data.submission;
+    $: submission = data.submission;
     const rights = data.rights;
 </script>
 
@@ -38,11 +38,36 @@
             Withdraw
         </button>
         {#if submission.status != "accepted"}
-            <button class="button-green outline">Accept</button>
+            <button
+                on:click={async () => {
+                    await fetch("", {
+                        method: "POST",
+                        body: JSON.stringify({ action: "accept" }),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    await invalidateAll();
+                }}
+                class="button-green outline">Accept</button
+            >
         {/if}
         {#if submission.status != "rejected"}
-            <button class="button-red outline">Reject</button>
+            <button
+                class="button-red outline"
+                on:click={async () => {
+                    await fetch("", {
+                        method: "POST",
+                        body: JSON.stringify({ action: "reject" }),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    await invalidateAll();
+                }}>Reject</button
+            >
         {/if}
+
         <a
             href="/pdf/submissions/{submission.id}"
             target="_blank"

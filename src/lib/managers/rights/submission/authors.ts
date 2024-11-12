@@ -7,18 +7,21 @@ const creatorRights: BaseSubmissionRights = {
     canAccess: true,
     canEdit: true,
     canDelete: true,
+    canUpload: true,
 };
 const correspondingAuthorRights: BaseSubmissionRights = {
     role: Roles.correspondingAuthor,
     canAccess: true,
     canEdit: true,
     canDelete: true,
+    canUpload: true,
 };
 const coAuthorRights: BaseSubmissionRights = {
     role: Roles.coAuthor,
     canAccess: true,
     canEdit: false,
     canDelete: false,
+    canUpload: false,
 };
 
 export const resolveAuthorRights = (

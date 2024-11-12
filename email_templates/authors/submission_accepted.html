@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.18.3/dist/css/uikit.min.css" />
+
+<body>
+    <div class="uk-container" style="
+    margin-top: 10px;
+    margin-bottom: 25px;
+    max-width: 980px;
+    min-height: 320px;
+">
+
+        <p style="color: black">
+            Dear <%= recipient.title %>
+                <%= recipient.first_name %>
+                    <%= recipient.last_name %>, </p>
+        <p style="color: black">
+            We are glad to confirm that your paper with submission number <%= submission.local_id %>
+                "<%= submission.title %>" has been accepted for presentation at  <%= conference.name %>.
+        </p>
+        <p style="color: black">
+            Upload Manager is now available on the submission page for uploading presentation and full manuscript.
+        </p>
+        <p style="color: black">
+            Presentations for on-site report should be uploaded preferably 
+            until <strong>November 23, 2024</strong>, 23:59 GMT to avoid any difficulties 
+            and delays with opening of presentations. During the technical 
+            session each presenter will be given 15 minutes for a report 
+            including 3-5 minutes for Q&A. The updated technical program 
+            of the Forum will be available not later than November 21, 2024 
+            in the Forum Program section of the Forum web-site.
+        </p>
+        <p style="color: black">
+            We invite authors to upload <strong>full manuscripts</strong> before 
+            the above mentioned date as well. 
+            But since there is not much time left before the Forum, 
+            it is also possible to provide the manuscript after the
+            Forum <strong>until December 25, 2024</strong>, 23:59 GMT. Manuscript 
+            template with format guidelines available for 
+            download by the following <a href="https://spaceflightmechanics.com">link</a> and could be found in 
+            Submit section of the Forum web-site. 
+            Manuscripts should not exceed 20 pages.
+        </p>
+        <p>
+            Online participation is free of charge.
+            For <strong>on-sight participation</strong> please visit Forum web-site 
+            to get detailed information about registration fee, 
+            travel arrangements, etc. 
+        </p>
+        <p style="color: black">
+            All questions could be addressed to the Local Organizing Committee by the following email: 
+            <%= conference.email %>.
+            Forum web-site:<%= conference.site_url %>
+        </p>
+        <p style="color: black">
+            Best Regards,<br>
+            ConfChair Team<br>
+            support@confchair.org
+        </p>
+    </div>
+</body>
+<style>
+    table td:last-child {
+        padding-left: 20px !important;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    table td,
+    table th {
+        border: 1px solid black;
+    }
+</style>
+
+</html>

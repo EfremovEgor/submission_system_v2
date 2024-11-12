@@ -19,6 +19,8 @@ model Submission {
     updated_at          DateTime   @default(now()) @updatedAt()
     status              String     @default("submitted")
     deleted             Boolean    @default(false)
+    presentation_file   String?
+    manuscript_file     String?
 
     @@map("submissions")
 }

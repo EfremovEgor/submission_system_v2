@@ -4,6 +4,7 @@ export interface BaseSubmissionRights {
     canEdit: boolean;
     canDelete: boolean;
     canViewAll?: boolean;
+    canUpload: boolean;
 }
 
 export enum Roles {
