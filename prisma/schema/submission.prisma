@@ -19,8 +19,11 @@ model Submission {
     updated_at          DateTime   @default(now()) @updatedAt()
     status              String     @default("submitted")
     deleted             Boolean    @default(false)
-    presentation_file   String?
-    manuscript_file     String?
+
+    presentation_file_id String?
+    presentation_file    UploadedFile? @relation("presentation", fields: [presentation_file_id], references: [id], onDelete: SetNull)
+    manuscript_file_id   String?
+    manuscript_file      UploadedFile? @relation("manuscript", fields: [manuscript_file_id], references: [id], onDelete: SetNull)
 
     @@map("submissions")
 }

@@ -30,6 +30,8 @@ export const load: Load = async ({ parent, params }) => {
                     id: "asc",
                 },
             },
+            presentation_file: true,
+            manuscript_file: true,
         },
     });
     if (submission == null) error(404);

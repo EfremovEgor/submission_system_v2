@@ -2,12 +2,15 @@
     import BackButton from "$components/common/buttons/backButton.svelte";
     import { presentation_formats } from "$lib/aliases";
     import { Check } from "lucide-svelte";
-    import { goto } from "$app/navigation";
+    import { goto, invalidateAll } from "$app/navigation";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
+    import { applyAction, enhance } from "$app/forms";
     export let data;
     const conference = data.conference;
-    const submission = data.submission;
+    $: submission = data.submission;
     const rights = data.rights;
+    let presentationUploadFormBusy = false;
+    let manuscriptUploadFormBusy = false;
 </script>
 
 <svelte:head>
@@ -170,15 +173,131 @@
     </div>
     {#if submission.status == "accepted"}
         <h4 id="upload_manager" class="font-bold">Upload Manager</h4>
+
         <form
-            class="max-w-xs"
+            use:enhance={({ formElement, formData, action, cancel }) => {
+                presentationUploadFormBusy = true;
+                console.log(1);
+                return async ({ result }) => {
+                    presentationUploadFormBusy = false;
+                    await invalidateAll();
+                    return;
+                };
+            }}
+            id="presentationUploadForm"
             action="?/presentation"
             method="post"
             enctype="multipart/form-data"
         >
             <h5>Presentation</h5>
-            <input required name="file" type="file" accept=".pptx" />
-            <input type="submit" value="Upload" />
+            <div class="flex flex-row gap-3 items-center">
+                <label class="m-0" aria-disabled={presentationUploadFormBusy}>
+                    <span
+                        aria-busy={presentationUploadFormBusy}
+                        role="button"
+                        class="block whitespace-nowrap primary-button-hover outline"
+                    >
+                        {#if submission.presentation_file}
+                            Update File
+                        {:else}
+                            Add File
+                        {/if}
+                    </span>
+                    <input
+                        on:change={(event) => {
+                            if (
+                                event.target.files[0].name.split(".").pop() !=
+                                "pptx"
+                            ) {
+                                alert("File extension must be .pptx");
+                                event.preventDefault();
+                                return;
+                            }
+                            document.forms.presentationUploadForm.requestSubmit();
+                        }}
+                        required
+                        name="file"
+                        hidden
+                        type="file"
+                        accept=".pptx"
+                    />
+                </label>
+                <span>
+                    {#if submission.presentation_file}
+                        <a
+                            href="/uploads/{submission.presentation_file.id}"
+                            download="{conference.acronym}-presentation-{submission.local_id}.pptx"
+                        >
+                            {submission.presentation_file.original_name}
+                        </a>
+                    {:else}
+                        Empty
+                    {/if}
+                </span>
+            </div>
+        </form>
+        <br />
+        <form
+            id="manuscriptUploadForm"
+            action="?/manuscript"
+            method="post"
+            enctype="multipart/form-data"
+            use:enhance={({ formElement, formData, action, cancel }) => {
+                manuscriptUploadFormBusy = true;
+                console.log(1);
+                return async ({ result }) => {
+                    manuscriptUploadFormBusy = false;
+                    await invalidateAll();
+                    return;
+                };
+            }}
+        >
+            <h5>Manuscript</h5>
+            <div class="flex flex-row gap-3 items-center">
+                <label class="m-0" aria-disabled={manuscriptUploadFormBusy}>
+                    <span
+                        aria-busy={manuscriptUploadFormBusy}
+                        role="button"
+                        class="block whitespace-nowrap primary-button-hover outline"
+                    >
+                        {#if submission.manuscript_file}
+                            Update File
+                        {:else}
+                            Add File
+                        {/if}
+                    </span>
+                    <input
+                        on:change={(event) => {
+                            if (
+                                event.target.files[0].name.split(".").pop() !=
+                                "docx"
+                            ) {
+                                alert("File extension must be .docx");
+                                event.preventDefault();
+                                return;
+                            }
+                            document.forms.manuscriptUploadForm.requestSubmit();
+                        }}
+                        required
+                        name="file"
+                        hidden
+                        type="file"
+                        accept=".docx"
+                    />
+                </label>
+                <span>
+                    {#if submission.manuscript_file}
+                        <a
+                            href="/uploads/{submission.manuscript_file.id}"
+                            download="{conference.acronym}-manuscript-{submission.local_id}.docx"
+                        >
+                            {submission.manuscript_file.original_name}
+                        </a>
+                    {:else}
+                        Empty
+                    {/if}
+                </span>
+            </div>
         </form>
     {/if}
 </div>

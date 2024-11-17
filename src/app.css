@@ -3,37 +3,39 @@
 @tailwind utilities;
 
 :root {
-    --red: #D93526;
+    --red: #d93526;
     --red-hover: #9a251a;
     --orange: #c09b5c;
     --green: #16a34a;
     --green-hover: #139844;
 }
 
-input:not([type=submit],
-    [type=button],
-    [type=reset],
-    [type=checkbox],
-    [type=radio],
-    [type=file],
-    [type=textarea]),
+input:not(
+        [type="submit"],
+        [type="button"],
+        [type="reset"],
+        [type="checkbox"],
+        [type="radio"],
+        [type="file"],
+        [type="textarea"]
+    ),
 :where(select),
 select {
     padding: 10px !important;
     height: 50px !important;
     font-size: 0.875rem !important;
     line-height: 1.25rem !important;
-    margin: 0
+    margin: 0;
 }
 
 textarea {
     font-size: 0.875rem !important;
     line-height: 1.25rem !important;
-    margin: 0
+    margin: 0;
 }
 
-input[type=radio],
-input[type=checkbox] {
+input[type="radio"],
+input[type="checkbox"] {
     height: 20px !important;
     width: 20px !important;
 }
@@ -44,9 +46,9 @@ input[type=checkbox] {
 }
 
 button,
-[role=button],
-[type=button],
-[type=submit] {
+[role="button"],
+[type="button"],
+[type="submit"] {
     min-width: 10rem;
 }
 
@@ -55,7 +57,7 @@ button,
     cursor: pointer;
 }
 
-.icon-button>svg {
+.icon-button > svg {
     stroke: var(--pico-primary);
 }
 
@@ -68,7 +70,7 @@ button,
     padding: 0;
 }
 
-.icon-button:hover>svg {
+.icon-button:hover > svg {
     stroke: var(--pico-primary-hover);
 }
 
@@ -84,9 +86,8 @@ button,
 
 .button-red.outline {
     background-color: transparent;
-    color: var(--red)
+    color: var(--red);
 }
-
 
 .button-green {
     background-color: var(--green);
@@ -100,24 +101,24 @@ button,
 
 .button-green.outline:hover {
     background-color: var(--green-hover);
-    color: white
+    color: white;
 }
 
 .button-green.outline {
     background-color: transparent;
-    color: var(--green)
+    color: var(--green);
 }
 
 .required_star {
-    color: var(--red)
+    color: var(--red);
 }
 
 .button-red.outline:hover {
     background-color: var(--red-hover);
-    color: white
+    color: white;
 }
 
-th>* {
+th > * {
     background-color: transparent;
     color: var(--pico-primary);
     border: none;
@@ -128,19 +129,17 @@ th.centered {
     text-align: center;
 }
 
-th>.sortable {
+th > .sortable {
     cursor: pointer;
     user-select: none;
-
 }
 
-th:hover>.sortable {
-    color: var(--pico-primary-hover)
+th:hover > .sortable {
+    color: var(--pico-primary-hover);
 }
 
-th>.bare-button.sortable {
+th > .bare-button.sortable {
     width: 100%;
-
 }
 
 details summary {
@@ -158,8 +157,6 @@ details summary {
     cursor: pointer;
 }
 
-
-
 .small-table * {
     font-size: 16px !important;
 }
@@ -168,14 +165,9 @@ details summary {
     padding: 5px !important;
 }
 
-
-.small-table>thead * {
+.small-table > thead * {
     padding: 5px !important;
 }
-
-
-
-
 
 .tooltiped::before {
     width: 700px !important;
@@ -191,10 +183,13 @@ details summary {
     --pico-tooltip-background-color: #0172ad;
 }
 
-.tooltiped.icon-button>svg {
+.tooltiped.icon-button > svg {
     margin-bottom: 5px;
 }
 
-.tooltiped.icon-button:hover>svg {
+.tooltiped.icon-button:hover > svg {
     stroke: var(--red-hover);
+}
+[aria-disabled="true"] {
+    pointer-events: none;
 }

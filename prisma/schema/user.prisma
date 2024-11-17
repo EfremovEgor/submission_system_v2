@@ -24,6 +24,8 @@ model User {
     chair              Chair[]
     LOC                LOC[]
 
+    uploaded_files UploadedFile[]
+
     @@map("users")
 }
 
