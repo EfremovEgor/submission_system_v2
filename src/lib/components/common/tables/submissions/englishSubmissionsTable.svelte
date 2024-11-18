@@ -3,7 +3,7 @@
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import { presentation_formats } from "$src/lib/aliases";
     import { generateSubmissionsXLSX } from "$src/lib/generators/excel/submissions_list";
-    import { generateSubmissionsWord } from "$src/lib/generators/word/submissions_list";
+    import { generateSubmissionsWord } from "$src/lib/generators/word/submissions_list.client";
     import { MIME_TYPES } from "$src/lib/mime_types";
     import { formatAuthors } from "$src/lib/utils.client";
     import { Search } from "lucide-svelte";
