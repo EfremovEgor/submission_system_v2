@@ -1,20 +1,18 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 import inject from "@rollup/plugin-inject";
+import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 
 export default defineConfig({
-    plugins: [
-        sveltekit(),
-
-        inject({
-            Buffer: ["buffer", "Buffer"],
-        }),
-    ],
-    build: {
-        rollupOptions: {
+    plugins: [sveltekit()],
+    optimizeDeps: {
+        esbuildOptions: {
+            define: {
+                global: "globalThis",
+            },
             plugins: [
-                inject({
-                    Buffer: ["buffer", "Buffer"],
+                NodeGlobalsPolyfillPlugin({
+                    buffer: true,
                 }),
             ],
         },
