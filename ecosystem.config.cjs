@@ -10,6 +10,7 @@ module.exports = {
                 PORT: 3000,
                 NODE_PORT: 3000,
                 BODY_SIZE_LIMIT: "Infinity",
+                TZ: "Europe/Moscow",
             },
         },
     ],
