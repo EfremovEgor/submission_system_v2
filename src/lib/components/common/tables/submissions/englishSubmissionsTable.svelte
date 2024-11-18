@@ -254,7 +254,7 @@
                     <td>
                         <a
                             href="/call_for_papers/{conference.acronym}/submissions/{submission.id}/{submissionViewRoleSuffix}"
-                            class="icon-button text-center"
+target="_blank"                           class="icon-button text-center"
                         >
                             <Search class="mx-auto" />
                         </a>
