@@ -2,7 +2,8 @@ import { titles } from "./aliases";
 
 const languagePatterns = {
     en: {
-        general: /^[a-zA-Z0-9()\“\”@*_\-\\\+!\;\:=#$%^&*\’,\’?/:."\'\][\s]+$/,
+        general:
+            /^[a-zA-Z0-9()\“\”@*_\-\\\+!\;\:=#$%^&*\’,\’?\/\»\«\–:."\'\][\s]+$/,
         onlyLettersAndNumbers: /^[a-zA-Z0-9\s\-]+$/,
     },
 };
