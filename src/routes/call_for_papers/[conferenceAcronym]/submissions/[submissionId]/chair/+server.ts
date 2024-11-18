@@ -1,10 +1,12 @@
-import { submission_statuses } from "$src/lib/aliases.js";
+import { DOMAIN } from "$env/static/private";
+import { PRIVILEGES, submission_statuses } from "$src/lib/aliases.js";
 import prisma from "$src/lib/database/prisma.js";
 import { sendSubmissionAccepted } from "$src/lib/email/authors.mailing.js";
 import { error, json } from "@sveltejs/kit";
 const acceptSubmission = async (submissionId: number) => {
     const submission = await prisma.submission.findFirst({
         select: {
+            id: true,
             authors: true,
             local_id: true,
             title: true,
@@ -14,6 +16,7 @@ const acceptSubmission = async (submissionId: number) => {
                     short_name: true,
                     site_url: true,
                     email: true,
+                    submission_deadline: true,
                 },
             },
         },
@@ -30,15 +33,15 @@ const acceptSubmission = async (submissionId: number) => {
         },
     });
     submission.authors.forEach((author) => {
-        if (author.is_corresponding)
-            sendSubmissionAccepted(author.email, {
-                recipient: author,
-                submission: {
-                    local_id: submission.local_id,
-                    title: submission.title,
-                },
-                conference: submission.conference,
-            });
+        sendSubmissionAccepted(author.email, {
+            recipient: author,
+            submission: {
+                local_id: submission.local_id,
+                title: submission.title,
+                link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${submission.id}/${PRIVILEGES.author}`,
+            },
+            conference: submission.conference,
+        });
     });
 };
 const rejectSubmission = async (submissionId: number) => {

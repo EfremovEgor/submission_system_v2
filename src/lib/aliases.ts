@@ -14,6 +14,7 @@ export const submission_statuses = {
     under_review: "Under review",
     rejected: "Rejected",
     accepted: "Accepted",
+    withdrawn: "Withdrawn",
 };
 export const PRIVILEGES = {
     author: "author",

@@ -59,10 +59,17 @@ export const load: Load = async ({ parent, params }) => {
             },
         },
     });
+
     if (conference == null) {
         error(404);
     }
-
+    if (
+        new Date() >
+        new Date(
+            conference.submission_deadline.getTime() + 60 * 60 * 21 * 1000 - 1,
+        )
+    )
+        redirect(302, `/call_for_papers/${conference.acronym}`);
     return { conference, userProfile };
 };
 
@@ -229,6 +236,7 @@ export const actions: Actions = {
             });
         });
         redirect(302, "/author");
+
         //     try {
         //         const results = await signInSchema.parseAsync(formData);
         //         const user: any = await getUserByEmail(results.email);

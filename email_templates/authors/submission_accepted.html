@@ -1,61 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.18.3/dist/css/uikit.min.css" />
 
 <body>
     <div class="uk-container" style="
-    margin-top: 10px;
-    margin-bottom: 25px;
-    max-width: 980px;
-    min-height: 320px;
-">
-
+                margin-top: 10px;
+                margin-bottom: 25px;
+                max-width: 980px;
+                min-height: 320px;
+            ">
         <p style="color: black">
             Dear <%= recipient.title %>
                 <%= recipient.first_name %>
-                    <%= recipient.last_name %>, </p>
-        <p style="color: black">
-            We are glad to confirm that your paper with submission number <%= submission.local_id %>
-                "<%= submission.title %>" has been accepted for presentation at  <%= conference.name %>.
+                    <%= recipient.last_name %>,
         </p>
         <p style="color: black">
-            Upload Manager is now available on the submission page for uploading presentation and full manuscript.
+            We are glad to confirm that your paper with submission number
+            <%= submission.local_id %> "<%= submission.title %>" has been
+                    accepted for presentation at
+                    <strong>
+                        <%= conference.name %>
+                    </strong>.
         </p>
         <p style="color: black">
-            Presentations for on-site report should be uploaded preferably 
-            until <strong>November 23, 2024</strong>, 23:59 GMT to avoid any difficulties 
-            and delays with opening of presentations. During the technical 
-            session each presenter will be given 15 minutes for a report 
-            including 3-5 minutes for Q&A. The updated technical program 
-            of the Forum will be available not later than November 21, 2024 
-            in the Forum Program section of the Forum web-site.
+            Upload Manager is now available on the
+            <a href="">submission page</a> for uploading presentation and
+            full manuscript. To access the submission the author must be
+            logged in to the ConfChair Event Management System
+            (confchair.org).
         </p>
         <p style="color: black">
-            We invite authors to upload <strong>full manuscripts</strong> before 
-            the above mentioned date as well. 
-            But since there is not much time left before the Forum, 
-            it is also possible to provide the manuscript after the
-            Forum <strong>until December 25, 2024</strong>, 23:59 GMT. Manuscript 
-            template with format guidelines available for 
-            download by the following <a href="https://spaceflightmechanics.com">link</a> and could be found in 
-            Submit section of the Forum web-site. 
-            Manuscripts should not exceed 20 pages.
+            <strong>Please <span style="color:green">Confirm</span> or <span style="color:red">Withdraw</span> your
+                presentation at the Technical
+                Session in the submission
+                page</strong>. Abstracts for which the status will not been updated by <%=
+                conference.submission_deadline %>
+                (Moscow Time, GMT+3) will be
+                removed from the <%= conference.short_name %> Technical Program and the presentation slot will be
+                    transferred to a back-up abstract.
+        </p>
+        <p style="color: black">
+            <strong>Slides</strong> for presentations should be uploaded <strong> until November 23, 2024</strong>,
+            23:59 (Moscow Time,
+            GMT+3) to avoid any
+            difficulties and delays with opening the slides during technical sessions. During the technical session each
+            presenter will be given 15 minutes for a report including 3-5 minutes for Q&A. Final technical program will
+            be available in the Program section of the Forum web-site not later than November 22.
+        </p>
+        <p style="color: black">
+            We invite authors to upload <strong>full manuscripts</strong> before the above mentioned date as well. But
+            since there is not
+            much time left before the Forum, it is also possible to provide the manuscript after the Forum <strong>
+                until January
+                15, 2025, 23:59 (Moscow Time, GMT+3)</strong>. Manuscript template with format guidelines available for
+            download by
+            the following link and could be found in Submit section of the Forum web-site. Manuscripts should not exceed
+            20 pages.
         </p>
         <p>
-            Online participation is free of charge.
-            For <strong>on-sight participation</strong> please visit Forum web-site 
-            to get detailed information about registration fee, 
-            travel arrangements, etc. 
+            All categories of participants need to register to the Forum using the form in the Register section on the
+            Forum web-site. <strong>We encourage Russian participants to attend the Forum on-sight.</strong>
         </p>
         <p style="color: black">
-            All questions could be addressed to the Local Organizing Committee by the following email: 
-            <%= conference.email %>.
-            Forum web-site:<%= conference.site_url %>
+            Thank you very much for your attendance in the <%= conference.short_name %>.
+        </p>
+        <p>
+            If you haven’t found your paper in the Program, or you have other issues, please address your questions to
+            the Local Organizing Committee: <br>
+            <%= conference.email %>.<br>
+                Forum web-site:<br>
+                <%= conference.site_url %><br>
         </p>
         <p style="color: black">
-            Best Regards,<br>
-            ConfChair Team<br>
+            Best Regards,<br />
+            ConfChair Team<br />
             support@confchair.org
         </p>
     </div>

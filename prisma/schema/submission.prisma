@@ -18,7 +18,7 @@ model Submission {
     created_at          DateTime   @default(now())
     updated_at          DateTime   @default(now()) @updatedAt()
     status              String     @default("submitted")
-    deleted             Boolean    @default(false)
+    withdrawn           Boolean    @default(false)
 
     presentation_file_id String?
     presentation_file    UploadedFile? @relation("presentation", fields: [presentation_file_id], references: [id], onDelete: SetNull)

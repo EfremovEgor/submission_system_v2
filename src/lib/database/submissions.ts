@@ -52,3 +52,13 @@ export const deleteSubmissionById = async (submissionId: number) => {
         },
     });
 };
+export const withdrawSubmissionById = async (submissionId: number) => {
+    await prisma.submission.update({
+        where: {
+            id: submissionId,
+        },
+        data: {
+            withdrawn: true,
+        },
+    });
+};

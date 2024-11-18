@@ -53,6 +53,16 @@ export const load: Load = async ({ parent, params }) => {
             },
         },
     });
+    if (
+        new Date() >
+        new Date(
+            conference.submission_deadline.getTime() + 60 * 60 * 21 * 1000 - 1,
+        )
+    )
+        redirect(
+            302,
+            `/call_for_papers/${params.conferenceAcronym}/submissions/${data.submission.id}/author`,
+        );
     if (conference == null) {
         error(404);
     }

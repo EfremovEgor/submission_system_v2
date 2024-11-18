@@ -1,7 +1,10 @@
 <script lang="ts">
     import DownloadPdf from "$components/common/icons/downloadPDF.svelte";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
-    import { presentation_formats } from "$src/lib/aliases";
+    import {
+        presentation_formats,
+        submission_statuses,
+    } from "$src/lib/aliases";
     import { generateSubmissionsXLSX } from "$src/lib/generators/excel/submissions_list";
     import { generateSubmissionsWord } from "$src/lib/generators/word/submissions_list.client";
     import { MIME_TYPES } from "$src/lib/mime_types";
@@ -21,6 +24,7 @@
         topic: {
             name: string;
         };
+        withdrawn: boolean;
         authors: {
             first_name: string;
             last_name: string;
@@ -300,6 +304,11 @@
                     </td>
                     <td class="text-center">
                         <SubmissionStatusText status={submission.status} />
+                        {#if submission.withdrawn}
+                            <br /><span style="color:var(--red)"
+                                >{submission_statuses.withdrawn}</span
+                            >
+                        {/if}
                     </td>
                 </tr>
             {/each}

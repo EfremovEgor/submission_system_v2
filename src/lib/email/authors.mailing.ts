@@ -20,6 +20,7 @@ export const sendSubmissionAccepted = async (
         submission: {
             local_id: number;
             title: string;
+            link: string;
         };
         conference: {
             name: string;
@@ -32,6 +33,10 @@ export const sendSubmissionAccepted = async (
     const subject = `Your paper #${rawData.submission.local_id} has been accepted for presentation at the ${rawData.conference.short_name}`;
     let data = {
         ...rawData,
+        conference: {
+            ...rawData.conference,
+            submission_deadline: new Date().toLocaleString(),
+        },
     };
     data.recipient.title = titles[data.recipient.title] ?? data.recipient.title;
     const html = await renderEmailTemplate(

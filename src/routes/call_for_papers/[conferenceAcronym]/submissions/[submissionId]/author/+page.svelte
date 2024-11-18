@@ -24,16 +24,19 @@
         Submission #{submission.local_id} for {conference.short_name}
     </h3>
     <div>
-        {#if rights.canEdit}
-            <a
-                href="author/edit"
-                class="primary-button-hover outline"
-                role="button"
-            >
-                Edit
-            </a>
+        {#if new Date() <= new Date(conference.submission_deadline.getTime() + 60 * 60 * 21 * 1000 - 1)}
+            {#if rights.canEdit}
+                <a
+                    href="author/edit"
+                    class="primary-button-hover outline"
+                    role="button"
+                >
+                    Edit
+                </a>
+            {/if}
         {/if}
-        {#if rights.canDelete}
+
+        {#if rights.canDelete && !submission.withdrawn}
             <button
                 on:click={async () => {
                     if (confirm("Do you want to withdraw submission?"))

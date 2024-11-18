@@ -8,6 +8,7 @@ import { getUsersWithPrivileges } from "$src/lib/database/privileges";
 import {
     deleteSubmissionById,
     getSubmissionById,
+    withdrawSubmissionById,
 } from "$src/lib/database/submissions";
 import { sendRCCCSubmissionAuthorDeleted } from "$src/lib/email/priviliges.mailing";
 import type { Load } from "@sveltejs/kit";
@@ -44,7 +45,7 @@ export const load: Load = async ({ parent, params }) => {
             authors,
         });
     });
-    await deleteSubmissionById(parseInt(data.submission.id));
+    await withdrawSubmissionById(parseInt(data.submission.id));
     const goBackUrl = `/author`;
     return { goBackUrl };
 };

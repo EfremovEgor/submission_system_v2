@@ -28,15 +28,17 @@
         <a href="chair/edit" class="primary-button-hover outline" role="button">
             Edit
         </a>
-        <button
-            on:click={async () => {
-                if (confirm("Do you want to delete submission?"))
-                    goto("chair/delete");
-            }}
-            class="button-red outline"
-        >
-            Withdraw
-        </button>
+        {#if !submission.withdrawn}
+            <button
+                on:click={async () => {
+                    if (confirm("Do you want to delete submission?"))
+                        goto("chair/delete");
+                }}
+                class="button-red outline"
+            >
+                Withdraw
+            </button>
+        {/if}
         {#if submission.status != "accepted"}
             <button
                 on:click={async () => {
