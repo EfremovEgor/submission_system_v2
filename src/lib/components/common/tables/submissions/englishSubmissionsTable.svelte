@@ -3,6 +3,8 @@
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import { presentation_formats } from "$src/lib/aliases";
     import { generateSubmissionsXLSX } from "$src/lib/generators/excel/submissions_list";
+    import { generateSubmissionsWord } from "$src/lib/generators/word/submissions_list";
+    import { MIME_TYPES } from "$src/lib/mime_types";
     import { formatAuthors } from "$src/lib/utils.client";
     import { Search } from "lucide-svelte";
     export let conference: {
@@ -104,7 +106,7 @@
     on:click={() => {
         const element = document.createElement("a");
         const file = new Blob([generateSubmissionsXLSX(submissionsToDisplay)], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            type: MIME_TYPES[".pptx"],
         });
         element.setAttribute("href", window.URL.createObjectURL(file));
         element.setAttribute("download", `${conference.acronym}-submissions`);
@@ -114,6 +116,34 @@
         document.body.removeChild(element);
     }}
     class="bare-button">Export to Excel</button
+>
+<br />
+<button
+    on:click={async () => {
+        const element = document.createElement("a");
+        const file = new Blob(
+            [
+                await generateSubmissionsWord({
+                    submissions: submissionsToDisplay.filter(
+                        ({ status }) => status == "accepted",
+                    ),
+                    conference: {
+                        acronym: conference.acronym,
+                    },
+                }),
+            ],
+            {
+                type: MIME_TYPES[".docx"],
+            },
+        );
+        element.setAttribute("href", window.URL.createObjectURL(file));
+        element.setAttribute("download", `${conference.acronym}-submissions`);
+        element.style.display = "none";
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }}
+    class="bare-button">Export to Docx</button
 >
 <div class="overflow-auto">
     <table class="striped">
@@ -254,7 +284,8 @@
                     <td>
                         <a
                             href="/call_for_papers/{conference.acronym}/submissions/{submission.id}/{submissionViewRoleSuffix}"
-target="_blank"                           class="icon-button text-center"
+                            target="_blank"
+                            class="icon-button text-center"
                         >
                             <Search class="mx-auto" />
                         </a>
