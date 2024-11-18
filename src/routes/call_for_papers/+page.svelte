@@ -7,6 +7,8 @@
     function onPaginationClick(page: number) {
         current = page;
     }
+    console.log(new Date());
+    console.log(new Date().toLocaleString());
 </script>
 
 <svelte:head>
