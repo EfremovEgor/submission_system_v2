@@ -106,7 +106,7 @@
     on:click={() => {
         const element = document.createElement("a");
         const file = new Blob([generateSubmissionsXLSX(submissionsToDisplay)], {
-            type: MIME_TYPES[".pptx"],
+            type: MIME_TYPES[".xlsx"],
         });
         element.setAttribute("href", window.URL.createObjectURL(file));
         element.setAttribute("download", `${conference.acronym}-submissions`);

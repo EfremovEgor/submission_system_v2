@@ -5,6 +5,13 @@
     const conference = data.conference;
     let modalIsOpen = false;
     let language = "en";
+    console.log(conference.submission_deadline);
+    console.log(new Date());
+    console.log(
+        new Date(
+            conference.submission_deadline.getTime() + 60 * 60 * 24 * 1000 - 1,
+        ),
+    );
 </script>
 
 <svelte:head>
@@ -16,19 +23,22 @@
         {conference.name}
     </h3>
     <div class="flex flex-row gap-5">
-        {#if conference.allow_ru}
-            <button
-                class="primary-button-hover outline"
-                on:click={() => (modalIsOpen = !modalIsOpen)}
-                >Submit an abstract</button
-            >
-        {:else}
-            <a
-                href="{conference.acronym}/submit?lang=en"
-                rel="noopener noreferrer"
-                class="primary-button-hover outline"
-                role="button">Submit an abstract</a
-            >
+        {#if new Date() <= new Date(conference.submission_deadline.getTime() + 60 * 60 * 21 * 1000 - 1)}
+            {#if conference.allow_ru}
+                <button
+                    class="primary-button-hover outline"
+                    on:click={() => (modalIsOpen = !modalIsOpen)}
+                >
+                    Submit an abstract
+                </button>
+            {:else}
+                <a
+                    href="{conference.acronym}/submit?lang=en"
+                    rel="noopener noreferrer"
+                    class="primary-button-hover outline"
+                    role="button">Submit an abstract</a
+                >
+            {/if}
         {/if}
         <a
             href={conference.site_url}

@@ -224,6 +224,8 @@
                 <span>
                     {#if submission.presentation_file}
                         <a
+                            style="color:var(--green);
+                            text-decoration-color:var(--green)"
                             href="/uploads/{submission.presentation_file.id}"
                             download="{conference.acronym}-presentation-{submission.local_id}.pptx"
                         >
@@ -286,6 +288,8 @@
                 <span>
                     {#if submission.manuscript_file}
                         <a
+                            style="color:var(--green);
+                            text-decoration-color:var(--green)"
                             href="/uploads/{submission.manuscript_file.id}"
                             download="{conference.acronym}-manuscript-{submission.local_id}.docx"
                         >

@@ -9,36 +9,34 @@ import {
     TableCell,
 } from "docx";
 
-export const generateSubmissionsWord = async (data: {
-    submissions: {
-        local_id: number;
-        authors: {
-            first_name: string;
-            last_name: string;
-            affiliation: string;
-            country: string;
+export const generateSubmissionsWord = async (
+    data: {
+        submissions: {
+            local_id: number;
+            authors: {
+                first_name: string;
+                last_name: string;
+                affiliation: string;
+                country: string;
+            }[];
+            title: string;
+            topic: {
+                name: string;
+            };
+            presentation_format: string;
+            created_at: Date;
+            status: string;
         }[];
-        title: string;
-        topic: {
-            name: string;
+        conference: {
+            acronym: string;
         };
-        presentation_format: string;
-        created_at: Date;
-        status: string;
-    }[];
-    conference: {
-        acronym: string;
-    };
-}) => {
-    const maxLocalIdLength = String(
-        Math.max.apply(
-            Math,
-            data.submissions.map(function (submission) {
-                return submission.local_id;
-            }),
-        ),
-    ).length;
-
+    },
+    settings: {
+        localIdMaxLength: number;
+    } = {
+        localIdMaxLength: 3,
+    },
+) => {
     const rows = data.submissions.map(
         (submission, index) =>
             new TableRow({
@@ -52,7 +50,7 @@ export const generateSubmissionsWord = async (data: {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: `${data.conference.acronym}-${String(submission.local_id).padStart(maxLocalIdLength, "0")}`,
+                                        text: `${data.conference.acronym}-${String(submission.local_id).padStart(settings.localIdMaxLength, "0")}`,
                                         bold: true,
                                     }),
                                     new TextRun({
