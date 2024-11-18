@@ -10,4 +10,13 @@ export default defineConfig({
             Buffer: ["buffer", "Buffer"],
         }),
     ],
+    build: {
+        rollupOptions: {
+            plugins: [
+                inject({
+                    Buffer: ["buffer", "Buffer"],
+                }),
+            ],
+        },
+    },
 });
