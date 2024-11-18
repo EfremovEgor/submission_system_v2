@@ -5,13 +5,6 @@
     const conference = data.conference;
     let modalIsOpen = false;
     let language = "en";
-    console.log(conference.submission_deadline);
-    console.log(new Date());
-    console.log(
-        new Date(
-            conference.submission_deadline.getTime() + 60 * 60 * 24 * 1000 - 1,
-        ),
-    );
 </script>
 
 <svelte:head>
