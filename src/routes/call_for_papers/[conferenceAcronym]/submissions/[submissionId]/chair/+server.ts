@@ -16,7 +16,8 @@ const acceptSubmission = async (submissionId: number) => {
                     short_name: true,
                     site_url: true,
                     email: true,
-                    submission_deadline: true,
+                    manuscript_deadline: true,
+                    presentation_deadline: true,
                 },
             },
         },
@@ -32,6 +33,9 @@ const acceptSubmission = async (submissionId: number) => {
             status: "accepted",
         },
     });
+    const presentationConfirmationDeadline = new Date(
+        new Date().getTime() + 1000 * 60 * 60 * 24 * 2,
+    );
     submission.authors.forEach((author) => {
         sendSubmissionAccepted(author.email, {
             recipient: author,
@@ -40,7 +44,11 @@ const acceptSubmission = async (submissionId: number) => {
                 title: submission.title,
                 link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${submission.id}/${PRIVILEGES.author}`,
             },
-            conference: submission.conference,
+            conference: {
+                ...submission.conference,
+                presentation_confirmation_deadline:
+                    presentationConfirmationDeadline,
+            },
         });
     });
 };

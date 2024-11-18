@@ -1,23 +1,25 @@
 model Conference {
-    id                  Int                 @id @default(autoincrement())
-    name                String
-    name_ru             String?
-    allow_ru            Boolean             @default(false)
-    site_url            String?
-    description         String?
-    start_date          DateTime?           @db.Date
-    submission_deadline DateTime?           @db.Date
-    acronym             String              @unique
-    short_name          String
-    email               String?
-    creator_id          Int?
-    creator             User?               @relation(fields: [creator_id], references: [id], onDelete: SetNull)
-    symposiums          Symposium[]
-    topics              Topic[]
-    settings            ConferenceSettings?
-    submissions         Submission[]
-    chairs              Chair[]
-    LOC                 LOC[]
+    id                    Int                 @id @default(autoincrement())
+    name                  String
+    name_ru               String?
+    allow_ru              Boolean             @default(false)
+    site_url              String?
+    description           String?
+    start_date            DateTime?           @db.Date
+    submission_deadline   DateTime?           @db.Date
+    presentation_deadline DateTime?           @db.Timestamp()
+    manuscript_deadline   DateTime?           @db.Timestamp()
+    acronym               String              @unique
+    short_name            String
+    email                 String?
+    creator_id            Int?
+    creator               User?               @relation(fields: [creator_id], references: [id], onDelete: SetNull)
+    symposiums            Symposium[]
+    topics                Topic[]
+    settings              ConferenceSettings?
+    submissions           Submission[]
+    chairs                Chair[]
+    LOC                   LOC[]
 
     @@map("conferences")
 }

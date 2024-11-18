@@ -34,16 +34,17 @@
             <strong>Please <span style="color:green">Confirm</span> or <span style="color:red">Withdraw</span> your
                 presentation at the Technical
                 Session in the submission
-                page</strong>. Abstracts for which the status will not been updated by <%=
-                conference.submission_deadline %>
-                (Moscow Time, GMT+3) will be
-                removed from the <%= conference.short_name %> Technical Program and the presentation slot will be
-                    transferred to a back-up abstract.
+                page</strong>. Abstracts for which the status will not been updated by <strong>
+                <%= conference.presentation_confirmation_deadline %> (Moscow Time, GMT+3)
+            </strong>
+            will be
+            removed from the <%= conference.short_name %> Technical Program and the presentation slot will be
+                transferred to a back-up abstract.
         </p>
         <p style="color: black">
-            <strong>Slides</strong> for presentations should be uploaded <strong> until November 23, 2024</strong>,
-            23:59 (Moscow Time,
-            GMT+3) to avoid any
+            <strong>Slides</strong> for presentations should be uploaded <strong>
+                <%= conference.presentation_deadline %> (Moscow Time, GMT+3)
+            </strong> to avoid any
             difficulties and delays with opening the slides during technical sessions. During the technical session each
             presenter will be given 15 minutes for a report including 3-5 minutes for Q&A. Final technical program will
             be available in the Program section of the Forum web-site not later than November 22.
@@ -52,8 +53,8 @@
             We invite authors to upload <strong>full manuscripts</strong> before the above mentioned date as well. But
             since there is not
             much time left before the Forum, it is also possible to provide the manuscript after the Forum <strong>
-                until January
-                15, 2025, 23:59 (Moscow Time, GMT+3)</strong>. Manuscript template with format guidelines available for
+                <%= conference.manuscript_deadline %> (Moscow Time, GMT+3)
+            </strong> . Manuscript template with format guidelines available for
             download by
             the following link and could be found in Submit section of the Forum web-site. Manuscripts should not exceed
             20 pages.
