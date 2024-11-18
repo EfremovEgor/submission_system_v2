@@ -1,5 +1,5 @@
+import { MIME_TYPES } from "$src/lib/mime_types";
 import { getUploadedFile } from "$src/lib/server/files.js";
-import { MIME_TYPES } from "$src/lib/server/mime_types";
 import { error, json } from "@sveltejs/kit";
 import { extname } from "path";
 
