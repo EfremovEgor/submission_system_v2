@@ -36,7 +36,6 @@ export const languageIsAvailable = (
         type: "general",
     },
 ) => {
-    console.log(value);
     if (allowedLanguages == null) {
         return true;
     }

@@ -48,13 +48,11 @@ export const resolveAuthorRights = (
                         : coAuthorRights,
                 );
         });
-        console.log("co-author");
     }
     if (
         submission.status != SubmissionStatuses.submitted &&
         submission.status != SubmissionStatuses.under_review
     ) {
-        console.log(submission.status);
         rights.canEdit = false;
     }
     console.debug(rights);

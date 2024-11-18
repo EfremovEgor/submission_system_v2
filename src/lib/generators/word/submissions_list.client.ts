@@ -30,6 +30,15 @@ export const generateSubmissionsWord = async (data: {
         acronym: string;
     };
 }) => {
+    const maxLocalIdLength = String(
+        Math.max.apply(
+            Math,
+            data.submissions.map(function (submission) {
+                return submission.local_id;
+            }),
+        ),
+    ).length;
+
     const rows = data.submissions.map(
         (submission, index) =>
             new TableRow({
@@ -43,7 +52,7 @@ export const generateSubmissionsWord = async (data: {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: `${data.conference.acronym}-${submission.local_id}`,
+                                        text: `${data.conference.acronym}-${String(submission.local_id).padStart(maxLocalIdLength, "0")}`,
                                         bold: true,
                                     }),
                                     new TextRun({

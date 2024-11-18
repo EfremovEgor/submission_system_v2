@@ -177,7 +177,6 @@
         <form
             use:enhance={({ formElement, formData, action, cancel }) => {
                 presentationUploadFormBusy = true;
-                console.log(1);
                 return async ({ result }) => {
                     presentationUploadFormBusy = false;
                     await invalidateAll();
@@ -244,7 +243,6 @@
             enctype="multipart/form-data"
             use:enhance={({ formElement, formData, action, cancel }) => {
                 manuscriptUploadFormBusy = true;
-                console.log(1);
                 return async ({ result }) => {
                     manuscriptUploadFormBusy = false;
                     await invalidateAll();

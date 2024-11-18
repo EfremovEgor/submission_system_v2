@@ -128,7 +128,6 @@ export const actions: Actions = {
                     },
                     data: updatedAuthor,
                 });
-                console.log(updatedAuthor);
             } else {
                 await prisma.author.create({
                     data: {
