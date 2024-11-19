@@ -21,6 +21,9 @@ export const sendSubmissionAccepted = async (
             local_id: number;
             title: string;
             link: string;
+            topic: {
+                name: string;
+            };
         };
         conference: {
             name: string;

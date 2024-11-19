@@ -16,12 +16,12 @@
                     <%= recipient.last_name %>,
         </p>
         <p style="color: black">
-            We are glad to confirm that your paper with submission number
+            We are glad to inform that your paper with submission number
             <%= submission.local_id %> "<%= submission.title %>" has been
                     accepted by Program Committee for presentation at
                     <strong>
-                        <%= conference.name %>
-                    </strong>.
+                        <%= submission.topic.name %>
+                    </strong> Technical Session.
         </p>
         <p style="color: black">
             <strong>Please <span style="color:green">Confirm</span> or <span style="color:red">Withdraw</span> your

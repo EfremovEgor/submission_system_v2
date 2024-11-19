@@ -9,6 +9,11 @@ const acceptSubmission = async (submissionId: number) => {
             id: true,
             authors: true,
             local_id: true,
+            topic: {
+                select: {
+                    name: true,
+                },
+            },
             title: true,
             conference: {
                 select: {
@@ -44,6 +49,9 @@ const acceptSubmission = async (submissionId: number) => {
                 local_id: submission.local_id,
                 title: submission.title,
                 link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${submission.id}/${PRIVILEGES.author}`,
+                topic: {
+                    name: submission.topic.name,
+                },
             },
             conference: {
                 ...submission.conference,
