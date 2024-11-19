@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { submission_statuses } from '$src/lib/aliases';
     import BackButton from "$components/common/buttons/backButton.svelte";
     import { presentation_formats } from "$lib/aliases";
     import { Check } from "lucide-svelte";
@@ -24,38 +25,57 @@
         Submission #{submission.local_id} for {conference.short_name}
     </h3>
     <div>
-        {#if new Date() <= new Date(conference.submission_deadline.getTime() + 60 * 60 * 21 * 1000 - 1)}
-            {#if rights.canEdit}
+        {#if !submission.withdrawn}
+            {#if submission.status == "accepted" && !submission.particiaption_confirmed}
+                <button class="button-green primary-button-hover outline"
+                on:click={async () => {
+                    await fetch("", {
+                        method: "POST",
+                        body: JSON.stringify({ action: "confirm" }),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    await invalidateAll();
+                }}
+                    >Confirm
+                </button>
+            {/if}
+            {#if new Date() <= new Date(conference.submission_deadline.getTime() + 60 * 60 * 21 * 1000 - 1)}
+                {#if rights.canEdit}
+                    <a
+                        href="author/edit"
+                        class="primary-button-hover outline"
+                        role="button"
+                    >
+                        Edit
+                    </a>
+                {/if}
+            {/if}
+
+            {#if rights.canDelete}
+                <button
+                    on:click={async () => {
+                        if (confirm("Do you want to withdraw submission?"))
+                            goto("author/delete");
+                    }}
+                    class="button-red outline"
+                >
+                    Withdraw
+                </button>
+            {/if}
+
+            {#if rights.canUpload && submission.status == "accepted"}
                 <a
-                    href="author/edit"
+                    href="#upload_manager"
                     class="primary-button-hover outline"
                     role="button"
                 >
-                    Edit
+                    Upload Files
                 </a>
             {/if}
         {/if}
 
-        {#if rights.canDelete && !submission.withdrawn}
-            <button
-                on:click={async () => {
-                    if (confirm("Do you want to withdraw submission?"))
-                        goto("author/delete");
-                }}
-                class="button-red outline"
-            >
-                Withdraw
-            </button>
-        {/if}
-        {#if rights.canUpload && submission.status == "accepted"}
-            <a
-                href="#upload_manager"
-                class="primary-button-hover outline"
-                role="button"
-            >
-                Upload Files
-            </a>
-        {/if}
         <a
             href="/pdf/submissions/{submission.id}"
             target="_blank"
@@ -111,6 +131,22 @@
                 <td class="font-semibold">Review Status</td>
                 <td> <SubmissionStatusText status={submission.status} /></td>
             </tr>
+            {#if submission.withdrawn  }
+            <tr>
+                <td class="font-semibold">Status</td>
+                <td> 
+                    <span style="color:var(--red)">{submission_statuses.withdrawn}</span>
+                </td>
+            </tr>
+            {/if}
+            {#if submission.particiaption_confirmed  }
+            <tr>
+                <td class="font-semibold">Status</td>
+                <td> 
+                    <span style="color:var(--green)">{submission_statuses.particiaption_confirmed}</span>
+                </td>
+            </tr>
+            {/if}
         </tbody>
     </table>
     <h4 class="font-bold">Authors</h4>
@@ -174,7 +210,7 @@
             </tbody>
         </table>
     </div>
-    {#if submission.status == "accepted"}
+    {#if submission.status == "accepted" && !submission.withdrawn && rights.canUpload}
         <h4 id="upload_manager" class="font-bold">Upload Manager</h4>
 
         <form

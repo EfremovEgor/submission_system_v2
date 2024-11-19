@@ -55,6 +55,5 @@ export const resolveAuthorRights = (
     ) {
         rights.canEdit = false;
     }
-    console.debug(rights);
     return rights;
 };

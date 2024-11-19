@@ -7,8 +7,6 @@
     function onPaginationClick(page: number) {
         current = page;
     }
-    console.log(new Date().getTimezoneOffset());
-    console.log(new Date().toLocaleString());
 </script>
 
 <svelte:head>

@@ -1,24 +1,25 @@
 model Submission {
-    id                  Int        @id @default(autoincrement())
-    local_id            Int
-    title               String
-    title_ru            String?
-    abstract            String
-    abstract_ru         String?
-    keywords            String
-    keywords_ru         String?
-    presentation_format String
-    topic_id            Int
-    topic               Topic      @relation(fields: [topic_id], references: [id], onDelete: Cascade)
-    conference_id       Int
-    conference          Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
-    authors             Author[]
-    created_by          User       @relation(fields: [created_by_id], references: [id])
-    created_by_id       Int
-    created_at          DateTime   @default(now())
-    updated_at          DateTime   @default(now()) @updatedAt()
-    status              String     @default("submitted")
-    withdrawn           Boolean    @default(false)
+    id                      Int        @id @default(autoincrement())
+    local_id                Int
+    title                   String
+    title_ru                String?
+    abstract                String
+    abstract_ru             String?
+    keywords                String
+    keywords_ru             String?
+    presentation_format     String
+    topic_id                Int
+    topic                   Topic      @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+    conference_id           Int
+    conference              Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+    authors                 Author[]
+    created_by              User       @relation(fields: [created_by_id], references: [id])
+    created_by_id           Int
+    created_at              DateTime   @default(now())
+    updated_at              DateTime   @default(now()) @updatedAt()
+    status                  String     @default("submitted")
+    withdrawn               Boolean    @default(false)
+    particiaption_confirmed Boolean    @default(false)
 
     presentation_file_id String?
     presentation_file    UploadedFile? @relation("presentation", fields: [presentation_file_id], references: [id], onDelete: SetNull)

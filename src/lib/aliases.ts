@@ -15,6 +15,7 @@ export const submission_statuses = {
     rejected: "Rejected",
     accepted: "Accepted",
     withdrawn: "Withdrawn",
+    particiaption_confirmed: "Participation Confirmed"
 };
 export const PRIVILEGES = {
     author: "author",

@@ -59,6 +59,7 @@ export const withdrawSubmissionById = async (submissionId: number) => {
         },
         data: {
             withdrawn: true,
+            particiaption_confirmed:false,
         },
     });
 };
