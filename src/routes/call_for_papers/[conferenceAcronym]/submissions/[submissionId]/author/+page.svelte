@@ -151,7 +151,7 @@
             {/if}
             {#if submission.particiaption_confirmed}
                 <tr>
-                    <td class="font-semibold">Status</td>
+                    <td class="font-semibold">Presentation Status</td>
                     <td>
                         <span style="color:var(--green)"
                             >{submission_statuses.particiaption_confirmed}</span
