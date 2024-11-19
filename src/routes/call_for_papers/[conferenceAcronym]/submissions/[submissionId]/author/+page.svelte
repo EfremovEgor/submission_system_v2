@@ -31,16 +31,22 @@
                 <button
                     class="button-green primary-button-hover outline"
                     on:click={async () => {
-                        await fetch("", {
-                            method: "POST",
-                            body: JSON.stringify({ action: "confirm" }),
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        });
-                        await invalidateAll();
+                        let response;
+                        if (confirm("Do you want to confirm participation?"))
+                            response = await fetch("", {
+                                method: "POST",
+                                body: JSON.stringify({ action: "confirm" }),
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            });
+                        if (response?.ok) {
+                            alert("You have confirmed participation");
+                            await invalidateAll();
+                        }
                     }}
-                    >Confirm
+                >
+                    Confirm
                 </button>
             {/if}
             {#if new Date() <= new Date(conference.submission_deadline.getTime() + 60 * 60 * 21 * 1000 - 1)}

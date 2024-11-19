@@ -8,6 +8,7 @@ model Conference {
     start_date            DateTime?           @db.Date
     submission_deadline   DateTime?           @db.Date
     presentation_deadline DateTime?           @db.Timestamp()
+    confirmation_deadline DateTime?           @db.Timestamp()
     manuscript_deadline   DateTime?           @db.Timestamp()
     acronym               String              @unique
     short_name            String

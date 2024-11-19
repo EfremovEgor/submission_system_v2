@@ -464,6 +464,19 @@
                                         <SubmissionStatusText
                                             status={submission.status}
                                         />
+                                        {#if submission.withdrawn}
+                                            <br /><span
+                                                style="color:var(--red)"
+                                            >
+                                                {submission_statuses.withdrawn}
+                                            </span>
+                                        {:else if submission.particiaption_confirmed}
+                                            <br /><span
+                                                style="color:var(--green)"
+                                            >
+                                                {submission_statuses.particiaption_confirmed}
+                                            </span>
+                                        {/if}
                                     </td>
                                 </tr>
                             {/each}

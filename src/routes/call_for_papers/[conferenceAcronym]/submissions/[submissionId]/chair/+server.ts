@@ -18,6 +18,7 @@ const acceptSubmission = async (submissionId: number) => {
                     email: true,
                     manuscript_deadline: true,
                     presentation_deadline: true,
+                    confirmation_deadline: true,
                 },
             },
         },
@@ -46,8 +47,6 @@ const acceptSubmission = async (submissionId: number) => {
             },
             conference: {
                 ...submission.conference,
-                presentation_confirmation_deadline:
-                    presentationConfirmationDeadline,
             },
         });
     });

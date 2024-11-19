@@ -26,18 +26,22 @@
         <p style="color: black">
             <strong>Please <span style="color:green">Confirm</span> or <span style="color:red">Withdraw</span> your
                 presentation</strong> at the Technical
-            Session <a href="<%= submission.link %>">submission page</a>. Abstracts for which the status
+            Session. To update the status, please go to the
+            ConfChair <a href="https://www.confchair.com/author">Author profile</a> and then click the “magnifier”
+            button
+            in the table with your submission. Abstracts
+            for which the status
             will not been updated by <strong>
-                <%= conference.presentation_confirmation_deadline %> (Moscow Time, GMT+3)
+                <%= conference.confirmation_deadline %> (Moscow Time, GMT+3)
             </strong>
             will be
             removed from the <%= conference.short_name %> Technical Program and the presentation slot will be
                 transferred to a back-up abstract.
         </p>
         <p style="color: black">
-            <strong>Upload Manager</strong> is now available on the
-            <a href="<%= submission.link %>">submission page</a> for uploading presentation and
-            full manuscript. To access the submission the author must be
+            <strong>Upload Manager</strong> for uploading presentation and
+            full manuscript is now available on the
+            <a href="<%= submission.link %>">submission page</a>. To access the submission the author must be
             logged in to the ConfChair Event Management System
             (<a href="https://confchair.org">confchair.org</a>).
         </p>
@@ -47,8 +51,9 @@
                 <%= conference.presentation_deadline %> (Moscow Time, GMT+3)
             </strong> to avoid any
             difficulties and delays with opening the slides during technical sessions. During the technical session each
-            presenter will be given 15 minutes for a report including 3-5 minutes for Q&A. Final technical program will
-            be available in the Program section of the Forum web-site not later than November 22.
+            presenter will be given 15 minutes for a report including 3-5 minutes for Q&A. Preliminary Technical Program
+            is available in the Program section of the Forum web-site. Final Program will be updated not later than
+            November 22.
         </p>
         <p style="color: black">
             We invite authors to upload <strong>full manuscripts</strong> before the above mentioned date as well. But
@@ -94,8 +99,7 @@
             Thank you very much for your attendance in the <%= conference.short_name %>.
         </p>
         <p>
-            If you haven’t found your paper in the Program, or you have other issues, please address your questions to
-            the Local Organizing Committee: <br>
+            If you have any questions, please address them to the Local Organizing Committee: <br>
             <%= conference.email %>.<br>
                 Forum web-site:<br>
                 <%= conference.site_url %><br>

@@ -39,6 +39,8 @@ export const load = async ({ parent }: { parent: any }) => {
             id: true,
             local_id: true,
             presentation_format: true,
+            particiaption_confirmed: true,
+            withdrawn: true,
             status: true,
             created_at: true,
             title: true,
