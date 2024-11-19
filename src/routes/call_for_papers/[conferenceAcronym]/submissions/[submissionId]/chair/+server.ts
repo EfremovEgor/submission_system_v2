@@ -14,6 +14,7 @@ const acceptSubmission = async (submissionId: number) => {
                     name: true,
                 },
             },
+            presentation_format: true,
             title: true,
             conference: {
                 select: {
@@ -52,6 +53,7 @@ const acceptSubmission = async (submissionId: number) => {
                 topic: {
                     name: submission.topic.name,
                 },
+                presentation_format: submission.presentation_format,
             },
             conference: {
                 ...submission.conference,

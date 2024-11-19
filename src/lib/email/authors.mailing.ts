@@ -1,4 +1,4 @@
-import { titles } from "../aliases";
+import { presentation_formats, titles } from "../aliases";
 import { MAILING_SETTINGS } from "./mailing";
 import transporter from "./setup.server";
 import { renderEmailTemplate } from "./templating";
@@ -21,6 +21,7 @@ export const sendSubmissionAccepted = async (
             local_id: number;
             title: string;
             link: string;
+            presentation_format: string;
             topic: {
                 name: string;
             };
@@ -49,6 +50,8 @@ export const sendSubmissionAccepted = async (
             presentation_deadline: `${presentationDeadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${presentationDeadline.getFullYear()}, ${presentationDeadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`,
         },
     };
+    data.submission.presentation_format =
+        presentation_formats[rawData.submission.presentation_format];
     data.recipient.title = titles[data.recipient.title] ?? data.recipient.title;
     const html = await renderEmailTemplate(
         AuthorTemplates.submission_accepted,

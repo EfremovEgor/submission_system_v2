@@ -18,7 +18,9 @@
         <p style="color: black">
             We are glad to inform that your paper with submission number
             <%= submission.local_id %> "<%= submission.title %>" has been
-                    accepted by Program Committee for presentation at
+                    accepted by Program Committee for <strong>
+                        <%= submission.presentation_format %>
+                    </strong> presentation at
                     <strong>
                         <%= submission.topic.name %>
                     </strong> Technical Session.
