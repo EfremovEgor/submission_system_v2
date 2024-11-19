@@ -413,7 +413,7 @@
                                 <th scope="col"
                                     ><button
                                         class="sortable bare-button"
-                                        data-order={0}>Review Status</button
+                                        data-order={0}>Status</button
                                     ></th
                                 >
                             </tr>

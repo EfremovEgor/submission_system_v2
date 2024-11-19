@@ -32,7 +32,7 @@
                     class="button-green primary-button-hover outline"
                     on:click={async () => {
                         let response;
-                        if (confirm("Do you want to confirm participation?"))
+                        if (confirm("Confirm participation?"))
                             response = await fetch("", {
                                 method: "POST",
                                 body: JSON.stringify({ action: "confirm" }),
@@ -41,7 +41,7 @@
                                 },
                             });
                         if (response?.ok) {
-                            alert("You have confirmed participation");
+                            alert("Your participation will be confirmed!");
                             await invalidateAll();
                         }
                     }}
@@ -64,7 +64,7 @@
             {#if rights.canDelete && !submission.particiaption_confirmed}
                 <button
                     on:click={async () => {
-                        if (confirm("Do you want to withdraw submission?"))
+                        if (confirm("Your submission will be withdrawn!"))
                             goto("author/delete");
                     }}
                     class="button-red outline"
@@ -141,7 +141,7 @@
             </tr>
             {#if submission.withdrawn}
                 <tr>
-                    <td class="font-semibold">Status</td>
+                    <td class="font-semibold">Presentation status</td>
                     <td>
                         <span style="color:var(--red)"
                             >{submission_statuses.withdrawn}</span

@@ -259,7 +259,9 @@
 
                             element.target["data-order"] =
                                 !element.target["data-order"];
-                        }}>Review Status</button
+                        }}
+                    >
+                        Status</button
                     ></th
                 >
             </tr>
