@@ -46,6 +46,7 @@ export const load: ServerLoad = async ({ url, cookies, request, parent }) => {
             created_at: true,
             status: true,
             withdrawn: true,
+            particiaption_confirmed: true,
         },
         orderBy: {
             local_id: "asc",

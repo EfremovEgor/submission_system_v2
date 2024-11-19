@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { submission_statuses } from '$src/lib/aliases';
+    import { submission_statuses } from "$src/lib/aliases";
     import BackButton from "$components/common/buttons/backButton.svelte";
     import { presentation_formats } from "$lib/aliases";
     import { Check } from "lucide-svelte";
     import { goto, invalidateAll } from "$app/navigation";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import { applyAction, enhance } from "$app/forms";
+    import SubmitButton from "$components/common/submitButton.svelte";
     export let data;
     const conference = data.conference;
     $: submission = data.submission;
@@ -27,17 +28,18 @@
     <div>
         {#if !submission.withdrawn}
             {#if submission.status == "accepted" && !submission.particiaption_confirmed}
-                <button class="button-green primary-button-hover outline"
-                on:click={async () => {
-                    await fetch("", {
-                        method: "POST",
-                        body: JSON.stringify({ action: "confirm" }),
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    });
-                    await invalidateAll();
-                }}
+                <button
+                    class="button-green primary-button-hover outline"
+                    on:click={async () => {
+                        await fetch("", {
+                            method: "POST",
+                            body: JSON.stringify({ action: "confirm" }),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        });
+                        await invalidateAll();
+                    }}
                     >Confirm
                 </button>
             {/if}
@@ -53,7 +55,7 @@
                 {/if}
             {/if}
 
-            {#if rights.canDelete}
+            {#if rights.canDelete && !submission.particiaption_confirmed}
                 <button
                     on:click={async () => {
                         if (confirm("Do you want to withdraw submission?"))
@@ -131,21 +133,25 @@
                 <td class="font-semibold">Review Status</td>
                 <td> <SubmissionStatusText status={submission.status} /></td>
             </tr>
-            {#if submission.withdrawn  }
-            <tr>
-                <td class="font-semibold">Status</td>
-                <td> 
-                    <span style="color:var(--red)">{submission_statuses.withdrawn}</span>
-                </td>
-            </tr>
+            {#if submission.withdrawn}
+                <tr>
+                    <td class="font-semibold">Status</td>
+                    <td>
+                        <span style="color:var(--red)"
+                            >{submission_statuses.withdrawn}</span
+                        >
+                    </td>
+                </tr>
             {/if}
-            {#if submission.particiaption_confirmed  }
-            <tr>
-                <td class="font-semibold">Status</td>
-                <td> 
-                    <span style="color:var(--green)">{submission_statuses.particiaption_confirmed}</span>
-                </td>
-            </tr>
+            {#if submission.particiaption_confirmed}
+                <tr>
+                    <td class="font-semibold">Status</td>
+                    <td>
+                        <span style="color:var(--green)"
+                            >{submission_statuses.particiaption_confirmed}</span
+                        >
+                    </td>
+                </tr>
             {/if}
         </tbody>
     </table>

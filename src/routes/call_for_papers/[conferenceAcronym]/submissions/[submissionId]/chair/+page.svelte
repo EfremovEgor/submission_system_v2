@@ -28,7 +28,7 @@
         <a href="chair/edit" class="primary-button-hover outline" role="button">
             Edit
         </a>
-        {#if !submission.withdrawn}
+        {#if !submission.withdrawn && !submission.particiaption_confirmed}
             <button
                 on:click={async () => {
                     if (confirm("Do you want to delete submission?"))
@@ -39,7 +39,7 @@
                 Withdraw
             </button>
         {/if}
-        {#if submission.status != "accepted"}
+        {#if submission.status != "accepted" && !submission.particiaption_confirmed && !submission.withdrawn}
             <button
                 on:click={async () => {
                     await fetch("", {
@@ -54,7 +54,7 @@
                 class="button-green outline">Accept</button
             >
         {/if}
-        {#if submission.status != "rejected"}
+        {#if submission.status != "rejected" && !submission.particiaption_confirmed && !submission.withdrawn}
             <button
                 class="button-red outline"
                 on:click={async () => {
