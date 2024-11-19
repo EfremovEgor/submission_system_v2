@@ -287,6 +287,7 @@
                     {/if}
                 </span>
             </div>
+            <small>Please upload your presentation in .pptx format</small>
         </form>
         <br />
         <form
@@ -351,6 +352,11 @@
                     {/if}
                 </span>
             </div>
+            <small class="max-w-80"
+                >Please, upload your manuscript in .docx format. <br />
+                Manuscript template and format instructions could be downloaded
+                by the following link.<br /> The document should not exceed 20 pages.</small
+            >
         </form>
     {/if}
 </div>
