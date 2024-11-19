@@ -1,4 +1,5 @@
 <script lang="ts">
+    import AccountInfoRow from "$components/account/accountInfoRow.svelte";
     import DownloadPdf from "$components/common/icons/downloadPDF.svelte";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import {
@@ -81,20 +82,99 @@
                 <details open>
                     <summary style="width: fit-content;">{symposium}</summary>
                     <table class="striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th
+                                    class="text-center"
+                                    style="padding:5px !important; padding-left:15px!important"
+                                >
+                                    <strong style="color:var(--green)">
+                                        •
+                                    </strong>
+                                </th>
+                                <th
+                                    class="text-center"
+                                    style="padding:5px !important"
+                                >
+                                    +
+                                </th>
+                                <th
+                                    class="text-center"
+                                    style="padding:5px !important"
+                                >
+                                    -
+                                </th>
+                            </tr>
+                        </thead>
                         <tbody>
                             {#each Object.keys(symposiums[symposium]) as topic}
                                 <tr>
-                                    <td
-                                        ><input
+                                    <td>
+                                        <input
                                             bind:checked={showedTopics[topic]}
                                             on:change={() => filterByTopics()}
                                             type="checkbox"
                                         /></td
                                     >
                                     <td>{topic}</td>
-                                    <td style="padding-left: 10px;"
-                                        >{symposiums[symposium][topic]}</td
+                                    <td style="padding-left: 10px;">
+                                        {symposiums[symposium][topic]}
+                                    </td>
+                                    <td
+                                        style="padding:5px !important; padding-left:15px!important"
+                                        class="text-center"
                                     >
+                                        {submissions.reduce(
+                                            (accumulator, submission) => {
+                                                if (
+                                                    submission.topic.name ==
+                                                        topic &&
+                                                    submission.status ==
+                                                        "accepted"
+                                                )
+                                                    return accumulator + 1;
+                                                return accumulator;
+                                            },
+                                            0,
+                                        )}
+                                    </td>
+                                    <td
+                                        style="padding:5px !important;"
+                                        class="text-center"
+                                    >
+                                        {submissions.reduce(
+                                            (accumulator, submission) => {
+                                                if (
+                                                    submission.topic.name ==
+                                                        topic &&
+                                                    submission.particiaption_confirmed
+                                                )
+                                                    return accumulator + 1;
+                                                return accumulator;
+                                            },
+                                            0,
+                                        )}
+                                    </td>
+                                    <td
+                                        style="padding:5px !important;"
+                                        class="text-center"
+                                    >
+                                        {submissions.reduce(
+                                            (accumulator, submission) => {
+                                                if (
+                                                    submission.topic.name ==
+                                                        topic &&
+                                                    submission.withdrawn
+                                                )
+                                                    return accumulator + 1;
+                                                return accumulator;
+                                            },
+                                            0,
+                                        )}
+                                    </td>
                                 </tr>
                             {/each}
                         </tbody>
