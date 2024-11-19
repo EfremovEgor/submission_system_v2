@@ -32,7 +32,7 @@
                     class="button-green primary-button-hover outline"
                     on:click={async () => {
                         let response;
-                        if (confirm("Confirm participation?"))
+                        if (confirm("Confirm presentation?"))
                             response = await fetch("", {
                                 method: "POST",
                                 body: JSON.stringify({ action: "confirm" }),
@@ -41,7 +41,7 @@
                                 },
                             });
                         if (response?.ok) {
-                            alert("Your participation will be confirmed!");
+                            alert("Your presentation will be confirmed!");
                             await invalidateAll();
                         }
                     }}
@@ -64,7 +64,7 @@
             {#if rights.canDelete && !submission.particiaption_confirmed}
                 <button
                     on:click={async () => {
-                        if (confirm("Your submission will be withdrawn!"))
+                        if (confirm("Your presentation will be withdrawn!"))
                             goto("author/delete");
                     }}
                     class="button-red outline"
@@ -354,8 +354,9 @@
             </div>
             <small class="max-w-80"
                 >Please, upload your manuscript in .docx format. <br />
-                Manuscript template and format instructions could be downloaded
-                by the following link.<br /> The document should not exceed 20 pages.</small
+                Manuscript template and format instructions could be downloaded by
+                the following <a href="">link</a>.<br /> The document should not
+                exceed 20 pages.</small
             >
         </form>
     {/if}
