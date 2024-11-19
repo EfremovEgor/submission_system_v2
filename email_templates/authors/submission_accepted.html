@@ -17,13 +17,13 @@
         </p>
         <p style="color: black">
             We are glad to inform that your paper with submission number
-            <%= submission.local_id %> "<%= submission.title %>" has been
-                    accepted by Program Committee for <strong>
-                        <%= submission.presentation_format %>
-                    </strong> presentation at
-                    <strong>
-                        <%= submission.topic.name %>
-                    </strong> Technical Session.
+            <%= submission.local_id %> <strong>(<%= submission.title %>)</strong> has been
+                accepted by Program Committee for <strong>
+                    <%= submission.presentation_format %>
+                </strong> presentation at
+                <strong>
+                    <%= submission.topic.name %>
+                </strong> Technical Session.
         </p>
         <p style="color: black">
             <strong>Please <span style="color:green">Confirm</span> or <span style="color:red">Withdraw</span> your
@@ -65,7 +65,8 @@
                 <%= conference.manuscript_deadline %> (Moscow Time, GMT+3)
             </strong> . Manuscript template with format guidelines available for
             download by
-            the following <a href="">link</a> and could be found in Submit section of the Forum web-site. Manuscripts
+            the following <a href="https://spaceflightmechanics.com/downloads/manuscript_template.docx">link</a> and
+            could be found in Submit section of the Forum web-site. Manuscripts
             should not exceed
             20 pages.
         </p>
