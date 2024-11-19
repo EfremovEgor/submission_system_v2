@@ -18,29 +18,30 @@
         <p style="color: black">
             We are glad to confirm that your paper with submission number
             <%= submission.local_id %> "<%= submission.title %>" has been
-                    accepted for presentation at
+                    accepted by Program Committee for presentation at
                     <strong>
                         <%= conference.name %>
                     </strong>.
         </p>
         <p style="color: black">
-            Upload Manager is now available on the
-            <a href="">submission page</a> for uploading presentation and
-            full manuscript. To access the submission the author must be
-            logged in to the ConfChair Event Management System
-            (confchair.org).
-        </p>
-        <p style="color: black">
             <strong>Please <span style="color:green">Confirm</span> or <span style="color:red">Withdraw</span> your
-                presentation at the Technical
-                Session in the submission
-                page</strong>. Abstracts for which the status will not been updated by <strong>
+                presentation</strong> at the Technical
+            Session <a href="<%= submission.link %>">submission page</a>. Abstracts for which the status
+            will not been updated by <strong>
                 <%= conference.presentation_confirmation_deadline %> (Moscow Time, GMT+3)
             </strong>
             will be
             removed from the <%= conference.short_name %> Technical Program and the presentation slot will be
                 transferred to a back-up abstract.
         </p>
+        <p style="color: black">
+            <strong>Upload Manager</strong> is now available on the
+            <a href="<%= submission.link %>">submission page</a> for uploading presentation and
+            full manuscript. To access the submission the author must be
+            logged in to the ConfChair Event Management System
+            (<a href="https://confchair.org">confchair.org</a>).
+        </p>
+
         <p style="color: black">
             <strong>Slides</strong> for presentations should be uploaded <strong>not later than
                 <%= conference.presentation_deadline %> (Moscow Time, GMT+3)
@@ -57,12 +58,13 @@
                 <%= conference.manuscript_deadline %> (Moscow Time, GMT+3)
             </strong> . Manuscript template with format guidelines available for
             download by
-            the following link and could be found in Submit section of the Forum web-site. Manuscripts should not exceed
+            the following <a href="">link</a> and could be found in Submit section of the Forum web-site. Manuscripts
+            should not exceed
             20 pages.
         </p>
         <p>
             All categories of participants need to register to the Forum using the form in the Register section on the
-            Forum web-site. <strong>We encourage Russian participants to attend the Forum on-sight.</strong>
+            Forum web-site. <strong>We encourage Russian participants to attend the Forum On-sight.</strong>
         </p>
         <p>
             <strong>To join the Forum online</strong> the participant should go to the Zoom registration form by the
@@ -71,6 +73,23 @@
             (if the link doesn’t work on not clickable, please copy and paste it to the browser directly)
 
         </p>
+        <p>To register the participant should indicate his name, surname and email. The direct connection link will be
+            sent
+            on the indicated email. This link is valid for all three days of the Forum and leads to the main hall (Hall
+            Galaxy), where Opening Ceremony, Plenary Sessions and Highlight Lectures will take place.
+        </p>
+
+        <p> To attend Parallel Technical Sessions on Tuesday and Wednesday participant, being connected to Zoom
+            conference,
+            should go the menu below and click on the Zoom Breakout Rooms icon and choose one of the Technical Sessions
+            Halls according to the Technical Program.
+        </p>
+
+        <p>For the best experience it is strongly recommended to use Zoom desktop or mobile application and install all
+            the
+            latest updates.
+        </p>
+
         <p style="color: black">
             Thank you very much for your attendance in the <%= conference.short_name %>.
         </p>
