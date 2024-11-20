@@ -37,7 +37,7 @@ export const sendSubmissionAccepted = async (
         };
     },
 ) => {
-    const subject = `Your paper #${rawData.submission.local_id} has been accepted for presentation at the ${rawData.conference.short_name}`;
+    const subject = `REMINDER | Your paper #${rawData.submission.local_id} has been accepted for presentation at the ${rawData.conference.short_name}`;
     const confirmationDeadline = rawData.conference.confirmation_deadline;
     const manuscriptDeadline = rawData.conference.manuscript_deadline;
     const presentationDeadline = rawData.conference.presentation_deadline;
