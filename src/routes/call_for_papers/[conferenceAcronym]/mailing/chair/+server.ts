@@ -31,6 +31,7 @@ export async function POST({ request, cookies, params }) {
         presentation_deadline: true,
         manuscript_deadline: true,
         site_url: true,
+        email: true,
     });
     submissions.forEach(async (_submission) => {
         const submission = await prisma.submission.findFirst({
