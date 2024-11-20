@@ -16,5 +16,10 @@ export default defineConfig({
                 }),
             ],
         },
+        exclude: [
+            "svelte-codemirror-editor",
+            "codemirror",
+            "@codemirror/language-javascript",
+        ],
     },
 });
