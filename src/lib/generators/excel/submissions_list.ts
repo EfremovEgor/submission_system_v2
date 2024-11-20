@@ -17,6 +17,8 @@ export const generateSubmissionsXLSX = (
         presentation_format: string;
         created_at: Date;
         status: string;
+        withdrawn: boolean;
+        particiaption_confirmed: boolean;
     }[],
 ): Buffer => {
     let workbook = utils.book_new();
@@ -30,6 +32,8 @@ export const generateSubmissionsXLSX = (
         "Presentation Format",
         "Submitted At",
         "Review Status",
+        "Withdrawn",
+        "Confirmed",
     ];
     let worksheet = utils.aoa_to_sheet([]);
     utils.book_append_sheet(workbook, worksheet);
@@ -45,6 +49,8 @@ export const generateSubmissionsXLSX = (
             presentation_formats[submission.presentation_format],
             submission.created_at.toLocaleString(),
             submission_statuses[submission.status],
+            submission.withdrawn,
+            submission.particiaption_confirmed,
         ];
         utils.sheet_add_aoa(worksheet, [data], { origin: `A${index + 2}` });
     });

@@ -56,6 +56,7 @@ export const generateSubmissionsWord = async (
                                     new TextRun({
                                         text: `${submission.title}`,
                                         break: 1,
+                                        italics: true,
                                     }),
                                     ...Object.entries(
                                         Object.groupBy(
@@ -69,7 +70,6 @@ export const generateSubmissionsWord = async (
                                                     delimiter: ", ",
                                                 })}, ${key}, ${value[0].country}`,
                                                 break: 1,
-                                                italics: true,
                                             }),
                                     ),
                                 ],
