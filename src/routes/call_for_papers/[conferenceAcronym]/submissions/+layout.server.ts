@@ -10,6 +10,7 @@ export const load: Load = async ({ parent, params }) => {
         name: true,
         acronym: true,
         submission_deadline: true,
+        confirmation_deadline: true,
     });
     if (data.user == null) redirect(302, "/sign-in");
 

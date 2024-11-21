@@ -27,7 +27,7 @@
     </h3>
     <div>
         {#if !submission.withdrawn}
-            {#if submission.status == "accepted" && !submission.particiaption_confirmed}
+            {#if submission.status == "accepted" && !submission.particiaption_confirmed && new Date() < conference.confirmation_deadline}
                 <button
                     class="button-green primary-button-hover outline"
                     on:click={async () => {

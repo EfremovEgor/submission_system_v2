@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.18.3/dist/css/uikit.min.css" />
+
+<body>
+    <div class="uk-container" style="
+                margin-top: 10px;
+                margin-bottom: 25px;
+                max-width: 980px;
+                min-height: 320px;
+            ">
+        <p style="color: black">
+            Dear <%= recipient.title %>
+                <%= recipient.first_name %>
+                    <%= recipient.last_name %>,
+        </p>
+        <p style="color: black">
+            We regret to inform that your paper with submission number <%= submission.local_id %> “<%= submission.title
+                    %>” has been rejected by
+                    Program Committee for presentation at <%= conference.short_name %>. But we invite you to take part
+                        in the Forum
+                        as a listener on-sight and online.
+        </p>
+        <p>
+            To take part in the Forum all categories of participants need to register to the Forum using the form in the
+            Register section on the Forum web-site. <strong>We encourage Russian participants to attend the Forum
+                On-sight</strong>.
+        </p>
+        <p>
+            <strong>To join the Forum online</strong> the participant should go to the Zoom registration form by the
+            following link: <br>
+            https://us06web.zoom.us/meeting/register/tZwsceisqz0rEtftu1C2sApjh5viXgKoNmdK <br>
+            (if the link doesn’t work on not clickable, please copy and paste it to the browser directly)
+
+        </p>
+        <p>
+            To register the participant should indicate his name, surname and email. The direct connection link will be
+            sent on the indicated email. This link is valid for all three days of the Forum and leads to the main hall
+            (Hall Galaxy), where Opening Ceremony, Plenary Sessions and Highlight Lectures will take place.
+        </p>
+
+        <p>
+            To attend Parallel Technical Sessions on Tuesday and Wednesday participant, being connected to Zoom
+            conference,
+            should go the menu below and click on the Zoom Breakout Rooms icon and choose one of the Technical Sessions
+            Halls according to the Technical Program.
+        </p>
+
+        <p>
+            For the best experience it is strongly recommended to use Zoom desktop or mobile application and install all
+            the latest updates.
+        </p>
+        <p>
+            If you have any questions, please address them to the Local Organizing Committee: <br>
+            <%= conference.email %>.<br>
+                Forum web-site:<br>
+                <%= conference.site_url %><br>
+        </p>
+        <p style="color: black">
+            Best Regards,<br />
+            ConfChair Team<br />
+            support@confchair.org
+        </p>
+    </div>
+</body>
+
+</html>
