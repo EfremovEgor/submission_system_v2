@@ -93,7 +93,6 @@ const rejectSubmission = async (submissionId: number) => {
             id: submissionId,
         },
     });
-    console.log(submission);
     await prisma.submission.update({
         where: {
             id: submissionId,
@@ -103,7 +102,6 @@ const rejectSubmission = async (submissionId: number) => {
         },
     });
     submission.authors.forEach((author) => {
-        console.log(author);
         sendSubmissionRejected(author.email, {
             recipient: author,
             submission: {
