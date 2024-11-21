@@ -93,9 +93,6 @@ const rejectSubmission = async (submissionId: number) => {
             id: submissionId,
         },
     });
-    const presentationConfirmationDeadline = new Date(
-        new Date().getTime() + 1000 * 60 * 60 * 24 * 2,
-    );
     await prisma.submission.update({
         where: {
             id: submissionId,
