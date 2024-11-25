@@ -33,6 +33,7 @@
             country: string;
             affiliation: string;
         }[];
+        presentation_file: string;
     }[];
     export let topics: object = {};
     export let symposiums: object = {};
@@ -344,6 +345,9 @@
                         Status</button
                     ></th
                 >
+                <th class="text-center">
+                    <button class="sortable bare-button">Presentation </button>
+                </th>
             </tr>
         </thead>
 
@@ -395,6 +399,21 @@
                             <br /><span style="color:var(--green)">
                                 {submission_statuses.particiaption_confirmed}
                             </span>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {#if submission.presentation_file}
+                            <a
+                                style="color:var(--green);
+                        text-decoration-color:var(--green)"
+                                href="/uploads/{submission.presentation_file
+                                    .id}"
+                                download="{conference.acronym}-presentation-{submission.local_id}.pptx"
+                            >
+                                Yes
+                            </a>
+                        {:else}
+                            <span style="color:var(--red)">No</span>
                         {/if}
                     </td>
                 </tr>

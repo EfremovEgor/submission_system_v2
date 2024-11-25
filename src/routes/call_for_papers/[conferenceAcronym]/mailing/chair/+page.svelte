@@ -194,6 +194,25 @@
                     submissionsToDisplay.forEach((submission) => {
                         if (
                             submission.status == "accepted" &&
+                            submission.particiaption_confirmed &&
+                            !submission.presentation_file_id
+                        )
+                            submission.selected = true;
+                        else submission.selected = false;
+                    });
+                    submissionsToDisplay = submissionsToDisplay;
+                }}
+            />
+            Select all confirmed (without presentation)
+        </label>
+        <label>
+            <input
+                type="radio"
+                name="acceptedSubmissionsVariety"
+                on:change={() => {
+                    submissionsToDisplay.forEach((submission) => {
+                        if (
+                            submission.status == "accepted" &&
                             submission.withdrawn
                         )
                             submission.selected = true;

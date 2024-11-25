@@ -95,7 +95,7 @@ export const sendSubmissionRejected = async (
         };
     },
 ) => {
-    const subject = `Your paper #${rawData.submission.local_id} has been rejected for presentation at the  ${rawData.conference.short_name}`;
+    const subject = `Your paper #${rawData.submission.local_id} has been rejected for presentation at the ${rawData.conference.short_name}`;
     const confirmationDeadline = rawData.conference.confirmation_deadline;
     const manuscriptDeadline = rawData.conference.manuscript_deadline;
     const presentationDeadline = rawData.conference.presentation_deadline;
