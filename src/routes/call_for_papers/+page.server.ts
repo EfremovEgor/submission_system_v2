@@ -13,6 +13,9 @@ export const load = async ({ parent }: { parent: any }) => {
                 start_date: true,
                 submission_deadline: true,
             },
+            orderBy: {
+                start_date: "desc",
+            },
         }),
     };
 };

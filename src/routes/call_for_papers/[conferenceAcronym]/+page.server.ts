@@ -11,6 +11,11 @@ export const load: Load = async ({ parent, params }) => {
         submission_deadline: true,
         description: true,
         site_url: true,
+        topics: {
+            select: {
+                name: true,
+            },
+        },
         symposiums: {
             select: {
                 name: true,

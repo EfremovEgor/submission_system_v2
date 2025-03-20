@@ -294,32 +294,56 @@
         <section class="shadow-lg p-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <div class="flex flex-col gap-2">
-                {#each conference.symposiums as symposium}
-                    <fieldset>
-                        <legend class="font-bold">{symposium.name}</legend>
-                        {#each symposium.topics as topic}
-                            <label class="">
-                                <input
-                                    bind:group={submission.topic}
-                                    type="radio"
-                                    value={topic.id}
-                                    required
-                                    name="topic"
-                                />
-                                {topic.name}
-                                {#if topic.hint}
-                                    <span
-                                        class="icon-button tooltiped"
-                                        style="display: inline;"
-                                        data-tooltip={topic.hint}
-                                    >
-                                        <CircleAlert />
-                                    </span>
-                                {/if}
-                            </label>
-                        {/each}
-                    </fieldset>
-                {/each}
+                {#if conference.symposiums.length}
+                    {#each conference.symposiums as symposium}
+                        <fieldset>
+                            <legend class="font-bold">{symposium.name}</legend>
+                            {#each symposium.topics as topic}
+                                <label class="">
+                                    <input
+                                        bind:group={submission.topic}
+                                        type="radio"
+                                        value={topic.id}
+                                        required
+                                        name="topic"
+                                    />
+                                    {topic.name}
+                                    {#if topic.hint}
+                                        <span
+                                            class="icon-button tooltiped"
+                                            style="display: inline;"
+                                            data-tooltip={topic.hint}
+                                        >
+                                            <CircleAlert />
+                                        </span>
+                                    {/if}
+                                </label>
+                            {/each}
+                        </fieldset>
+                    {/each}
+                {:else}
+                    {#each conference.topics as topic}
+                        <label class="">
+                            <input
+                                bind:group={submission.topic}
+                                type="radio"
+                                value={topic.id}
+                                required
+                                name="topic"
+                            />
+                            {topic.name}
+                            {#if topic.hint}
+                                <span
+                                    class="icon-button tooltiped"
+                                    style="display: inline;"
+                                    data-tooltip={topic.hint}
+                                >
+                                    <CircleAlert />
+                                </span>
+                            {/if}
+                        </label>
+                    {/each}
+                {/if}
             </div>
         </section>
         <label class="font-normal flex flex-row items-center align-middle gap-3"

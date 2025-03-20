@@ -56,14 +56,22 @@
                 <div class="text-justify">
                     {@html conference.description}
                 </div>
-                {#each conference.symposiums as symposium}
-                    <b class="mt-2 font-bold">{symposium.name}</b>
+                {#if conference.symposiums.length}
+                    {#each conference.symposiums as symposium}
+                        <b class="mt-2 font-bold">{symposium.name}</b>
+                        <ul class="pl-10 list-disc">
+                            {#each symposium.topics as topic}
+                                <li>{topic.name}</li>
+                            {/each}
+                        </ul>
+                    {/each}
+                {:else}
                     <ul class="pl-10 list-disc">
-                        {#each symposium.topics as topic}
+                        {#each conference.topics as topic}
                             <li>{topic.name}</li>
                         {/each}
                     </ul>
-                {/each}
+                {/if}
             </article>
         </section>
     </div>

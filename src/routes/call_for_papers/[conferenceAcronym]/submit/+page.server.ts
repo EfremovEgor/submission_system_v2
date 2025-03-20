@@ -39,6 +39,13 @@ export const load: Load = async ({ parent, params }) => {
                 presentation_formats: true,
             },
         },
+        topics: {
+            select: {
+                hint: true,
+                id: true,
+                name: true,
+            },
+        },
         symposiums: {
             select: {
                 name: true,
