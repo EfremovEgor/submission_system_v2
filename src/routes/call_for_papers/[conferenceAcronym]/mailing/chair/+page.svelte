@@ -223,6 +223,24 @@
             />
             Select all accepted (withdrawn)
         </label>
+        <label>
+            <input
+                type="radio"
+                name="acceptedSubmissionsVariety"
+                on:change={() => {
+                    submissionsToDisplay.forEach((submission) => {
+                        if (
+                            submission.status == "accepted" &&
+                            !submission.manuscript_file_id
+                        )
+                            submission.selected = true;
+                        else submission.selected = false;
+                    });
+                    submissionsToDisplay = submissionsToDisplay;
+                }}
+            />
+            Select all without uploaded manuscript
+        </label>
     </article>
     <div class="overflow-auto mt-5">
         <table class="striped">
