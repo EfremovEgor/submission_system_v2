@@ -231,7 +231,8 @@
                     submissionsToDisplay.forEach((submission) => {
                         if (
                             submission.status == "accepted" &&
-                            !submission.manuscript_file_id
+                            !submission.manuscript_file_id &&
+                            submission.particiaption_confirmed
                         )
                             submission.selected = true;
                         else submission.selected = false;
