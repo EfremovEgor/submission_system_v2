@@ -23,7 +23,7 @@
                         </a>
                     </div>
                 </li>
-                <li
+                <!-- <li
                     aria-current={$page.url.pathname === "/call_for_papers"
                         ? "page"
                         : undefined}
@@ -37,8 +37,7 @@
                         <a href="/call_for_papers">Call for Papers</a>
                     {/if}
 
-                    <!-- else content here -->
-                </li>
+                </li> -->
                 {#if user}
                     <li
                         aria-current={$page.url.pathname === "/author"

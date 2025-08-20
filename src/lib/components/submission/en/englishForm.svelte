@@ -167,8 +167,14 @@
         {/if}
         <h4 class="font-normal">Authors Information</h4>
         <div class="ml-5">
-            For each author, please fill out the form below. Some items on the
-            form are explained here:
+            For each author, please fill out the form below. One of the authors
+            should be marked as <strong>Corresponding</strong> and one as a
+            <strong>Presenter</strong>
+            (corresponding author and presenter could be the same).
+            <strong>Email address</strong>
+            will only be used for communication with the authors. It will not
+            appear in public Web pages of this conference.
+
             <ul class="pl-10 mt-2 list-disc">
                 <li class="">
                     <strong>Email address</strong> will only be used for communication

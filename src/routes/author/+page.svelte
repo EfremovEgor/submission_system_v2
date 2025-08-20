@@ -273,7 +273,9 @@
         {#if !rawSubmissions}
             <p>
                 There are no submissions yet. To submit a new abstract, please
-                proceed to the <a href="/call_for_papers">Call for Papers</a>.
+                proceed <a href="/call_for_papers/issf2025/submit?lang=en"
+                    >here</a
+                >.
             </p>
         {:else}
             <p>

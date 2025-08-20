@@ -74,16 +74,16 @@
     />
     <AuthorInput
         bind:value={author.affiliation}
-        label="Affiliation"
+        label="Organization"
         name="#{author.id}#_affiliation"
         placeholder="Organization name"
     />
-    <AuthorInput
+    <!-- <AuthorInput
         bind:value={author.web_page}
         label="Web Page"
         required={false}
         name="#{author.id}#_web_page"
-    />
+    /> -->
     <div class="flex flex-col items-end mt-5">
         <CorrespondingSelect
             bind:checked={author.is_corresponding}
