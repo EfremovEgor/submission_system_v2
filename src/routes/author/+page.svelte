@@ -279,8 +279,8 @@
             </p>
         {:else}
             <p>
-                To submit a new abstract, please proceed to the <a
-                    href="/call_for_papers">Call for Papers</a
+                To submit a new abstract, please proceed <a
+                    href="/call_for_papers/issf2025/submit?lang=en">here</a
                 >.
             </p>
         {/if}

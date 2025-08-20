@@ -172,38 +172,8 @@
             <strong>Presenter</strong>
             (corresponding author and presenter could be the same).
             <strong>Email address</strong>
-            will only be used for communication with the authors. It will not
-            appear in public Web pages of this conference.
-
-            <ul class="pl-10 mt-2 list-disc">
-                <li class="">
-                    <strong>Email address</strong> will only be used for communication
-                    with the authors. It will not appear in public Web pages of this
-                    conference.
-                </li>
-                <li>
-                    <strong>Affiliation</strong> must contain only the short
-                    official
-                    <strong>organization name</strong> which the author affiliated
-                    with.
-                </li>
-                <li>
-                    <strong>Web page</strong> can be used on the conference web pages,
-                    for example, for making the program. It should be a Web page
-                    of the author, not the web page of her or his organization.
-                </li>
-                <li>
-                    One of the authors should be marked as a
-                    <strong>Presenter</strong>. If you are not sure, make your
-                    best choice, it could be updated later.
-                </li>
-                <li>
-                    Each author marked as a <strong>Corresponding author</strong
-                    > will receive email messages from the system about this submission
-                    and updated information about this event. There must be at least
-                    one Corresponding author.
-                </li>
-            </ul>
+            will only be used for communication with the authors. It will not appear
+            in public Web pages of this conference.
         </div>
         <div class="mt-5 flex items-center flex-wrap gap-4">
             {#each authors as author, index}
