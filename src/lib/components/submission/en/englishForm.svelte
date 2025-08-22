@@ -33,7 +33,7 @@
     onMount(() => {
         if (!authors.length) {
             addNewAuthor();
-            addNewAuthor();
+            // addNewAuthor();
         }
         resolveAuthorsIds();
     });

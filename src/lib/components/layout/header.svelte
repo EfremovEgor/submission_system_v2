@@ -16,13 +16,13 @@
     <div class="container">
         <nav>
             <ul>
-                <li>
+                <!-- <li>
                     <div class="logo-container">
                         <a href="/">
                             <img class="logo" src={logo} alt="ConfChair Logo" />
                         </a>
                     </div>
-                </li>
+                </li> -->
                 <!-- <li
                     aria-current={$page.url.pathname === "/call_for_papers"
                         ? "page"

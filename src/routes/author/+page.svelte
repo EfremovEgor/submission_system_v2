@@ -272,16 +272,15 @@
         <h3>My Submissions</h3>
         {#if !rawSubmissions}
             <p>
-                There are no submissions yet. To submit a new abstract, please
-                proceed <a href="/call_for_papers/issf2025/submit?lang=en"
-                    >here</a
-                >.
+                <a href="/call_for_papers/issf2025/submit?lang=en"
+                    >Submit a new abstract</a
+                >
             </p>
         {:else}
             <p>
-                To submit a new abstract, please proceed <a
-                    href="/call_for_papers/issf2025/submit?lang=en">here</a
-                >.
+                <a
+                    href="/call_for_papers/issf2025/submit?lang=en">Submit a new abstract</a
+                >
             </p>
         {/if}
         {#each Object.entries(submissions) as [conference, data]}
