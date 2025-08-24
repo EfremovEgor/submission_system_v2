@@ -222,7 +222,7 @@
             </tbody>
         </table>
     </div>
-    {#if submission.status == "accepted" && !submission.withdrawn && rights.canUpload}
+    {#if !submission.withdrawn && rights.canUpload}
         <h4 id="upload_manager" class="font-bold">Upload Manager</h4>
 
         <form

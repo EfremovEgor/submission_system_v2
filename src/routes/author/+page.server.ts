@@ -31,6 +31,7 @@ export const load = async ({ parent }: { parent: any }) => {
                     },
                 },
             ],
+            AND: [{ conference_id: 2 }],
         },
         orderBy: {
             created_at: "desc",
