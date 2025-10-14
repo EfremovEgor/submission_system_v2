@@ -1,6 +1,7 @@
 #!/bin/bash
 
 git pull origin main
+docker compose up --build -d
 npm ci
 npx prisma generate 
 npx prisma migrate deploy 
