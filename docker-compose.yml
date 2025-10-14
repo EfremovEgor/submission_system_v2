@@ -8,7 +8,7 @@ services:
             - POSTGRES_DB=${DATABASE_NAME}
             - POSTGRES_USER=${DATABASE_USER}
         ports:
-            - "127.0.0.1:5432:5432"
+            - "127.0.0.1:3001:5432"
         expose:
             - 5432
         volumes:
@@ -22,7 +22,7 @@ services:
         restart: unless-stopped
         image: redis
         ports:
-            - "127.0.0.1:6380:6379"
+            - "127.0.0.1:3002:6379"
         expose:
             - 6380
         volumes:
@@ -35,14 +35,14 @@ services:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         ports:
-            - "5050:80"
+            - "127.0.0.1:3001:80"
         volumes:
             - pgadmin_data:/var/lib/pgadmin
     pdf_api:
         image: pdf_api:latest
         restart: unless-stopped
         ports:
-            - "127.0.0.1:5000:3000"
+            - "127.0.0.1:3003:3000"
 volumes:
     postgres_data:
     redis_data:
