@@ -1,7 +1,7 @@
 #!/bin/bash
 
 git pull origin main
-npm ci --omit=dev
+npm ci
 npx prisma generate 
 npx prisma migrate deploy 
 npm run build 
