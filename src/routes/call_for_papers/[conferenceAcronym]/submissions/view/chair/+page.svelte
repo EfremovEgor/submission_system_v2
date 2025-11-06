@@ -6,7 +6,7 @@
     const conference = data.conference;
     const topics = {};
     const symposiums = {};
-    if (data.symposiums)
+    if (data.symposiums.length != 0) {
         data.symposiums.forEach((symposium) => {
             symposiums[symposium.name] = {};
             symposium.topics.forEach(
@@ -14,29 +14,40 @@
             );
         });
 
-    submissions.forEach((submission) => {
-        if (submission.topic.symposium.name) {
-            if (!(submission.topic.symposium.name in symposiums))
-                symposiums[submission.topic.symposium.name] = {};
-            if (
-                !(
-                    submission.topic.name in
-                    symposiums[submission.topic.symposium.name]
+        submissions.forEach((submission) => {
+            if (submission.topic.symposium.name) {
+                if (!(submission.topic.symposium.name in symposiums))
+                    symposiums[submission.topic.symposium.name] = {};
+                if (
+                    !(
+                        submission.topic.name in
+                        symposiums[submission.topic.symposium.name]
+                    )
                 )
-            )
-                symposiums[submission.topic.symposium.name][
-                    submission.topic.name
-                ] = 1;
-            else
-                symposiums[submission.topic.symposium.name][
-                    submission.topic.name
-                ] += 1;
-        } else {
-            if (!(submission.topic.name in topics))
-                topics[submission.topic.name] = 1;
-            else topics[submission.topic.name] += 1;
-        }
-    });
+                    symposiums[submission.topic.symposium.name][
+                        submission.topic.name
+                    ] = 1;
+                else
+                    symposiums[submission.topic.symposium.name][
+                        submission.topic.name
+                    ] += 1;
+            } else {
+                if (!(submission.topic.name in topics))
+                    topics[submission.topic.name] = 1;
+                else topics[submission.topic.name] += 1;
+            }
+        });
+    } else {
+        submissions.forEach((submission) => {
+            if (submission.topic) {
+                if (!(submission.topic.name in topics))
+                    topics[submission.topic.name] = 1;
+                else topics[submission.topic.name] += 1;
+            }
+        });
+    }
+    console.log(topics);
+    console.log(symposiums);
 </script>
 
 <svelte:head>

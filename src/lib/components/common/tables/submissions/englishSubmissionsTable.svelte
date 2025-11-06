@@ -41,9 +41,15 @@
     let submissionsToDisplay = submissions;
 
     let showedTopics = {};
-    Object.values(symposiums).forEach((symposium) => {
-        Object.keys(symposium).forEach((topic) => (showedTopics[topic] = true));
-    });
+    if (Object.keys(symposiums).length != 0)
+        Object.values(symposiums).forEach((symposium) => {
+            Object.keys(symposium).forEach(
+                (topic) => (showedTopics[topic] = true),
+            );
+        });
+    else {
+        Object.keys(topics).forEach((t) => (showedTopics[t] = true));
+    }
     function sortSubmissions(field, reverse = 0) {
         function compare(a, b) {
             let compareBy = field;
@@ -76,7 +82,7 @@
     }
 </script>
 
-{#if symposiums}
+{#if Object.keys(symposiums).length != 0}
     <div class="symposiums">
         {#each Object.keys(symposiums) as symposium}
             <tr>
@@ -184,7 +190,82 @@
             </tr>
         {/each}
     </div>
+{:else}
+    <div class="symposiums">
+        <table class="striped" style="width: fit-content;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th
+                        class="text-center"
+                        style="padding:5px !important; padding-left:15px!important"
+                    >
+                        <strong style="color:var(--green)"> • </strong>
+                    </th>
+                    <th class="text-center" style="padding:5px !important">
+                        +
+                    </th>
+                    <th class="text-center" style="padding:5px !important">
+                        -
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each Object.keys(topics) as topic}
+                    <tr>
+                        <td>
+                            <input
+                                bind:checked={showedTopics[topic]}
+                                on:change={() => filterByTopics()}
+                                type="checkbox"
+                            /></td
+                        >
+                        <td>{topic}</td>
+                        <td style="padding-left: 10px;">
+                            {topics[topic]}
+                        </td>
+                        <td
+                            style="padding:5px !important; padding-left:15px!important"
+                            class="text-center"
+                        >
+                            {submissions.reduce((accumulator, submission) => {
+                                if (
+                                    submission.topic.name == topic &&
+                                    submission.status == "accepted"
+                                )
+                                    return accumulator + 1;
+                                return accumulator;
+                            }, 0)}
+                        </td>
+                        <td style="padding:5px !important;" class="text-center">
+                            {submissions.reduce((accumulator, submission) => {
+                                if (
+                                    submission.topic.name == topic &&
+                                    submission.particiaption_confirmed
+                                )
+                                    return accumulator + 1;
+                                return accumulator;
+                            }, 0)}
+                        </td>
+                        <td style="padding:5px !important;" class="text-center">
+                            {submissions.reduce((accumulator, submission) => {
+                                if (
+                                    submission.topic.name == topic &&
+                                    submission.withdrawn
+                                )
+                                    return accumulator + 1;
+                                return accumulator;
+                            }, 0)}
+                        </td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
 {/if}
+
 <span>
     Displayed: {submissionsToDisplay.length}/{submissions.length} <br />
 </span>

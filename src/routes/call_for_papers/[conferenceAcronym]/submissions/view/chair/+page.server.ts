@@ -61,5 +61,18 @@ export const load: ServerLoad = async ({ url, cookies, request, parent }) => {
             position: "asc",
         },
     });
-    return { submissions: submissions, symposiums };
+
+    if (symposiums.length == 0) {
+        const topics = await prisma.topic.findMany({
+            where: {
+                conference_id: conference.id,
+            },
+            select: {
+                name: true,
+                id: true,
+            },
+        });
+        return { submissions: submissions, topics, symposiums };
+    }
+    return { submissions: submissions, symposiums, topics: [] };
 };
