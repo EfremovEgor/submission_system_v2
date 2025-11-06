@@ -38,6 +38,10 @@
             }
         });
     } else {
+        data.topics.forEach((t) => {
+            topics[t.name] = 0;
+        });
+
         submissions.forEach((submission) => {
             if (submission.topic) {
                 if (!(submission.topic.name in topics))
