@@ -73,15 +73,13 @@
                 </button>
             {/if}
 
-            {#if rights.canUpload && submission.status == "accepted"}
-                <a
-                    href="#upload_manager"
-                    class="primary-button-hover outline"
-                    role="button"
-                >
-                    Upload Files
-                </a>
-            {/if}
+            <a
+                href="#upload_manager"
+                class="primary-button-hover outline"
+                role="button"
+            >
+                Upload Manager
+            </a>
         {/if}
 
         <a
