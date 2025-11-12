@@ -355,7 +355,7 @@
                 Manuscript template and format instructions could be downloaded by
                 the following
                 <a
-                    href="https://spaceflightmechanics.com/downloads/manuscript_template.docx"
+                    href="https://spacescitech.com/files/manuscript_template.docx"
                     >link</a
                 >.<br /> The document should not exceed 20 pages.</small
             >
