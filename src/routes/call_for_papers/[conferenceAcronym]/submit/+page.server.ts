@@ -225,22 +225,38 @@ export const actions: Actions = {
             { chairs: true },
             { title: true, first_name: true, last_name: true, email: true },
         );
-        recipients.chairs.forEach(async (recipient) => {
-            await sendRCCCSubmissionAuthorCreated(recipient.email, {
-                recipient,
-                submission: {
-                    ...createdSubmission,
-                    topic: {
-                        name: topic.name,
-                    },
-                    link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${createdSubmission.id}/${PRIVILEGES.chair}`,
+        // recipients.chairs.forEach(async (recipient) => {
+        //     await sendRCCCSubmissionAuthorCreated(recipient.email, {
+        //         recipient,
+        //         submission: {
+        //             ...createdSubmission,
+        //             topic: {
+        //                 name: topic.name,
+        //             },
+        //             link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${createdSubmission.id}/${PRIVILEGES.chair}`,
+        //         },
+        //         conference: {
+        //             name: conference.name,
+        //             short_name: conference.short_name,
+        //         },
+        //         authors: rawAuthors,
+        //     });
+        // });
+
+        await sendRCCCSubmissionAuthorCreated("submissions@confchair.org", {
+            recipient: { title: "", first_name: "committee", last_name: "" },
+            submission: {
+                ...createdSubmission,
+                topic: {
+                    name: topic.name,
                 },
-                conference: {
-                    name: conference.name,
-                    short_name: conference.short_name,
-                },
-                authors: rawAuthors,
-            });
+                link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${createdSubmission.id}/${PRIVILEGES.chair}`,
+            },
+            conference: {
+                name: conference.name,
+                short_name: conference.short_name,
+            },
+            authors: rawAuthors,
         });
         redirect(302, "/author");
 

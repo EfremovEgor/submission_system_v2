@@ -5,10 +5,10 @@
     >
         <!-- <span style="color:var(--pico-primary);">
             Copyright © 2024 ConfChair
-        </span>
+        </span> -->
         <a href="mailto:support@confchair.org" class="link"
             >support@confchair.org</a
-        > -->
+        >
     </article>
 </footer>
 
