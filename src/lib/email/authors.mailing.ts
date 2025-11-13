@@ -99,8 +99,6 @@ export const sendSubmissionRejected = async (
     const confirmationDeadline = rawData.conference.confirmation_deadline;
     const manuscriptDeadline = rawData.conference.manuscript_deadline;
     const presentationDeadline = rawData.conference.presentation_deadline;
-    console.log(subject);
-    console.log(to);
     let data = {
         ...rawData,
         conference: {

@@ -11,7 +11,6 @@
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
 
     const submissions = data.submissions;
-    console.log(submissions);
     let allState = false;
     let preview = false;
     let emailHtml = "<h1>Email Template</h1>";
@@ -255,7 +254,6 @@
                                 submissionsToDisplay.forEach((submission) => {
                                     submission.selected = allState;
                                 });
-                                console.log(submissionsToDisplay);
                                 submissionsToDisplay = submissionsToDisplay;
                             }}
                         />

@@ -37,11 +37,13 @@ export const load: ServerLoad = async ({ url, cookies, request, parent }) => {
             withdrawn: true,
             particiaption_confirmed: true,
             presentation_file: true,
+            manuscript_file: true,
         },
         orderBy: {
             local_id: "asc",
         },
     });
+    console.log(submissions);
     const rights = await checkForChairRights(conference.id, user.id);
     if (rights.role != Roles.chair) error(403);
     const symposiums = await prisma.symposium.findMany({

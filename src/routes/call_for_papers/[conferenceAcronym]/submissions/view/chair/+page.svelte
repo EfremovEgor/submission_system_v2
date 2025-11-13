@@ -50,8 +50,6 @@
             }
         });
     }
-    console.log(topics);
-    console.log(symposiums);
 </script>
 
 <svelte:head>

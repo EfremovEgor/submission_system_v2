@@ -48,6 +48,7 @@ export const load: ServerLoad = async ({ url, cookies, request, parent }) => {
             withdrawn: true,
             particiaption_confirmed: true,
             presentation_file: true,
+            manuscript_file: true,
         },
         orderBy: {
             local_id: "asc",

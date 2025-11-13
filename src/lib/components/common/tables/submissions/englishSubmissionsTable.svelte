@@ -9,7 +9,7 @@
     import { generateSubmissionsXLSX } from "$src/lib/generators/excel/submissions_list";
     import { generateSubmissionsWord } from "$src/lib/generators/word/submissions_list.client";
     import { MIME_TYPES } from "$src/lib/mime_types";
-    import { formatAuthors } from "$src/lib/utils.client";
+    import { formatAuthors, getFileExtension } from "$src/lib/utils.client";
     import { Search } from "lucide-svelte";
     export let conference: {
         acronym: string;
@@ -33,7 +33,22 @@
             country: string;
             affiliation: string;
         }[];
-        presentation_file: string;
+        presentation_file?: {
+            id: string;
+            file_name: string;
+            original_name: string;
+            path: string;
+            uploaded_at: Date;
+            uploaded_by_id: number;
+        };
+        manuscript_file?: {
+            id: string;
+            file_name: string;
+            original_name: string;
+            path: string;
+            uploaded_at: Date;
+            uploaded_by_id: number;
+        };
     }[];
     export let topics: object = {};
     export let symposiums: object = {};
@@ -427,7 +442,36 @@
                     ></th
                 >
                 <th class="text-center">
-                    <button class="sortable bare-button">Presentation </button>
+                    <button
+                        class="sortable bare-button"
+                        data-order={0}
+                        on:click={(element) => {
+                            sortSubmissions(
+                                "presentation_file",
+                                element.target["data-order"],
+                            );
+
+                            element.target["data-order"] =
+                                !element.target["data-order"];
+                        }}
+                        >Presentation
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button
+                        class="sortable bare-button"
+                        data-order={0}
+                        on:click={(element) => {
+                            sortSubmissions(
+                                "manuscript_file",
+                                element.target["data-order"],
+                            );
+
+                            element.target["data-order"] =
+                                !element.target["data-order"];
+                        }}
+                        >Manuscript
+                    </button>
                 </th>
             </tr>
         </thead>
@@ -490,6 +534,22 @@
                                 href="/uploads/{submission.presentation_file
                                     .id}"
                                 download="{conference.acronym}-presentation-{submission.local_id}.pptx"
+                            >
+                                Yes
+                            </a>
+                        {:else}
+                            <span style="color:var(--red)">No</span>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {#if submission.manuscript_file}
+                            <a
+                                style="color:var(--green);
+                        text-decoration-color:var(--green)"
+                                href="/uploads/{submission.manuscript_file.id}"
+                                download="{conference.acronym}-manuscript-{submission.local_id}.{getFileExtension(
+                                    submission.manuscript_file.original_name,
+                                )}"
                             >
                                 Yes
                             </a>

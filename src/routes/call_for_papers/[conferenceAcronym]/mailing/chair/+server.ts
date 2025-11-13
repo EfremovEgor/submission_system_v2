@@ -23,7 +23,6 @@ export async function POST({ request, cookies, params }) {
             allCorresponding: boolean;
         };
     } = await request.json();
-    console.log(submissions);
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
         name: true,
         short_name: true,
