@@ -7,3 +7,9 @@ export interface layoutUser {
     is_chair: boolean;
     is_loc: boolean;
 }
+
+export type SubmissionStatus =
+    | "accepted"
+    | "under_review"
+    | "submitted"
+    | "rejected";

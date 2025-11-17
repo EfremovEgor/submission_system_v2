@@ -9,13 +9,14 @@
     import { generateSubmissionsXLSX } from "$src/lib/generators/excel/submissions_list";
     import { generateSubmissionsWord } from "$src/lib/generators/word/submissions_list.client";
     import { MIME_TYPES } from "$src/lib/mime_types";
+    import type { SubmissionStatus } from "$src/lib/types/interfaces";
     import { formatAuthors, getFileExtension } from "$src/lib/utils.client";
     import { Search } from "lucide-svelte";
     export let conference: {
         acronym: string;
     };
     export let submissionViewRoleSuffix: string;
-    export let submissions: {
+    interface SubmissionIn {
         id: number;
         local_id: number;
         title: string;
@@ -49,12 +50,13 @@
             uploaded_at: Date;
             uploaded_by_id: number;
         };
-    }[];
+    }
+    export let submissions: SubmissionIn[];
     export let topics: object = {};
     export let symposiums: object = {};
 
     let submissionsToDisplay = submissions;
-
+    let statusFilter: SubmissionStatus | "withdrawn" | null = null;
     let showedTopics = {};
     if (Object.keys(symposiums).length != 0)
         Object.values(symposiums).forEach((symposium) => {
@@ -88,10 +90,19 @@
         submissionsToDisplay = submissionsToDisplay;
     }
 
-    function filterByTopics() {
+    const applyStatusFilter = (submission: SubmissionIn) => {
+        if (!statusFilter) return true;
+        if (statusFilter == "withdrawn" && submission.withdrawn) return true;
+        return statusFilter == submission.status;
+    };
+    const applyTopicFilter = (submission: SubmissionIn) => {
+        return !!showedTopics[submission.topic.name];
+    };
+    const filters = [applyStatusFilter, applyTopicFilter];
+    function applyFilters() {
         submissionsToDisplay = [];
         submissions.forEach((submission) => {
-            if (showedTopics[submission.topic.name])
+            if (filters.every((f) => f(submission)))
                 submissionsToDisplay.push(submission);
         });
     }
@@ -137,7 +148,7 @@
                                     <td>
                                         <input
                                             bind:checked={showedTopics[topic]}
-                                            on:change={() => filterByTopics()}
+                                            on:change={() => applyFilters()}
                                             type="checkbox"
                                         /></td
                                     >
@@ -210,7 +221,18 @@
         <table class="striped" style="width: fit-content;">
             <thead>
                 <tr>
-                    <th></th>
+                    <th
+                        ><input
+                            checked
+                            on:change={(e) => {
+                                Object.keys(showedTopics).forEach((k) => {
+                                    showedTopics[k] = e.currentTarget.checked;
+                                });
+                                applyFilters();
+                            }}
+                            type="checkbox"
+                        /></th
+                    >
                     <th></th>
                     <th></th>
                     <th
@@ -233,7 +255,7 @@
                         <td>
                             <input
                                 bind:checked={showedTopics[topic]}
-                                on:change={() => filterByTopics()}
+                                on:change={() => applyFilters()}
                                 type="checkbox"
                             /></td
                         >
@@ -284,6 +306,69 @@
 <span>
     Displayed: {submissionsToDisplay.length}/{submissions.length} <br />
 </span>
+<div>
+    <button
+        on:click={() => {
+            statusFilter = null;
+            applyFilters();
+        }}
+        >All ({submissions.length})
+    </button>
+    <button
+        on:click={() => {
+            statusFilter = "submitted";
+            applyFilters();
+        }}
+        >Submitted ({submissions.reduce((acc, cur) => {
+            acc += cur.status == "submitted" ? 1 : 0;
+            return acc;
+        }, 0)})
+    </button>
+
+    <button
+        on:click={() => {
+            statusFilter = "under_review";
+            applyFilters();
+        }}
+        >Under Review ({submissions.reduce((acc, cur) => {
+            acc += cur.status == "under_review" ? 1 : 0;
+            return acc;
+        }, 0)})
+    </button>
+    <button
+        class="button-green"
+        on:click={() => {
+            statusFilter = "accepted";
+            applyFilters();
+        }}
+        >Accepted ({submissions.reduce((acc, cur) => {
+            acc += cur.status == "accepted" ? 1 : 0;
+            return acc;
+        }, 0)})
+    </button>
+    <button
+        class="button-red"
+        on:click={() => {
+            statusFilter = "rejected";
+            applyFilters();
+        }}
+        >Rejected ({submissions.reduce((acc, cur) => {
+            acc += cur.status == "rejected" ? 1 : 0;
+            return acc;
+        }, 0)})
+    </button>
+    <button
+        class="button-red"
+        on:click={() => {
+            statusFilter = "withdrawn";
+            applyFilters();
+        }}
+        >Withdrawn ({submissions.reduce((acc, cur) => {
+            acc += cur.withdrawn ? 1 : 0;
+            return acc;
+        }, 0)})
+    </button>
+</div>
 <button
     on:click={() => {
         const element = document.createElement("a");
