@@ -23,6 +23,7 @@
     export let isEditing = false;
     export let userDetails;
     export let conference;
+
     const resolveAuthorsIds = () => {
         authors.forEach((author, index) => {
             author.id = index;
@@ -137,6 +138,17 @@
                 cancel();
                 return;
             }
+
+            if (
+                submission.funding &&
+                !languageIsAvailable(["en"], submission.funding)
+            ) {
+                alert(
+                    "Funding information must contain only english characters",
+                );
+                cancel();
+                return;
+            }
             if (
                 !languageIsAvailable(["en"], submission.keywords, {
                     type: "onlyLettersAndNumbers",
@@ -248,7 +260,7 @@
         <section class="shadow-lg p-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label
-                class="mt-0 flex flex-row justify-between font-normal items-center gap-5 mt-5"
+                class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
             >
                 <span>Keywords<span class="text-red-500">*</span></span>
                 <div class="basis-5/6">
@@ -259,6 +271,25 @@
                         minimumWords={3}
                         maximumWords={20}
                         placeholder="Not less than 3 keywords. One per line"
+                    />
+                </div>
+            </label>
+        </section>
+
+        <h4 class="font-normal">Funding Information</h4>
+        <section class="shadow-lg p-5">
+            <!-- svelte-ignore a11y-label-has-associated-control -->
+            <label
+                class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
+            >
+                <span>Funding Information</span>
+                <div class="basis-5/6">
+                    <input
+                        style="margin:0"
+                        bind:value={submission.funding}
+                        class="pr-12 w-full m-0"
+                        type="text"
+                        name="funding"
                     />
                 </div>
             </label>

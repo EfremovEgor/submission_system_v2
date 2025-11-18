@@ -21,6 +21,7 @@
             topic: submission.topic_id,
             presentation_format: submission.presentation_format,
             local_id: submission.local_id,
+            funding: submission.funding,
         }}
         {authors}
         userDetails={userProfile}

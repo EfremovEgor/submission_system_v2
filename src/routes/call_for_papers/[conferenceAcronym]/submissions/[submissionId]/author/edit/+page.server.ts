@@ -52,6 +52,7 @@ export const load: Load = async ({ parent, params }) => {
                 position: "asc",
             },
         },
+        topics: true,
     });
     if (
         new Date() >
@@ -82,6 +83,7 @@ export const actions: Actions = {
             title: formData.title,
             abstract: formData.abstract,
             keywords: formData.keywords,
+            funding: formData.funding,
             topic: {
                 connect: {
                     id: parseInt(formData.topic),

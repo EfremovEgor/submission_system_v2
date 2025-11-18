@@ -251,7 +251,7 @@
         <section class="shadow-lg p-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label
-                class="mt-0 flex flex-row justify-between font-normal items-center gap-5 mt-5"
+                class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
             >
                 <span>Keywords<span class="text-red-500">*</span></span>
                 <div class="basis-5/6">
@@ -269,6 +269,24 @@
                 </div>
             </label>
         </section>
+        <h4 class="font-normal">Funding Information</h4>
+        <section class="shadow-lg p-5">
+            <!-- svelte-ignore a11y-label-has-associated-control -->
+            <label
+                class="flex flex-row justify-between font-normal items-center gap-5 mt-5"
+            >
+                <span>Funding Information</span>
+                <div class="basis-5/6">
+                    <input
+                        style="margin:0"
+                        bind:value={submission.funding}
+                        class="pr-12 w-full m-0"
+                        type="text"
+                        name="funding"
+                    />
+                </div>
+            </label>
+        </section>
         <h4 class="font-normal">Topics<span class="text-red-500">*</span></h4>
         <div class="ml-5">
             <p>Choose preferable topic for your paper.</p>
@@ -276,32 +294,56 @@
         <section class="shadow-lg p-5">
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <div class="flex flex-col gap-2">
-                {#each conference.symposiums as symposium}
-                    <fieldset>
-                        <legend class="font-bold">{symposium.name}</legend>
-                        {#each symposium.topics as topic}
-                            <label class="">
-                                <input
-                                    bind:group={submission.topic}
-                                    type="radio"
-                                    value={topic.id}
-                                    required
-                                    name="topic"
-                                />
-                                {topic.name}
-                                {#if topic.hint}
-                                    <span
-                                        class="icon-button tooltiped"
-                                        style="display: inline;"
-                                        data-tooltip={topic.hint}
-                                    >
-                                        <CircleAlert />
-                                    </span>
-                                {/if}
-                            </label>
-                        {/each}
-                    </fieldset>
-                {/each}
+                {#if conference.symposiums.length}
+                    {#each conference.symposiums as symposium}
+                        <fieldset>
+                            <legend class="font-bold">{symposium.name}</legend>
+                            {#each symposium.topics as topic}
+                                <label class="">
+                                    <input
+                                        bind:group={submission.topic}
+                                        type="radio"
+                                        value={topic.id}
+                                        required
+                                        name="topic"
+                                    />
+                                    {topic.name}
+                                    {#if topic.hint}
+                                        <span
+                                            class="icon-button tooltiped"
+                                            style="display: inline;"
+                                            data-tooltip={topic.hint}
+                                        >
+                                            <CircleAlert />
+                                        </span>
+                                    {/if}
+                                </label>
+                            {/each}
+                        </fieldset>
+                    {/each}
+                {:else}
+                    {#each conference.topics as topic}
+                        <label class="">
+                            <input
+                                bind:group={submission.topic}
+                                type="radio"
+                                value={topic.id}
+                                required
+                                name="topic"
+                            />
+                            {topic.name}
+                            {#if topic.hint}
+                                <span
+                                    class="icon-button tooltiped"
+                                    style="display: inline;"
+                                    data-tooltip={topic.hint}
+                                >
+                                    <CircleAlert />
+                                </span>
+                            {/if}
+                        </label>
+                    {/each}
+                {/if}
             </div>
         </section>
         <label class="font-normal flex flex-row items-center align-middle gap-3"

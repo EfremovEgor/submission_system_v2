@@ -4,6 +4,7 @@ model Submission {
     title                   String
     title_ru                String?
     abstract                String
+    funding                 String?
     abstract_ru             String?
     keywords                String
     keywords_ru             String?

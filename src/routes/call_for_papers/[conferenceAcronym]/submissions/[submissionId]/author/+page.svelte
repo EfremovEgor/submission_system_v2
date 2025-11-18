@@ -118,6 +118,12 @@
                 >
             </tr>
             <tr>
+                <td class="font-semibold">Funding Information</td>
+                <td style="white-space: pre-wrap; word-wrap: break-word;"
+                    >{submission.funding}</td
+                >
+            </tr>
+            <tr>
                 <td class="font-semibold">Submitted at</td>
                 <td>{submission.created_at.toLocaleString()}</td>
             </tr>
