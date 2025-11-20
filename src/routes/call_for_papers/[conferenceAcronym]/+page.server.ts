@@ -13,7 +13,12 @@ export const load: Load = async ({ parent, params }) => {
         site_url: true,
         topics: {
             select: {
+                hint: true,
+                id: true,
                 name: true,
+            },
+            orderBy: {
+                position: "asc",
             },
         },
         symposiums: {

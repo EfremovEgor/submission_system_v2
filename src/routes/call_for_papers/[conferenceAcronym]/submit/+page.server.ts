@@ -45,6 +45,9 @@ export const load: Load = async ({ parent, params }) => {
                 id: true,
                 name: true,
             },
+            orderBy: {
+                position: "asc",
+            },
         },
         symposiums: {
             select: {

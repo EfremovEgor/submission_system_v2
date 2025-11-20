@@ -52,7 +52,16 @@ export const load: Load = async ({ parent, params }) => {
                 position: "asc",
             },
         },
-        topics: true,
+        topics: {
+            select: {
+                hint: true,
+                id: true,
+                name: true,
+            },
+            orderBy: {
+                position: "asc",
+            },
+        },
     });
     if (
         new Date() >
