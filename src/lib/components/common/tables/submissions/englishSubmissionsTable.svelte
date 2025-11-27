@@ -67,20 +67,24 @@
     else {
         Object.keys(topics).forEach((t) => (showedTopics[t] = true));
     }
-    function sortSubmissions(field, reverse = 0) {
-        function compare(a, b) {
+    function sortSubmissions(field: keyof SubmissionIn, reverse = 0) {
+        function compare(a: SubmissionIn, b: SubmissionIn) {
             let compareBy = field;
-            if (compareBy == "topic") {
-                a = a[compareBy];
-                b = b[compareBy];
 
-                compareBy = "name";
+            if (compareBy == "topic")
+                return a.topic.name < b.topic.name ? 0 : 1;
+
+            if (
+                compareBy == "presentation_file" ||
+                compareBy == "manuscript_file"
+            ) {
+                return !!a[compareBy] > !!b[compareBy] ? 0 : 1;
             }
 
             if (a[compareBy] < b[compareBy]) {
                 return -1;
             }
-            if (a[compareBy] < b[compareBy]) {
+            if (a[compareBy] > b[compareBy]) {
                 return 1;
             }
             return 0;
