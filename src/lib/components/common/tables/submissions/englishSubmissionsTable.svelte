@@ -71,26 +71,31 @@
         function compare(a: SubmissionIn, b: SubmissionIn) {
             let compareBy = field;
 
-            if (compareBy == "topic")
-                return a.topic.name < b.topic.name ? 0 : 1;
+            if (compareBy === "topic") {
+                if (a.topic.name < b.topic.name) return -1;
+                if (a.topic.name > b.topic.name) return 1;
+                return 0;
+            }
 
             if (
-                compareBy == "presentation_file" ||
-                compareBy == "manuscript_file"
+                compareBy === "presentation_file" ||
+                compareBy === "manuscript_file"
             ) {
-                return !!a[compareBy] > !!b[compareBy] ? 0 : 1;
+                const hasA = !!a[compareBy];
+                const hasB = !!b[compareBy];
+                if (hasA === hasB) return 0;
+                return hasA ? 1 : -1;
             }
 
-            if (a[compareBy] < b[compareBy]) {
-                return -1;
-            }
-            if (a[compareBy] > b[compareBy]) {
-                return 1;
-            }
+            if (a[compareBy] < b[compareBy]) return -1;
+            if (a[compareBy] > b[compareBy]) return 1;
             return 0;
         }
-        submissionsToDisplay.sort(compare);
-        if (reverse) submissionsToDisplay.reverse();
+
+        submissionsToDisplay.sort((a, b) => {
+            const res = compare(a, b);
+            return reverse ? -res : res;
+        });
         submissionsToDisplay = submissionsToDisplay;
     }
 
