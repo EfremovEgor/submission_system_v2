@@ -425,6 +425,7 @@
     <table class="striped">
         <thead>
             <tr>
+                <th></th>
                 <th scope="col"
                     ><button
                         class="sortable bare-button"
@@ -571,8 +572,9 @@
         </thead>
 
         <tbody>
-            {#each submissionsToDisplay as submission}
+            {#each submissionsToDisplay as submission, i}
                 <tr>
+                    <td>{i + 1}</td>
                     <td>
                         {submission.local_id}
                     </td>

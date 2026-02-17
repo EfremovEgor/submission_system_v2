@@ -19,6 +19,14 @@ export const generateSubmissionsXLSX = (
         status: string;
         withdrawn: boolean;
         particiaption_confirmed: boolean;
+        manuscript_file?: {
+            id: string;
+            file_name: string;
+            original_name: string;
+            path: string;
+            uploaded_at: Date;
+            uploaded_by_id: number;
+        };
     }[],
 ): Buffer => {
     let workbook = utils.book_new();
@@ -34,6 +42,7 @@ export const generateSubmissionsXLSX = (
         "Review Status",
         "Withdrawn",
         "Confirmed",
+        "Manuscript",
     ];
     let worksheet = utils.aoa_to_sheet([]);
     utils.book_append_sheet(workbook, worksheet);
@@ -51,6 +60,7 @@ export const generateSubmissionsXLSX = (
             submission_statuses[submission.status],
             submission.withdrawn,
             submission.particiaption_confirmed,
+            !!submission.manuscript_file,
         ];
         utils.sheet_add_aoa(worksheet, [data], { origin: `A${index + 2}` });
     });
