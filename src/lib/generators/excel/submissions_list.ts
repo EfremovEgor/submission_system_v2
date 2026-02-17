@@ -44,6 +44,7 @@ export const generateSubmissionsXLSX = (
         "Confirmed",
         "Manuscript",
     ];
+    const applySpelling = (val: boolean) => (val ? "Yes" : "No");
     let worksheet = utils.aoa_to_sheet([]);
     utils.book_append_sheet(workbook, worksheet);
     utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
@@ -58,9 +59,9 @@ export const generateSubmissionsXLSX = (
             presentation_formats[submission.presentation_format],
             submission.created_at.toLocaleString(),
             submission_statuses[submission.status],
-            submission.withdrawn,
-            submission.particiaption_confirmed,
-            !!submission.manuscript_file,
+            applySpelling(submission.withdrawn),
+            applySpelling(submission.particiaption_confirmed),
+            applySpelling(!!submission.manuscript_file),
         ];
         utils.sheet_add_aoa(worksheet, [data], { origin: `A${index + 2}` });
     });
