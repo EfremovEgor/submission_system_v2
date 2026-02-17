@@ -1,6 +1,6 @@
 <script lang="ts">
     import { submission_statuses } from "$lib/aliases";
-    import { Search } from "lucide-svelte";
+    import { Search, Upload } from "lucide-svelte";
     import { enhance } from "$app/forms";
     import { invalidateAll } from "$app/navigation";
     import AccountInfoRow from "$components/account/accountInfoRow.svelte";
@@ -278,8 +278,8 @@
             </p>
         {:else}
             <p>
-                <a
-                    href="/call_for_papers/issf2025/submit?lang=en">Submit a new abstract</a
+                <a href="/call_for_papers/issf2025/submit?lang=en"
+                    >Submit a new abstract</a
                 >
             </p>
         {/if}
@@ -376,6 +376,11 @@
                                     ></th
                                 >
                                 <th scope="col"
+                                    ><button class="sortable bare-button"
+                                        >Actions</button
+                                    ></th
+                                >
+                                <th scope="col"
                                     ><button
                                         class="sortable bare-button"
                                         data-order={0}>Authors</button
@@ -406,11 +411,7 @@
                                         data-order={0}>Submitted at</button
                                     ></th
                                 >
-                                <th scope="col"
-                                    ><button class="sortable bare-button"
-                                        >View</button
-                                    ></th
-                                >
+
                                 <th scope="col"
                                     ><button
                                         class="sortable bare-button"
@@ -425,6 +426,34 @@
                                 <tr>
                                     <td>
                                         {submission.local_id}
+                                    </td>
+                                    <td>
+                                        <div class="flex flex-col gap-2">
+                                            <a
+                                                href="/call_for_papers/{data
+                                                    .conference_data
+                                                    .acronym}/submissions/{submission.id}/author"
+                                                class="icon-button text-center"
+                                            >
+                                                <Search class="mx-auto" />
+                                            </a>
+                                            <a
+                                                href="/call_for_papers/{data
+                                                    .conference_data
+                                                    .acronym}/submissions/{submission.id}/author#upload_manager"
+                                                class="icon-button text-center"
+                                            >
+                                                <Upload class="mx-auto" />
+                                            </a>
+                                        </div>
+                                        <!-- <a
+                                            href="/pdf/submissions/{submission.id}"
+                                            target="_blank"
+                                            class="icon-button text-center p-2.5"
+                                            download="{conference.acronym}-abstract-{submission.local_id}.pdf"
+                                        >
+                                            <DownloadPdf class="mx-auto" />
+                                        </a> -->
                                     </td>
                                     <td>
                                         {formatAuthors(submission.authors)}
@@ -443,24 +472,7 @@
                                     <td class="text-center">
                                         {submission.created_at.toLocaleString()}
                                     </td>
-                                    <td>
-                                        <a
-                                            href="/call_for_papers/{data
-                                                .conference_data
-                                                .acronym}/submissions/{submission.id}/author"
-                                            class="icon-button text-center p-2.5"
-                                        >
-                                            <Search class="mx-auto" />
-                                        </a>
-                                        <a
-                                            href="/pdf/submissions/{submission.id}"
-                                            target="_blank"
-                                            class="icon-button text-center p-2.5"
-                                            download="{conference.acronym}-abstract-{submission.local_id}.pdf"
-                                        >
-                                            <DownloadPdf class="mx-auto" />
-                                        </a>
-                                    </td>
+
                                     <td class="text-center">
                                         <SubmissionStatusText
                                             status={submission.status}
