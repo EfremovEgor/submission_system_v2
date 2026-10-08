@@ -15,7 +15,7 @@
         });
 
     submissions.forEach((submission) => {
-        if (submission.topic.symposium.name) {
+        if (submission.topic.symposium?.name) {
             if (!(submission.topic.symposium.name in symposiums))
                 symposiums[submission.topic.symposium.name] = {};
             if (
@@ -44,7 +44,7 @@
 </svelte:head>
 <div class="container">
     <div class="mb-2">
-        <BackButton url="/chair" />
+        <BackButton url="/loc" />
     </div>
     <h3>{conference.name}</h3>
     <EnglishSubmissionsTable

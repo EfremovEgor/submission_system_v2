@@ -2,7 +2,7 @@ import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import prisma from "$src/lib/database/prisma.js";
 import { Roles } from "$src/lib/managers/rights/base.server";
 import { checkForChairRights } from "$src/lib/managers/rights/submission/privileges";
-import { error, type ServerLoad } from "@sveltejs/kit";
+import { error, redirect, type ServerLoad } from "@sveltejs/kit";
 
 export const load: ServerLoad = async ({
     url,
@@ -12,6 +12,7 @@ export const load: ServerLoad = async ({
     params,
 }) => {
     const { user } = await parent();
+    if (user == null) redirect(302, "/sign-in");
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
         id: true,
         short_name: true,
@@ -19,6 +20,9 @@ export const load: ServerLoad = async ({
         acronym: true,
         submission_deadline: true,
     });
+    if (conference == null) error(404);
+    const rights = await checkForChairRights(conference.id, user.id);
+    if (rights.role != Roles.chair) error(403);
     const submissions = await prisma.submission.findMany({
         where: {
             conference_id: conference.id,
@@ -57,8 +61,6 @@ export const load: ServerLoad = async ({
             local_id: "asc",
         },
     });
-    const rights = await checkForChairRights(conference.id, user.id);
-    if (rights.role != Roles.chair) error(403);
     const symposiums = await prisma.symposium.findMany({
         where: {
             conference_id: conference.id,

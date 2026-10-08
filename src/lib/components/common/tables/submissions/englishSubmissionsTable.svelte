@@ -55,7 +55,8 @@
     export let topics: object = {};
     export let symposiums: object = {};
 
-    let submissionsToDisplay = submissions;
+    // A copy: sorting in place must not reorder the parent's `submissions`.
+    let submissionsToDisplay = [...submissions];
     let statusFilter: SubmissionStatus | "withdrawn" | null = null;
     let showedTopics = {};
     if (Object.keys(symposiums).length != 0)
@@ -75,6 +76,14 @@
                 if (a.topic.name < b.topic.name) return -1;
                 if (a.topic.name > b.topic.name) return 1;
                 return 0;
+            }
+
+            if (compareBy === "authors") {
+                const authorsOf = (submission: SubmissionIn) =>
+                    submission.authors
+                        .map((author) => author.last_name)
+                        .join(", ");
+                return authorsOf(a).localeCompare(authorsOf(b));
             }
 
             if (
@@ -401,7 +410,8 @@
             [
                 await generateSubmissionsWord({
                     submissions: submissionsToDisplay.filter(
-                        ({ status }) => status == "accepted",
+                        ({ status, withdrawn }) =>
+                            status == "accepted" && !withdrawn,
                     ),
                     conference: {
                         acronym: conference.acronym,

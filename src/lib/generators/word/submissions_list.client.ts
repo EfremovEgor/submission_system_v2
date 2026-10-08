@@ -58,10 +58,18 @@ export const generateSubmissionsWord = async (
                                         break: 1,
                                         italics: true,
                                     }),
+                                    // Not Object.groupBy: it is missing in browsers before Chrome 117 / Safari 17.4.
                                     ...Object.entries(
-                                        Object.groupBy(
-                                            submission.authors,
-                                            ({ affiliation }) => affiliation,
+                                        submission.authors.reduce(
+                                            (groups, author) => {
+                                                (groups[author.affiliation] ??=
+                                                    []).push(author);
+                                                return groups;
+                                            },
+                                            {} as Record<
+                                                string,
+                                                typeof submission.authors
+                                            >,
                                         ),
                                     ).map(
                                         ([key, value]) =>

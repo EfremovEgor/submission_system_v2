@@ -3,11 +3,17 @@ import prisma from "$src/lib/database/prisma.js";
 import { fetchPdfApi } from "$src/lib/server/fetch.js";
 import { type submissionPDFTemplateData } from "$src/lib/server/pdf/submission";
 
-import { json } from "@sveltejs/kit";
+import { authorizedRoute } from "$src/lib/auth.sever";
+import { canViewSubmission } from "$src/lib/managers/rights/submission/guards.server";
+import { redis } from "$src/lib/redis/redis";
+import { error } from "@sveltejs/kit";
 
-export async function GET({ params, fetch }) {
+export async function GET({ params, fetch, cookies }) {
+    const user = await authorizedRoute(cookies, redis);
+    const submissionId = Number(params.id);
+    if (!Number.isInteger(submissionId)) error(404);
     const rawSubmission = await prisma.submission.findFirst({
-        where: { id: parseInt(params.id) },
+        where: { id: submissionId },
         include: {
             authors: {
                 select: {
@@ -16,6 +22,11 @@ export async function GET({ params, fetch }) {
                     affiliation: true,
                     country: true,
                     title: true,
+                    email: true,
+                    is_corresponding: true,
+                },
+                orderBy: {
+                    id: "asc",
                 },
             },
             topic: {
@@ -26,6 +37,8 @@ export async function GET({ params, fetch }) {
             },
         },
     });
+    if (rawSubmission == null || !(await canViewSubmission(user, rawSubmission)))
+        error(404);
     const submission: submissionPDFTemplateData = {
         submission: {
             title: rawSubmission.title,
@@ -52,10 +65,10 @@ export async function GET({ params, fetch }) {
         body: JSON.stringify(submission),
     });
 
+    if (!response.ok) error(502, "PDF generation failed");
     const bytes: Buffer = Buffer.from(
         await (await response.blob()).arrayBuffer(),
     );
-    if (!bytes) return json({ error: true });
     return new Response(bytes, {
         headers: {
             "Content-Type": "application/pdf",

@@ -1,3 +1,4 @@
+import { getSessionUserId } from "$src/lib/auth.sever";
 import { getLayoutUser, getUserById } from "$src/lib/database/users.js";
 import { redis } from "$src/lib/redis/redis.js";
 import { includeOnlyProperties } from "$src/lib/utils.js";
@@ -34,14 +35,14 @@ export const load = async ({ url, cookies, request }) => {
         cookies.delete("SESSION", { path: "/" });
         return data;
     }
-    const userId = await redis.get(sessionToken);
+    const userId = await getSessionUserId(redis, sessionToken);
     if (userId == null) {
         try {
             cookies.delete("SESSION", { path: "/" });
         } catch (error) {}
         return data;
     }
-    let user = await getLayoutUser(parseInt(userId));
+    let user = await getLayoutUser(userId);
     if (user == null) {
         cookies.delete("SESSION", { path: "/" });
         return data;

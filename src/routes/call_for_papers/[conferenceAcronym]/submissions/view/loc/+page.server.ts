@@ -29,6 +29,11 @@ export const load: ServerLoad = async ({ url, cookies, request, parent }) => {
                 select: {
                     first_name: true,
                     last_name: true,
+                    country: true,
+                    affiliation: true,
+                },
+                orderBy: {
+                    id: "asc",
                 },
             },
             title: true,

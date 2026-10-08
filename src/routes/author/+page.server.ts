@@ -1,6 +1,6 @@
 import { updateUserById } from "$src/lib/database/users.js";
 import { redis } from "$src/lib/redis/redis";
-import { getUserFromCookies } from "$src/lib/auth.sever";
+import { authorizedRoute } from "$src/lib/auth.sever";
 import type { Actions } from "@sveltejs/kit";
 import { z } from "zod";
 import { getUserProfile } from "$src/lib/database/users";
@@ -31,7 +31,6 @@ export const load = async ({ parent }: { parent: any }) => {
                     },
                 },
             ],
-            AND: [{ conference_id: 2 }],
         },
         orderBy: {
             created_at: "desc",
@@ -133,14 +132,15 @@ const profileChangeSchema = z.object({
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
+        const user = await authorizedRoute(cookies, redis);
         const formData = Object.fromEntries(await request.formData());
 
         try {
             const results = await profileChangeSchema.parseAsync(formData);
-            const user = await getUserFromCookies(cookies, redis);
-            updateUserById(user.id, results);
+            await updateUserById(user.id, results);
             return { message: "success" };
         } catch (error: any) {
+            if (!(error instanceof z.ZodError)) throw error;
             const { ...rest } = formData;
             const { fieldErrors: errors } = error.flatten();
             return {

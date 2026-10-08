@@ -1,14 +1,18 @@
-import { redirect, type Actions, type Load } from "@sveltejs/kit";
+import { redirect, type Actions } from "@sveltejs/kit";
 import { z } from "zod";
-import { getUserByEmail } from "$lib/database/users";
-import { createBase64UrlSafeString, hashString } from "$lib/utils";
+import { getUserByEmail, updateUserById } from "$lib/database/users";
+import {
+    createBase64UrlSafeString,
+    isLegacyPasswordHash,
+    verifyPassword,
+} from "$lib/utils";
 import { redis } from "$lib/redis/redis";
 import { SESSION_EXPIRATION_TIME } from "$src/config";
+import { createSession, getSessionUserId } from "$src/lib/auth.sever";
 
 export const load = async ({ cookies }) => {
-    const sessionToken = cookies.get("SESSION");
-    if (sessionToken != null) {
-        redirect(302, "/account");
+    if ((await getSessionUserId(redis, cookies.get("SESSION"))) != null) {
+        redirect(302, "/author");
     }
 };
 
@@ -20,9 +24,9 @@ const signInSchema = z
             .email(),
         password: z
             .string({ required_error: "Password is required" })
+            .trim()
             .min(8, { message: "Password must be at least 8 characters" })
-            .max(32, { message: "Password must be less than 32 characters" })
-            .trim(),
+            .max(32, { message: "Password must be less than 32 characters" }),
     })
     .superRefine(async (data, ctx) => {
         const user = await getUserByEmail(data.email);
@@ -44,7 +48,7 @@ const signInSchema = z
             });
             return z.NEVER;
         }
-        if (user.password != hashString(data.password)) {
+        if (!(await verifyPassword(data.password, user.password))) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 message: "Wrong password",
@@ -55,20 +59,21 @@ const signInSchema = z
         }
     });
 export const actions: Actions = {
-    default: async ({ request, cookies, session }) => {
+    default: async ({ request, cookies }) => {
         const formData = Object.fromEntries(await request.formData());
         const sessionToken = createBase64UrlSafeString();
         try {
             const results = await signInSchema.parseAsync(formData);
-            const user: any = await getUserByEmail(results.email);
-            await redis.set(sessionToken, user.id, {
-                EX: SESSION_EXPIRATION_TIME,
-            });
+            const user = await getUserByEmail(results.email);
+            if (isLegacyPasswordHash(user.password))
+                await updateUserById(user.id, { password: results.password });
+            await createSession(redis, sessionToken, user.id);
             cookies.set("SESSION", sessionToken, {
                 path: "/",
                 maxAge: SESSION_EXPIRATION_TIME,
             });
         } catch (error: any) {
+            if (!(error instanceof z.ZodError)) throw error;
             const { ...rest } = formData;
             const { fieldErrors: errors } = error.flatten();
             return {

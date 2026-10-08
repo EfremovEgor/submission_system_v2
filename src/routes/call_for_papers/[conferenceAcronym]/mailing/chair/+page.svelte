@@ -13,6 +13,7 @@
     const submissions = data.submissions;
     let allState = false;
     let preview = false;
+    let sending = false;
     let emailHtml = "<h1>Email Template</h1>";
     let subject = "Sample subject";
     let submissionsToDisplay = submissions.map((submission) => {
@@ -80,6 +81,7 @@
     >
     <button
         class="primary-button-hover button-green outline"
+        disabled={sending}
         on:click={async () => {
             const selectedSubmissions = submissionsToDisplay
                 .filter((submission) => {
@@ -93,20 +95,41 @@
                 alert("No submissions selected!");
                 return;
             }
-            const response = await fetch("", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    template: emailHtml,
-                    subject,
-                    submissions: selectedSubmissions,
-                    settings,
-                }),
-            });
-            if (response.ok) alert("Successfully sent emails!");
-        }}>Send</button
+            if (
+                !confirm(
+                    `Send this email for ${selectedSubmissions.length} submission(s)?`,
+                )
+            )
+                return;
+            sending = true;
+            try {
+                const response = await fetch("", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        template: emailHtml,
+                        subject,
+                        submissions: selectedSubmissions,
+                        settings,
+                    }),
+                });
+                if (response.ok) {
+                    const { sent, failed } = await response.json();
+                    alert(
+                        failed
+                            ? `Sent ${sent} emails, ${failed} failed`
+                            : `Successfully sent ${sent} emails!`,
+                    );
+                } else {
+                    const body = await response.json().catch(() => null);
+                    alert(`Sending failed: ${body?.message ?? response.status}`);
+                }
+            } finally {
+                sending = false;
+            }
+        }}>{sending ? "Sending..." : "Send"}</button
     >
     <article class="mt-5">
         <label>

@@ -18,7 +18,7 @@
 <div class="container">
     <div class="mb-2">
         <BackButton
-            url="/call_for_papers/{conference.acronym}/submissions/view/chair"
+            url="/call_for_papers/{conference.acronym}/submissions/view/loc"
         />
     </div>
     <h3>

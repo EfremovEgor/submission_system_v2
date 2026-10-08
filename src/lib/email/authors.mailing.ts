@@ -11,6 +11,12 @@ export const enum AuthorTemplates {
         "submission_rejected.html",
 }
 
+// Deadlines are optional per conference; an unset one must not break the email.
+const formatDeadline = (deadline: Date | null) =>
+    deadline == null
+        ? "TBA"
+        : `${deadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${deadline.getFullYear()}, ${deadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`;
+
 export const sendSubmissionAccepted = async (
     to: string,
     rawData: {
@@ -33,23 +39,26 @@ export const sendSubmissionAccepted = async (
             short_name: string;
             site_url: string;
             email: string;
-            confirmation_deadline: Date;
-            manuscript_deadline: Date;
-            presentation_deadline: Date;
+            confirmation_deadline: Date | null;
+            manuscript_deadline: Date | null;
+            presentation_deadline: Date | null;
         };
     },
 ) => {
     const subject = `Your paper #${rawData.submission.local_id} has been accepted for presentation at the ${rawData.conference.short_name}`;
-    const confirmationDeadline = rawData.conference.confirmation_deadline;
-    const manuscriptDeadline = rawData.conference.manuscript_deadline;
-    const presentationDeadline = rawData.conference.presentation_deadline;
     let data = {
         ...rawData,
         conference: {
             ...rawData.conference,
-            confirmation_deadline: `${confirmationDeadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${confirmationDeadline.getFullYear()}, ${confirmationDeadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`,
-            manuscript_deadline: `${manuscriptDeadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${manuscriptDeadline.getFullYear()}, ${manuscriptDeadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`,
-            presentation_deadline: `${presentationDeadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${presentationDeadline.getFullYear()}, ${presentationDeadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`,
+            confirmation_deadline: formatDeadline(
+                rawData.conference.confirmation_deadline,
+            ),
+            manuscript_deadline: formatDeadline(
+                rawData.conference.manuscript_deadline,
+            ),
+            presentation_deadline: formatDeadline(
+                rawData.conference.presentation_deadline,
+            ),
         },
     };
     data.submission.presentation_format =
@@ -89,23 +98,26 @@ export const sendSubmissionRejected = async (
             short_name: string;
             site_url: string;
             email: string;
-            confirmation_deadline: Date;
-            manuscript_deadline: Date;
-            presentation_deadline: Date;
+            confirmation_deadline: Date | null;
+            manuscript_deadline: Date | null;
+            presentation_deadline: Date | null;
         };
     },
 ) => {
     const subject = `Your paper #${rawData.submission.local_id} has been rejected for presentation at the ${rawData.conference.short_name}`;
-    const confirmationDeadline = rawData.conference.confirmation_deadline;
-    const manuscriptDeadline = rawData.conference.manuscript_deadline;
-    const presentationDeadline = rawData.conference.presentation_deadline;
     let data = {
         ...rawData,
         conference: {
             ...rawData.conference,
-            confirmation_deadline: `${confirmationDeadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${confirmationDeadline.getFullYear()}, ${confirmationDeadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`,
-            manuscript_deadline: `${manuscriptDeadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${manuscriptDeadline.getFullYear()}, ${manuscriptDeadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`,
-            presentation_deadline: `${presentationDeadline.toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${presentationDeadline.getFullYear()}, ${presentationDeadline.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" })}`,
+            confirmation_deadline: formatDeadline(
+                rawData.conference.confirmation_deadline,
+            ),
+            manuscript_deadline: formatDeadline(
+                rawData.conference.manuscript_deadline,
+            ),
+            presentation_deadline: formatDeadline(
+                rawData.conference.presentation_deadline,
+            ),
         },
     };
     data.submission.presentation_format =

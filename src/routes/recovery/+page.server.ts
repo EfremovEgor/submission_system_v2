@@ -8,11 +8,11 @@ import transporter from "$src/lib/email/setup.server";
 import { renderRecoverPasswordTemplate } from "$src/lib/email/templating.js";
 import { titles } from "$src/lib/aliases.js";
 import { EMAIL } from "$env/static/private";
+import { getSessionUserId, recoveryKey } from "$src/lib/auth.sever";
 
 export const load = async ({ cookies }) => {
-    const sessionToken = cookies.get("SESSION");
-    if (sessionToken != null) {
-        redirect(302, "/account");
+    if ((await getSessionUserId(redis, cookies.get("SESSION"))) != null) {
+        redirect(302, "/author");
     }
 };
 
@@ -51,7 +51,7 @@ export const actions: Actions = {
         try {
             const results = await passwordRecoverySchema.parseAsync(formData);
             const user: any = await getUserByEmail(results.email);
-            await redis.set(recoveryToken, user.id, {
+            await redis.set(recoveryKey(recoveryToken), user.id, {
                 EX: PASSWORD_RESET_EXPIRATION_TIME,
             });
             const html = await renderRecoverPasswordTemplate({
@@ -60,13 +60,27 @@ export const actions: Actions = {
                 last_name: user.last_name,
                 link: constructSiteLink(`/recovery/${recoveryToken}`),
             });
-            transporter.sendMail({
-                from: `${EMAIL}`,
-                to: `${results.email}`,
-                subject: "Password recovery",
-                html: html,
-            });
+            try {
+                await transporter.sendMail({
+                    from: `${EMAIL}`,
+                    to: `${results.email}`,
+                    subject: "Password recovery",
+                    html: html,
+                });
+            } catch (e) {
+                console.error(`Recovery email to ${results.email} failed`, e);
+                const { ...rest } = formData;
+                return {
+                    data: rest,
+                    errors: {
+                        email: [
+                            "Could not send the recovery email, please try again later",
+                        ],
+                    },
+                };
+            }
         } catch (error: any) {
+            if (!(error instanceof z.ZodError)) throw error;
             const { ...rest } = formData;
             const { fieldErrors: errors } = error.flatten();
             return {

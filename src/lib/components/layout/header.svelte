@@ -95,7 +95,7 @@
                             : undefined}
                     >
                         <div class="logout-container">
-                            <a href="/logout">Logout</a>
+                            <a href="/logout" data-sveltekit-preload-data="off">Logout</a>
                             <span>{user.email}</span>
                             <span>{user.first_name} {user.last_name}</span>
                         </div>
@@ -211,7 +211,7 @@
                                 </ul>
                             </details>
                         </li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/logout" data-sveltekit-preload-data="off">Logout</a></li>
                     {:else}
                         <li
                             aria-current={$page.url.pathname === "/author"
@@ -227,7 +227,7 @@
                                 <a href="/author">Author</a>
                             {/if}
                         </li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/logout" data-sveltekit-preload-data="off">Logout</a></li>
                     {/if}
                 {:else}
                     <li

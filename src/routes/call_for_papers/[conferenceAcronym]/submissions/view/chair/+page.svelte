@@ -15,7 +15,7 @@
         });
 
         submissions.forEach((submission) => {
-            if (submission.topic.symposium.name) {
+            if (submission.topic.symposium?.name) {
                 if (!(submission.topic.symposium.name in symposiums))
                     symposiums[submission.topic.symposium.name] = {};
                 if (

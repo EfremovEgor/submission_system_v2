@@ -6,6 +6,7 @@
     import { goto, invalidateAll } from "$app/navigation";
     import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
     import { applyAction, enhance } from "$app/forms";
+    import type { ActionResult } from "@sveltejs/kit";
     import SubmitButton from "$components/common/submitButton.svelte";
     export let data;
     const conference = data.conference;
@@ -13,6 +14,11 @@
     const rights = data.rights;
     let presentationUploadFormBusy = false;
     let manuscriptUploadFormBusy = false;
+    const alertUploadError = (result: ActionResult) => {
+        if (result.type == "failure")
+            alert(result.data?.message ?? "Upload failed");
+        else if (result.type == "error") alert("Upload failed");
+    };
 </script>
 
 <svelte:head>
@@ -61,16 +67,20 @@
                 {/if}
             {/if}
 
-            {#if rights.canDelete && !submission.particiaption_confirmed}
-                <button
-                    on:click={async () => {
-                        if (confirm("Your presentation will be withdrawn!"))
-                            goto("author/delete");
+            {#if rights.canDelete && !submission.particiaption_confirmed && !submission.withdrawn}
+                <form
+                    method="POST"
+                    action="author/delete"
+                    style="display: contents"
+                    on:submit={(event) => {
+                        if (!confirm("Your presentation will be withdrawn!"))
+                            event.preventDefault();
                     }}
-                    class="button-red outline"
                 >
-                    Withdraw
-                </button>
+                    <button type="submit" class="button-red outline">
+                        Withdraw
+                    </button>
+                </form>
             {/if}
 
             <a
@@ -234,6 +244,7 @@
                 presentationUploadFormBusy = true;
                 return async ({ result }) => {
                     presentationUploadFormBusy = false;
+                    alertUploadError(result);
                     await invalidateAll();
                     return;
                 };
@@ -303,6 +314,7 @@
                 manuscriptUploadFormBusy = true;
                 return async ({ result }) => {
                     manuscriptUploadFormBusy = false;
+                    alertUploadError(result);
                     await invalidateAll();
                     return;
                 };

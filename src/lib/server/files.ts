@@ -40,7 +40,7 @@ export const getUploadedFile = async (fileId: string) => {
             id: fileId,
         },
     });
-    if (!existsSync(join(file.path))) {
+    if (file == null || !existsSync(join(file.path))) {
         return null;
     }
     const outputFile = {

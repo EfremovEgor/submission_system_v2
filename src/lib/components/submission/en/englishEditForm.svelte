@@ -40,6 +40,7 @@
         authors.splice(position, 1);
         resolveAuthorsIds();
         authors = authors;
+        isEdited = true;
     };
     const addNewAuthor = () => {
         let author: IAuthor = {
@@ -111,7 +112,7 @@
                 return;
             }
             if (abstractLength > 500) {
-                alert("Title must not exceed 500 words");
+                alert("Abstract must not exceed 500 words");
                 cancel();
                 return;
             }
@@ -124,7 +125,7 @@
                 cancel();
                 return;
             }
-            if (keywordsLength > 500) {
+            if (keywordsLength > 20) {
                 alert("Keywords must not exceed 20 words");
                 cancel();
                 return;
@@ -190,6 +191,7 @@
             class="primary-button-hover mt-3 outline"
             on:click={() => {
                 addNewAuthor();
+                isEdited = true;
             }}>Add more authors</button
         >
         <h4 class="font-normal">Title and Abstract</h4>

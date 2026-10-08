@@ -28,7 +28,7 @@ export const resolveAuthorRights = (
     user: User,
     submission: {
         created_by_id: number;
-        status: SubmissionStatuses;
+        status: SubmissionStatuses | string;
         authors: {
             is_corresponding: boolean;
 

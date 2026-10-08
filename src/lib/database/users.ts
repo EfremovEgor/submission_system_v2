@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import prisma from "./prisma";
-import { hashString } from "$lib/utils";
+import { hashPassword } from "$lib/utils";
 import type { layoutUser } from "../types/interfaces";
 
 export const getUserByEmail = async (email: string) => {
@@ -65,7 +65,7 @@ export const getUserByRegistrationCode = async (token: string) => {
 };
 
 export const createNewUser = async (userCreate: Prisma.UserCreateInput) => {
-    userCreate.password = hashString(userCreate.password);
+    userCreate.password = await hashPassword(userCreate.password);
 
     const user = await prisma.user.create({ data: userCreate });
     return user;
@@ -76,7 +76,7 @@ export const updateUserById = async (
     userUpdate: Prisma.UserUpdateInput,
 ) => {
     if (userUpdate.password != null) {
-        userUpdate.password = hashString(userUpdate.password.toString());
+        userUpdate.password = await hashPassword(userUpdate.password.toString());
     }
     await prisma.user.update({
         where: {
@@ -91,7 +91,7 @@ export const updateUserByEmail = async (
     userUpdate: Prisma.UserUpdateInput,
 ) => {
     if (userUpdate.password != null) {
-        userUpdate.password = hashString(userUpdate.password.toString());
+        userUpdate.password = await hashPassword(userUpdate.password.toString());
     }
     await prisma.user.update({
         where: {

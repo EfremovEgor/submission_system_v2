@@ -22,7 +22,11 @@ export const load: Load = async ({ parent, params }) => {
     });
     if (submission == null) error(404);
     if (submission.conference_id != conference.id) error(404);
-    const rights = await checkForLOCRights(conference.id, data.user.id);
+    const rights = await checkForLOCRights(
+        conference.id,
+        data.user.id,
+        submission.topic_id,
+    );
     if (!rights.canAccess) error(403);
 
     return { submission, rights };

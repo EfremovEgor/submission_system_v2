@@ -13,7 +13,7 @@ export const load = async ({ params, url }) => {
     if (user == null) {
         error(404, { message: "No such confirmation code" });
     }
-    updateUserById(user.id, {
+    await updateUserById(user.id, {
         registration_token: null,
         is_registered: true,
     });

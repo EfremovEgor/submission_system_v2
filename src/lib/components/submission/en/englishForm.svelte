@@ -109,7 +109,7 @@
                 return;
             }
             if (abstractLength > 500) {
-                alert("Title must not exceed 500 words");
+                alert("Abstract must not exceed 500 words");
                 cancel();
                 return;
             }
@@ -122,7 +122,7 @@
                 cancel();
                 return;
             }
-            if (keywordsLength > 500) {
+            if (keywordsLength > 20) {
                 alert("Keywords must not exceed 20 words");
                 cancel();
                 return;

@@ -1,16 +1,32 @@
 import { DOMAIN } from "$env/static/private";
-import { PRIVILEGES, submission_statuses } from "$src/lib/aliases.js";
+import { PRIVILEGES } from "$src/lib/aliases.js";
 import prisma from "$src/lib/database/prisma.js";
 import {
     sendSubmissionAccepted,
     sendSubmissionRejected,
 } from "$src/lib/email/authors.mailing.js";
+import { requireSubmissionChair } from "$src/lib/managers/rights/submission/guards.server";
 import { error, json } from "@sveltejs/kit";
-const acceptSubmission = async (submissionId: number) => {
-    const submission = await prisma.submission.findFirst({
+
+const decide = async (
+    submissionId: number,
+    conferenceAcronym: string,
+    status: "accepted" | "rejected",
+) => {
+    const submission = await prisma.submission.update({
+        where: {
+            id: submissionId,
+        },
+        data: {
+            status,
+        },
         select: {
             id: true,
-            authors: true,
+            authors: {
+                orderBy: {
+                    id: "asc",
+                },
+            },
             local_id: true,
             topic: {
                 select: {
@@ -31,102 +47,50 @@ const acceptSubmission = async (submissionId: number) => {
                 },
             },
         },
-        where: {
-            id: submissionId,
-        },
     });
-    await prisma.submission.update({
-        where: {
-            id: submissionId,
-        },
-        data: {
-            status: "accepted",
-        },
-    });
-    const presentationConfirmationDeadline = new Date(
-        new Date().getTime() + 1000 * 60 * 60 * 24 * 2,
-    );
-    submission.authors.forEach((author) => {
-        sendSubmissionAccepted(author.email, {
-            recipient: author,
-            submission: {
-                local_id: submission.local_id,
-                title: submission.title,
-                link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${submission.id}/${PRIVILEGES.author}`,
-                topic: {
-                    name: submission.topic.name,
+    const send =
+        status == "accepted" ? sendSubmissionAccepted : sendSubmissionRejected;
+    for (const author of submission.authors) {
+        try {
+            await send(author.email, {
+                recipient: author,
+                submission: {
+                    local_id: submission.local_id,
+                    title: submission.title,
+                    link: `${DOMAIN}/call_for_papers/${conferenceAcronym}/submissions/${submission.id}/${PRIVILEGES.author}`,
+                    topic: {
+                        name: submission.topic.name,
+                    },
+                    presentation_format: submission.presentation_format,
                 },
-                presentation_format: submission.presentation_format,
-            },
-            conference: {
-                ...submission.conference,
-            },
-        });
-    });
+                conference: {
+                    ...submission.conference,
+                },
+            });
+        } catch (e) {
+            console.error(
+                `Sending ${status} email for submission ${submission.id} to ${author.email} failed`,
+                e,
+            );
+        }
+    }
 };
-const rejectSubmission = async (submissionId: number) => {
-    const submission = await prisma.submission.findFirst({
-        select: {
-            id: true,
-            authors: true,
-            local_id: true,
-            topic: {
-                select: {
-                    name: true,
-                },
-            },
-            presentation_format: true,
-            title: true,
-            conference: {
-                select: {
-                    name: true,
-                    short_name: true,
-                    site_url: true,
-                    email: true,
-                    manuscript_deadline: true,
-                    presentation_deadline: true,
-                    confirmation_deadline: true,
-                },
-            },
-        },
-        where: {
-            id: submissionId,
-        },
-    });
-    await prisma.submission.update({
-        where: {
-            id: submissionId,
-        },
-        data: {
-            status: "rejected",
-        },
-    });
-    submission.authors.forEach((author) => {
-        sendSubmissionRejected(author.email, {
-            recipient: author,
-            submission: {
-                local_id: submission.local_id,
-                title: submission.title,
-                link: `${DOMAIN}/call_for_papers/scitech2024/submissions/${submission.id}/${PRIVILEGES.author}`,
-                topic: {
-                    name: submission.topic.name,
-                },
-                presentation_format: submission.presentation_format,
-            },
-            conference: {
-                ...submission.conference,
-            },
-        });
-    });
-};
+
 export async function POST({ request, cookies, params }) {
+    const { submission, rights } = await requireSubmissionChair({
+        cookies,
+        params,
+    });
+    if (!rights.canEdit) error(403);
     const {
         action,
     }: {
         action: string;
     } = await request.json();
-    if (!["accept", "reject"].includes(action)) error(422);
-    if (action == "reject") rejectSubmission(parseInt(params.submissionId));
-    if (action == "accept") acceptSubmission(parseInt(params.submissionId));
+    if (action == "reject")
+        await decide(submission.id, params.conferenceAcronym, "rejected");
+    else if (action == "accept")
+        await decide(submission.id, params.conferenceAcronym, "accepted");
+    else error(422);
     return json({ status: "ok" });
 }

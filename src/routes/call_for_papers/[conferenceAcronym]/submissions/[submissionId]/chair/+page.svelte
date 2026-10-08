@@ -10,6 +10,31 @@
     const conference = data.conference;
     $: submission = data.submission;
     const rights = data.rights;
+
+    // Each decision emails all authors, so guard against mis-clicks and double clicks.
+    let deciding = false;
+    const decide = async (action: "accept" | "reject") => {
+        if (
+            !confirm(
+                `${action == "accept" ? "Accept" : "Reject"} submission #${submission.local_id}? All authors will be notified by email.`,
+            )
+        )
+            return;
+        deciding = true;
+        try {
+            const response = await fetch("", {
+                method: "POST",
+                body: JSON.stringify({ action }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!response.ok) alert(`Failed to ${action} submission`);
+            await invalidateAll();
+        } finally {
+            deciding = false;
+        }
+    };
 </script>
 
 <svelte:head>
@@ -29,44 +54,32 @@
             Edit
         </a>
         {#if !submission.withdrawn && !submission.particiaption_confirmed}
-            <button
-                on:click={async () => {
-                    if (confirm("Do you want to delete submission?"))
-                        goto("chair/delete");
+            <form
+                method="POST"
+                action="chair/delete"
+                style="display: contents"
+                on:submit={(event) => {
+                    if (!confirm("Do you want to delete submission?"))
+                        event.preventDefault();
                 }}
-                class="button-red outline"
             >
-                Withdraw
-            </button>
+                <button type="submit" class="button-red outline">
+                    Withdraw
+                </button>
+            </form>
         {/if}
         {#if submission.status != "accepted" && !submission.particiaption_confirmed && !submission.withdrawn}
             <button
-                on:click={async () => {
-                    await fetch("", {
-                        method: "POST",
-                        body: JSON.stringify({ action: "accept" }),
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    });
-                    await invalidateAll();
-                }}
+                disabled={deciding}
+                on:click={() => decide("accept")}
                 class="button-green outline">Accept</button
             >
         {/if}
         {#if submission.status != "rejected" && !submission.particiaption_confirmed && !submission.withdrawn}
             <button
                 class="button-red outline"
-                on:click={async () => {
-                    await fetch("", {
-                        method: "POST",
-                        body: JSON.stringify({ action: "reject" }),
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    });
-                    await invalidateAll();
-                }}>Reject</button
+                disabled={deciding}
+                on:click={() => decide("reject")}>Reject</button
             >
         {/if}
 
