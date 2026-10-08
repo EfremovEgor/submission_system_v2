@@ -272,13 +272,13 @@
         <h3>My Submissions</h3>
         {#if !rawSubmissions}
             <p>
-                <a href="/call_for_papers/issf2025/submit?lang=en"
+                <a href="/call_for_papers/scitech2026/submit?lang=en"
                     >Submit a new abstract</a
                 >
             </p>
         {:else}
             <p>
-                <a href="/call_for_papers/issf2025/submit?lang=en"
+                <a href="/call_for_papers/scitech2026/submit?lang=en"
                     >Submit a new abstract</a
                 >
             </p>
