@@ -1,7 +1,10 @@
 import { Queue } from "bullmq";
+import { REDIS_URL } from "$env/static/private";
+
+const redisUrl = new URL(REDIS_URL);
 export const connection = {
-    port: 6380,
-    host: "localhost",
+    host: redisUrl.hostname,
+    port: Number(redisUrl.port) || 6379,
 };
 export const submissionReviewProcessQueue = new Queue(
     "submission_review_process",
