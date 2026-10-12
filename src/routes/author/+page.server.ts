@@ -1,3 +1,4 @@
+import { signInUrl } from "$src/lib/redirects";
 import { updateUserById } from "$src/lib/database/users.js";
 import { redis } from "$src/lib/redis/redis";
 import { authorizedRoute } from "$src/lib/auth.sever";
@@ -12,10 +13,10 @@ import {
 } from "$src/lib/utils.client";
 
 /** @type {import('@sveltejs/kit').Load} */
-export const load = async ({ parent }: { parent: any }) => {
+export const load = async ({ parent, url }: { parent: any; url: URL }) => {
     const data = await parent();
 
-    if (data.user == null) redirect(302, "/sign-in");
+    if (data.user == null) redirect(302, signInUrl(url));
     const userProfile = await getUserProfile(data.user.id);
     const submissions = await prisma.submission.findMany({
         where: {

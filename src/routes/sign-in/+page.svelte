@@ -3,6 +3,8 @@
     import type { ActionData } from "./$types";
     import FormInput from "$components/common/authForm/formInput.svelte";
     import { enhance } from "$app/forms";
+    import { page } from "$app/stores";
+    import { getRedirectParam, withRedirect } from "$src/lib/redirects";
     export let form: ActionData;
     const formSubmitHandler = () => {
         return async ({ result, update }: { result: any; update: any }) => {
@@ -46,7 +48,13 @@
                 <SubmitButton Class="mt-4 w-36 sm:w-28 ">Sign in</SubmitButton>
                 <p class="mt-3">
                     Don't have an account?
-                    <a class="bare-link" href="/sign-up">Sign up now</a>.
+                    <a
+                        class="bare-link"
+                        href={withRedirect(
+                            "/sign-up",
+                            getRedirectParam($page.url),
+                        )}>Sign up now</a
+                    >.
                 </p>
                 <p class="mt-3">
                     Forgot password?

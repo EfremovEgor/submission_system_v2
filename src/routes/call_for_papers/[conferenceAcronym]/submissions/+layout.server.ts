@@ -1,7 +1,8 @@
+import { signInUrl } from "$src/lib/redirects";
 import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import { redirect, type Load } from "@sveltejs/kit";
 
-export const load: Load = async ({ parent, params }) => {
+export const load: Load = async ({ parent, params, url }) => {
     const data = await parent();
 
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
@@ -12,7 +13,7 @@ export const load: Load = async ({ parent, params }) => {
         submission_deadline: true,
         confirmation_deadline: true,
     });
-    if (data.user == null) redirect(302, "/sign-in");
+    if (data.user == null) redirect(302, signInUrl(url));
 
     return { conference: conference };
 };

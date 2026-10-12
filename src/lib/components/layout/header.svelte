@@ -4,7 +4,19 @@
     import { page } from "$app/stores";
     import { UserRound } from "lucide-svelte";
     import type { layoutUser } from "$src/lib/types/interfaces";
+    import {
+        getRedirectParam,
+        safeRedirectPath,
+        withRedirect,
+    } from "$src/lib/redirects";
     export let user: layoutUser;
+    // Sign in / Create account bring the visitor back to the current page; on the auth
+    // pages themselves they keep the target those pages already carry.
+    $: returnTo =
+        $page.url.pathname == "/"
+            ? null
+            : safeRedirectPath($page.url.pathname + $page.url.search, "") ||
+              getRedirectParam($page.url);
     const handleChange = ({ currentTarget }: { currentTarget: any }) => {
         const { value } = currentTarget;
 
@@ -108,14 +120,14 @@
                             ? "page"
                             : undefined}
                     >
-                        <a href="/sign-in">Sign in</a>
+                        <a href={withRedirect("/sign-in", returnTo)}>Sign in</a>
                     </li>
                     <li
                         aria-current={$page.url.pathname === "/sign-up"
                             ? "page"
                             : undefined}
                     >
-                        <a href="/sign-up">Create account</a>
+                        <a href={withRedirect("/sign-up", returnTo)}>Create account</a>
                     </li>
                 </ul>
             {/if}
@@ -235,14 +247,14 @@
                             ? "page"
                             : undefined}
                     >
-                        <a href="/sign-in">Sign in</a>
+                        <a href={withRedirect("/sign-in", returnTo)}>Sign in</a>
                     </li>
                     <li
                         aria-current={$page.url.pathname === "/sign-up"
                             ? "page"
                             : undefined}
                     >
-                        <a href="/sign-up">Create account</a>
+                        <a href={withRedirect("/sign-up", returnTo)}>Create account</a>
                     </li>
                 {/if}
             </ul>

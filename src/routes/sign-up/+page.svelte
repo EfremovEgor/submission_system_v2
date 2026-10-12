@@ -3,6 +3,8 @@
     import type { ActionData } from "./$types";
     import FormInput from "$components/common/authForm/formInput.svelte";
     import { enhance } from "$app/forms";
+    import { page } from "$app/stores";
+    import { getRedirectParam, withRedirect } from "$src/lib/redirects";
     export let form: ActionData;
     let emailIsSent = false;
     const formSubmitHandler = () => {
@@ -92,7 +94,15 @@
                     >
                     <p class="mt-3">
                         Already have an account?
-                        <a class="bare-link" href="/sign-in"> Sign in now</a>.
+                        <a
+                            class="bare-link"
+                            href={withRedirect(
+                                "/sign-in",
+                                getRedirectParam($page.url),
+                            )}
+                        >
+                            Sign in now</a
+                        >.
                     </p>
                 </form>
             {:else}

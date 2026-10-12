@@ -1,3 +1,4 @@
+import { signInUrl } from "$src/lib/redirects";
 import { DOMAIN, EMAIL } from "$env/static/private";
 import { presentation_formats, PRIVILEGES, titles } from "$src/lib/aliases";
 import { authorizedRoute } from "$src/lib/auth.sever";
@@ -20,9 +21,9 @@ import { Prisma } from "@prisma/client";
 import { error, redirect, type Actions, type Load } from "@sveltejs/kit";
 
 /** @type {import('@sveltejs/kit').Load} */
-export const load: Load = async ({ parent, params }) => {
+export const load: Load = async ({ parent, params, url }) => {
     const data = await parent();
-    if (data.user == null) redirect(302, "/sign-in");
+    if (data.user == null) redirect(302, signInUrl(url));
     const userProfile = await getUserProfile(data.user.id);
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
         short_name: true,

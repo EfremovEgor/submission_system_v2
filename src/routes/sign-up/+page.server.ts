@@ -9,10 +9,15 @@ import {
 import { createBase64UrlSafeString } from "$lib/utils";
 import { sendRegistrationEmail } from "$src/lib/email/mailing.js";
 import { getSessionUserId } from "$src/lib/auth.sever";
+import {
+    getRedirectParam,
+    REDIRECT_PARAM,
+    safeRedirectPath,
+} from "$src/lib/redirects";
 import { redis } from "$lib/redis/redis";
-export const load = async ({ cookies }) => {
+export const load = async ({ cookies, url }) => {
     if ((await getSessionUserId(redis, cookies.get("SESSION"))) != null) {
-        redirect(302, "/author");
+        redirect(302, safeRedirectPath(getRedirectParam(url)));
     }
 };
 
@@ -59,12 +64,18 @@ const registerSchema = z
         },
     );
 export const actions: Actions = {
-    default: async ({ request }) => {
+    default: async ({ request, url }) => {
         const formData = Object.fromEntries(await request.formData());
         try {
             const results = await registerSchema.parseAsync(formData);
             const registrationToken = createBase64UrlSafeString();
-            const link = `${DOMAIN}/email_confirmation?token=${registrationToken}`;
+            // The confirmation link carries on the page the visitor was heading to.
+            const redirectTo = safeRedirectPath(getRedirectParam(url), "");
+            const link =
+                `${DOMAIN}/email_confirmation?token=${registrationToken}` +
+                (redirectTo
+                    ? `&${REDIRECT_PARAM}=${encodeURIComponent(redirectTo)}`
+                    : "");
             const { password_confirm, ...data } = results;
             const user = await getUserByEmail(data.email);
             if (user == null)

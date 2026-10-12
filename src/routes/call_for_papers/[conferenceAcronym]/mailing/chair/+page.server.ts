@@ -1,3 +1,4 @@
+import { signInUrl } from "$src/lib/redirects";
 import { getConferenceByAcronym } from "$src/lib/database/conferences";
 import prisma from "$src/lib/database/prisma.js";
 import { Roles } from "$src/lib/managers/rights/base.server";
@@ -12,7 +13,7 @@ export const load: ServerLoad = async ({
     params,
 }) => {
     const { user } = await parent();
-    if (user == null) redirect(302, "/sign-in");
+    if (user == null) redirect(302, signInUrl(url));
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
         id: true,
         short_name: true,

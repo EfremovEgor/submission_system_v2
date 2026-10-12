@@ -3,6 +3,11 @@ import {
     updateUserById,
 } from "$lib/database/users.js";
 import { error } from "@sveltejs/kit";
+import {
+    getRedirectParam,
+    safeRedirectPath,
+    withRedirect,
+} from "$src/lib/redirects";
 
 export const load = async ({ params, url }) => {
     const code = url.searchParams.get("token");
@@ -17,4 +22,10 @@ export const load = async ({ params, url }) => {
         registration_token: null,
         is_registered: true,
     });
+    return {
+        signInLink: withRedirect(
+            "/sign-in",
+            safeRedirectPath(getRedirectParam(url), "") || null,
+        ),
+    };
 };

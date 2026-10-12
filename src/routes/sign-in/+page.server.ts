@@ -9,10 +9,11 @@ import {
 import { redis } from "$lib/redis/redis";
 import { SESSION_EXPIRATION_TIME } from "$src/config";
 import { createSession, getSessionUserId } from "$src/lib/auth.sever";
+import { getRedirectParam, safeRedirectPath } from "$src/lib/redirects";
 
-export const load = async ({ cookies }) => {
+export const load = async ({ cookies, url }) => {
     if ((await getSessionUserId(redis, cookies.get("SESSION"))) != null) {
-        redirect(302, "/author");
+        redirect(302, safeRedirectPath(getRedirectParam(url)));
     }
 };
 
@@ -59,7 +60,7 @@ const signInSchema = z
         }
     });
 export const actions: Actions = {
-    default: async ({ request, cookies }) => {
+    default: async ({ request, cookies, url }) => {
         const formData = Object.fromEntries(await request.formData());
         const sessionToken = createBase64UrlSafeString();
         try {
@@ -81,6 +82,6 @@ export const actions: Actions = {
                 errors,
             };
         }
-        redirect(302, "/author");
+        redirect(302, safeRedirectPath(getRedirectParam(url)));
     },
 };
