@@ -1,7 +1,11 @@
 import { Queue } from "bullmq";
-import { REDIS_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
-const redisUrl = new URL(REDIS_URL);
+// Read at runtime from the environment (.env), not baked into the build.
+const { REDIS_URL } = env;
+
+// Env is empty while building; the fallback only keeps the build from failing.
+const redisUrl = new URL(REDIS_URL || "redis://localhost:6379");
 // BullMQ lives in its own Redis DB: sessions use raw keys in DB 0,
 // so queue keys there (e.g. the numeric "bull:...:id") would be accepted as session tokens.
 export const connection = {

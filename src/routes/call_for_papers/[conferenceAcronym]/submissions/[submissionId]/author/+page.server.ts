@@ -1,9 +1,12 @@
-import { UPLOADS_FOLDER } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import prisma from "$src/lib/database/prisma";
 import { error, fail, type Actions, type RequestEvent } from "@sveltejs/kit";
 import { extname, join } from "path";
 import { uploadFile } from "$src/lib/server/files";
 import { requireSubmissionAuthor } from "$src/lib/managers/rights/submission/guards.server";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { UPLOADS_FOLDER } = env;
 
 const uploadSubmissionFile = async (
     { request, params, cookies }: RequestEvent,

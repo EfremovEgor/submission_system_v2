@@ -1,6 +1,10 @@
-import { EMAIL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import transporter from "./setup.server";
 import { EmailTemplates, renderEmailTemplate } from "./templating";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { EMAIL } = env;
+
 export const MAILING_SETTINGS = {
     from: EMAIL,
 };

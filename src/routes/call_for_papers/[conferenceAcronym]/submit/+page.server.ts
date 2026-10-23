@@ -1,5 +1,5 @@
 import { signInUrl } from "$src/lib/redirects";
-import { DOMAIN, EMAIL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { presentation_formats, PRIVILEGES, titles } from "$src/lib/aliases";
 import { authorizedRoute } from "$src/lib/auth.sever";
 import { getConferenceByAcronym } from "$src/lib/database/conferences";
@@ -20,6 +20,9 @@ import { redis } from "$src/lib/redis/redis";
 import { Prisma } from "@prisma/client";
 import { error, fail, redirect, type Actions, type Load } from "@sveltejs/kit";
 import { findNonEnglishInSubmission } from "$src/lib/english";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { DOMAIN, EMAIL } = env;
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load: Load = async ({ parent, params, url }) => {

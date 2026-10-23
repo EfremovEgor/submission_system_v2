@@ -1,10 +1,9 @@
 import nodemailer from "nodemailer";
-import {
-    EMAIL,
-    EMAIL_HOST,
-    EMAIL_PASSWORD,
-    EMAIL_PORT,
-} from "$env/static/private";
+import { env } from "$env/dynamic/private";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { EMAIL, EMAIL_HOST, EMAIL_PASSWORD, EMAIL_PORT } = env;
+
 let transporter = nodemailer.createTransport({
     port: parseInt(EMAIL_PORT),
     host: EMAIL_HOST,

@@ -4,7 +4,10 @@ import { createHash, randomBytes, scrypt, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import type { RedisClientType } from "redis";
 import { getUserById } from "./database/users";
-import { DOMAIN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { DOMAIN } = env;
 
 export const createBase64UrlSafeString = (size: number = 32): string => {
     return randomBytes(size).toString("base64url");

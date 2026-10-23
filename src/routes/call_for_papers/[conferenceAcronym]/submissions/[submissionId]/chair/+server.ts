@@ -1,4 +1,4 @@
-import { DOMAIN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { PRIVILEGES } from "$src/lib/aliases.js";
 import prisma from "$src/lib/database/prisma.js";
 import {
@@ -7,6 +7,9 @@ import {
 } from "$src/lib/email/authors.mailing.js";
 import { requireSubmissionChair } from "$src/lib/managers/rights/submission/guards.server";
 import { error, json } from "@sveltejs/kit";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { DOMAIN } = env;
 
 const decide = async (
     submissionId: number,

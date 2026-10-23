@@ -4,7 +4,11 @@ import { connection, submissionReviewProcessQueue } from "../queues";
 import { renderSubmissionUnderReviewTemplate } from "$src/lib/email/templating";
 import { presentation_formats, titles } from "$src/lib/aliases";
 import transporter from "$src/lib/email/setup.server";
-import { EMAIL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { EMAIL } = env;
+
 export interface submissionReviewProcessQueueData {
     id: number;
 }

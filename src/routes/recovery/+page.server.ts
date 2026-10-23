@@ -7,8 +7,11 @@ import { PASSWORD_RESET_EXPIRATION_TIME } from "$src/config";
 import transporter from "$src/lib/email/setup.server";
 import { renderRecoverPasswordTemplate } from "$src/lib/email/templating.js";
 import { titles } from "$src/lib/aliases.js";
-import { EMAIL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { getSessionUserId, recoveryKey } from "$src/lib/auth.sever";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { EMAIL } = env;
 
 export const load = async ({ cookies }) => {
     if ((await getSessionUserId(redis, cookies.get("SESSION"))) != null) {

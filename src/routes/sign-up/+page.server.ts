@@ -1,6 +1,6 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import { z } from "zod";
-import { DOMAIN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import {
     createNewUser,
     getUserByEmail,
@@ -16,6 +16,10 @@ import {
     safeRedirectPath,
 } from "$src/lib/redirects";
 import { redis } from "$lib/redis/redis";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { DOMAIN } = env;
+
 export const load = async ({ cookies, url }) => {
     if ((await getSessionUserId(redis, cookies.get("SESSION"))) != null) {
         redirect(302, safeRedirectPath(getRedirectParam(url)));

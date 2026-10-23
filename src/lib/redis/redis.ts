@@ -1,6 +1,9 @@
-import { REDIS_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { createClient } from "redis";
 import type { RedisClientType } from "redis";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { REDIS_URL } = env;
 
 export const redis = createClient({
     url: REDIS_URL,

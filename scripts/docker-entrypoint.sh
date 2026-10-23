@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
+set -e
 
 echo "Apply database migrations"
+node -r dotenv/config node_modules/prisma/build/index.js migrate deploy --schema prisma/schema
 
-npx prisma migrate deploy
-
-node -r dotenv/config build
+exec node -r dotenv/config build

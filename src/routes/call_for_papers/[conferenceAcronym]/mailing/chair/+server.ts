@@ -1,4 +1,4 @@
-import { DOMAIN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { presentation_formats, PRIVILEGES, titles } from "$src/lib/aliases.js";
 import { authorizedRoute } from "$src/lib/auth.sever";
 import { getConferenceByAcronym } from "$src/lib/database/conferences.js";
@@ -12,6 +12,9 @@ import transporter from "$src/lib/email/setup.server.js";
 import { checkForChairRights } from "$src/lib/managers/rights/submission/privileges";
 import { redis } from "$src/lib/redis/redis";
 import { error, json } from "@sveltejs/kit";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { DOMAIN } = env;
 
 export async function POST({ request, cookies, params }) {
     const user = await authorizedRoute(cookies, redis);

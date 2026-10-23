@@ -1,4 +1,7 @@
-import { PDF_API_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
+
+// Read at runtime from the environment (.env), not baked into the build.
+const { PDF_API_URL } = env;
 
 export const fetchPdfApi = async (
     fetch: CallableFunction,

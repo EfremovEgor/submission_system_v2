@@ -43,6 +43,25 @@ services:
         restart: unless-stopped
         ports:
             - "127.0.0.1:3003:3000"
+    # The site itself. The image is built locally and pushed by scripts/deploy.sh;
+    # the server only pulls it. Host networking keeps the localhost URLs from .env
+    # (postgres, redis, pdf_api) working; nginx proxies to 127.0.0.1:3000.
+    app:
+        image: ghcr.io/efremovegor/confchair:${CONFCHAIR_TAG:-latest}
+        restart: unless-stopped
+        network_mode: host
+        depends_on:
+            - postgres
+            - redis
+            - pdf_api
+        environment:
+            HOST: 127.0.0.1
+            PORT: 3000
+            BODY_SIZE_LIMIT: Infinity
+            TZ: Europe/Moscow
+        volumes:
+            - ./.env:/app/.env:ro
+            - ./uploads:/app/uploads
 volumes:
     postgres_data:
     redis_data:
