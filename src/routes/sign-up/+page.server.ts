@@ -9,6 +9,7 @@ import {
 import { createBase64UrlSafeString } from "$lib/utils";
 import { sendRegistrationEmail } from "$src/lib/email/mailing.js";
 import { getSessionUserId } from "$src/lib/auth.sever";
+import { englishOnlyMessage, isEnglishOnly } from "$src/lib/english";
 import {
     getRedirectParam,
     REDIRECT_PARAM,
@@ -26,17 +27,20 @@ const registerSchema = z
         email: z
             .string({ required_error: "Email name is required" })
             .max(64, { message: "Email must be less than 64 characters" })
-            .email(),
+            .email()
+            .refine(isEnglishOnly, { message: englishOnlyMessage("Email") }),
         first_name: z
             .string({ required_error: "First name is required" })
             .trim()
             .min(1, { message: "First name must be at least 1 character" })
-            .max(64, { message: "First name must be less than 64 characters" }),
+            .max(64, { message: "First name must be less than 64 characters" })
+            .refine(isEnglishOnly, { message: englishOnlyMessage("First name") }),
         last_name: z
             .string({ required_error: "Last name is required" })
             .trim()
             .min(1, { message: "Last name must be at least 1 character" })
-            .max(64, { message: "Last name must be less than 64 characters" }),
+            .max(64, { message: "Last name must be less than 64 characters" })
+            .refine(isEnglishOnly, { message: englishOnlyMessage("Last name") }),
         password: z
             .string({ required_error: "Password is required" })
             .trim()

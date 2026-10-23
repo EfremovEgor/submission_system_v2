@@ -11,7 +11,8 @@ import {
     requireSubmissionChair,
 } from "$src/lib/managers/rights/submission/guards.server";
 import { Prisma } from "@prisma/client";
-import { error, redirect, type Actions, type Load } from "@sveltejs/kit";
+import { error, fail, redirect, type Actions, type Load } from "@sveltejs/kit";
+import { findNonEnglishInSubmission } from "$src/lib/english";
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load: Load = async ({ parent, params, url }) => {
@@ -83,6 +84,8 @@ export const actions: Actions = {
         );
         if (topic == null) error(400, "Unknown topic");
         const authors = parseSubmissionAuthors(formData.authors);
+        const nonEnglish = findNonEnglishInSubmission(formData, authors);
+        if (nonEnglish != null) return fail(400, { message: nonEnglish });
         const updatedSubmissionData: Prisma.SubmissionUpdateInput = {
             title: String(formData.title),
             abstract: String(formData.abstract),

@@ -7,10 +7,13 @@ import { z } from "zod";
 import { getUserProfile } from "$src/lib/database/users";
 import { error, redirect } from "@sveltejs/kit";
 import prisma from "$src/lib/database/prisma";
-import {
-    getPatternFromLanguages,
-    languageIsAvailable,
-} from "$src/lib/utils.client";
+import { englishOnlyMessage, isEnglishOnly } from "$src/lib/english";
+
+// Profile fields must be in English.
+const english = (schema: z.ZodTypeAny, label: string) =>
+    schema.refine((value) => typeof value != "string" || isEnglishOnly(value), {
+        message: englishOnlyMessage(label),
+    });
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load = async ({ parent, url }: { parent: any; url: URL }) => {
@@ -69,66 +72,73 @@ export const load = async ({ parent, url }: { parent: any; url: URL }) => {
 };
 
 const profileChangeSchema = z.object({
-    title: z.string().trim(),
-    first_name: z
-        .string({ required_error: "First name is required" })
-        .trim()
-        .min(1, { message: "First name must be at least 1 character" })
-        .max(64, { message: "First name must be less than 64 characters" })
-        .regex(
-            getPatternFromLanguages(["en"]),
-            "First name must contain only english characters",
-        ),
-
-    last_name: z
-        .string({ required_error: "Last name is required" })
-        .trim()
-        .min(1, { message: "Last name must be at least 1 character" })
-        .max(64, { message: "Last name must be less than 64 characters" })
-        .regex(
-            getPatternFromLanguages(["en"]),
-            "Last name must contain only english characters",
-        ),
-    middle_name: z
-        .string()
-        .trim()
-        .max(64, { message: "Middle name must be less than 64 characters" })
-        .optional(),
-
-    affiliation: z
-        .string()
-        .trim()
-        .min(1)
-        .max(64, { message: "Affiliation must be less than 64 characters" })
-        .regex(
-            getPatternFromLanguages(["en"]),
-            "Affiliation must contain only english characters",
-        ),
-    country: z
-        .string()
-        .trim()
-        .max(64, { message: "country must be less than 64 characters" })
-        .optional(),
-    city: z
-        .string()
-        .trim()
-        .max(64, { message: "City must be less than 64 characters" })
-        .optional(),
-    state: z
-        .string()
-        .trim()
-        .max(64, { message: "State must be less than 64 characters" })
-        .optional(),
-    orcid_id: z
-        .string()
-        .trim()
-        .max(64, { message: "Orcid ID must be less than 64 characters" })
-        .optional(),
-    web_page: z
-        .string()
-        .trim()
-        .max(64, { message: "Web Page must be less than 64 characters" })
-        .optional(),
+    title: english(z.string().trim(), "Title"),
+    first_name: english(
+        z
+            .string({ required_error: "First name is required" })
+            .trim()
+            .min(1, { message: "First name must be at least 1 character" })
+            .max(64, { message: "First name must be less than 64 characters" }),
+        "First name",
+    ),
+    last_name: english(
+        z
+            .string({ required_error: "Last name is required" })
+            .trim()
+            .min(1, { message: "Last name must be at least 1 character" })
+            .max(64, { message: "Last name must be less than 64 characters" }),
+        "Last name",
+    ),
+    middle_name: english(
+        z
+            .string()
+            .trim()
+            .max(64, { message: "Middle name must be less than 64 characters" }),
+        "Middle name",
+    ).optional(),
+    affiliation: english(
+        z
+            .string()
+            .trim()
+            .min(1)
+            .max(64, { message: "Affiliation must be less than 64 characters" }),
+        "Affiliation",
+    ),
+    country: english(
+        z
+            .string()
+            .trim()
+            .max(64, { message: "country must be less than 64 characters" }),
+        "Country",
+    ).optional(),
+    city: english(
+        z
+            .string()
+            .trim()
+            .max(64, { message: "City must be less than 64 characters" }),
+        "City",
+    ).optional(),
+    state: english(
+        z
+            .string()
+            .trim()
+            .max(64, { message: "State must be less than 64 characters" }),
+        "State",
+    ).optional(),
+    orcid_id: english(
+        z
+            .string()
+            .trim()
+            .max(64, { message: "Orcid ID must be less than 64 characters" }),
+        "ORCID ID",
+    ).optional(),
+    web_page: english(
+        z
+            .string()
+            .trim()
+            .max(64, { message: "Web Page must be less than 64 characters" }),
+        "Web page",
+    ).optional(),
 });
 
 export const actions: Actions = {

@@ -1,28 +1,24 @@
 import { titles } from "./aliases";
+import { findNonEnglishCharacter, isEnglishOnly } from "./english";
 
-const languagePatterns = {
-    en: {
-        general:
-            /^[a-zA-Z0-9()\“\”@*_\-\\\+!\;\:=#$%^&*\’,\’?\/\»\«\–:."\'\][\s]+$/,
-        onlyLettersAndNumbers: /^[a-zA-Z0-9\s\-]+$/,
-    },
-};
-export const getPatternFromLanguages = (
-    languages: Array<"en">,
-    type: "general" | "onlyLettersAndNumbers" = "general",
-) => {
-    const pattern = languagePatterns.en[type];
-    return pattern;
-};
+// Blocks typing or pasting non-English letters into an input.
 export const preventLanguages = (
     allowedLanguages: Array<string> | null,
-    event: KeyboardEvent,
+    event: Event,
 ) => {
     if (allowedLanguages == null) {
         return true;
     }
-    const pattern = getPatternFromLanguages(allowedLanguages);
-    if (!pattern.test(event.key)) {
+    let text = "";
+    if (typeof ClipboardEvent != "undefined" && event instanceof ClipboardEvent)
+        text = event.clipboardData?.getData("text") ?? "";
+    else if (
+        typeof KeyboardEvent != "undefined" &&
+        event instanceof KeyboardEvent &&
+        event.key.length == 1
+    )
+        text = event.key;
+    if (findNonEnglishCharacter(text) != null) {
         event.preventDefault();
         return false;
     }
@@ -40,8 +36,7 @@ export const languageIsAvailable = (
     if (allowedLanguages == null) {
         return true;
     }
-    const pattern = getPatternFromLanguages(allowedLanguages, options.type);
-    return pattern.test(value);
+    return isEnglishOnly(value);
 };
 interface formatAuthorsOptions {
     additionalInfo?: boolean;

@@ -18,7 +18,8 @@ import {
 import { SubmissionReviewProcessQueueManager } from "$src/lib/queue/consumers/submissions";
 import { redis } from "$src/lib/redis/redis";
 import { Prisma } from "@prisma/client";
-import { error, redirect, type Actions, type Load } from "@sveltejs/kit";
+import { error, fail, redirect, type Actions, type Load } from "@sveltejs/kit";
+import { findNonEnglishInSubmission } from "$src/lib/english";
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load: Load = async ({ parent, params, url }) => {
@@ -100,6 +101,8 @@ export const actions: Actions = {
         );
         if (topic == null) error(400, "Unknown topic");
         const authors = parseSubmissionAuthors(formData.authors);
+        const nonEnglish = findNonEnglishInSubmission(formData, authors);
+        if (nonEnglish != null) return fail(400, { message: nonEnglish });
         const submission: Prisma.SubmissionCreateInput = {
             created_by: {
                 connect: {

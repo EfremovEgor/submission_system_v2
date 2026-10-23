@@ -9,6 +9,7 @@
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
     import { languageIsAvailable } from "$src/lib/utils.client";
+    import { findNonEnglishInSubmission } from "$src/lib/english";
     import { CircleAlert } from "lucide-svelte";
 
     let busy = false;
@@ -159,6 +160,20 @@
                 return;
             }
 
+            const nonEnglish = findNonEnglishInSubmission(
+                {
+                    title: submission.title,
+                    abstract: submission.abstarct,
+                    keywords: submission.keywords,
+                    funding: submission.funding,
+                },
+                authors,
+            );
+            if (nonEnglish != null) {
+                alert(nonEnglish);
+                cancel();
+                return;
+            }
             formData.append("authors", JSON.stringify(authors));
             busy = true;
             return async ({ result }) => {
@@ -166,6 +181,8 @@
                     return;
                 }
                 busy = false;
+                if (result.type == "failure")
+                    alert(result.data?.message ?? "Submission failed");
                 if (result.type == "redirect") {
                     goto(result.location);
                 }
