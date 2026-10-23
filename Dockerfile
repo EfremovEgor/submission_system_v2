@@ -1,5 +1,5 @@
-# Built locally (scripts/deploy.sh) and pulled by the server: the VPS is too small
-# to run the vite build next to everything else.
+# Built by the Image workflow and pulled by the server (scripts/deploy.sh): the VPS
+# is too small to run the vite build next to everything else.
 FROM node:24-bookworm-slim AS build
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends openssl \

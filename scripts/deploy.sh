@@ -1,29 +1,35 @@
 #!/bin/bash
-# Builds the image on this machine, pushes it to GHCR and makes the server pull it.
+# Deploys the current main: waits for the Image workflow to publish the image of
+# this commit to GHCR, then makes the server pull and restart it.
 # The server never builds: the vite build doesn't fit next to everything else there.
 #
-# Usage: scripts/deploy.sh            (deploys the current HEAD, must be pushed)
-# Needs: docker, gh (logged in, write:packages), ssh access to the server.
+# Usage: scripts/deploy.sh
+# Needs: gh (logged in), ssh access to the server.
 set -euo pipefail
 
 SERVER="${SERVER:-root@vm737980.vps.masterhost.tech}"
 APP_DIR="/var/www/confchair/main_site"
-IMAGE="ghcr.io/efremovegor/confchair"
+REPO="EfremovEgor/submission_system_v2"
 
 cd "$(dirname "$0")/.."
 if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
-    echo "Commit your changes first: the image is tagged with the commit." >&2
+    echo "Commit your changes first: the image is built from the pushed commit." >&2
     exit 1
 fi
-TAG="$(git rev-parse --short HEAD)"
 git push origin HEAD:main
+SHA="$(git rev-parse HEAD)"
+TAG="sha-$(git rev-parse --short=7 HEAD)"
 
-gh auth token | docker login ghcr.io -u "$(gh api user -q .login)" --password-stdin
-docker build --platform linux/amd64 \
-    --label "org.opencontainers.image.source=https://github.com/EfremovEgor/submission_system_v2" \
-    -t "$IMAGE:$TAG" -t "$IMAGE:latest" .
-docker push "$IMAGE:$TAG"
-docker push "$IMAGE:latest"
+echo "Waiting for the image of $TAG..."
+RUN=""
+for _ in $(seq 1 30); do
+    RUN="$(gh run list --repo "$REPO" --workflow image.yml --commit "$SHA" \
+        --limit 1 --json databaseId -q '.[0].databaseId')"
+    [ -n "$RUN" ] && break
+    sleep 5
+done
+[ -n "$RUN" ] || { echo "No Image workflow run for $SHA" >&2; exit 1; }
+gh run watch "$RUN" --repo "$REPO" --exit-status --interval 10 >/dev/null
 
 ssh "$SERVER" "set -e
     cd $APP_DIR
@@ -31,4 +37,4 @@ ssh "$SERVER" "set -e
     CONFCHAIR_TAG=$TAG docker compose pull app
     CONFCHAIR_TAG=$TAG docker compose up -d app
     docker image prune -f >/dev/null"
-echo "Deployed $IMAGE:$TAG"
+echo "Deployed $TAG"

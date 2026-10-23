@@ -43,11 +43,12 @@ services:
         restart: unless-stopped
         ports:
             - "127.0.0.1:3003:3000"
-    # The site itself. The image is built locally and pushed by scripts/deploy.sh;
-    # the server only pulls it. Host networking keeps the localhost URLs from .env
-    # (postgres, redis, pdf_api) working; nginx proxies to 127.0.0.1:3000.
+    # The site itself. The image is built by the Image workflow (GitHub Actions);
+    # the server only pulls it (scripts/deploy.sh). Host networking keeps the
+    # localhost URLs from .env (postgres, redis, pdf_api) working; nginx proxies
+    # to 127.0.0.1:3000.
     app:
-        image: ghcr.io/efremovegor/confchair:${CONFCHAIR_TAG:-latest}
+        image: ghcr.io/efremovegor/submission_system_v2:${CONFCHAIR_TAG:-latest}
         restart: unless-stopped
         network_mode: host
         depends_on:
