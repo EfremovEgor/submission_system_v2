@@ -117,6 +117,60 @@
         return !!showedTopics[submission.topic.name];
     };
     const filters = [applyStatusFilter, applyTopicFilter];
+    // Downloads the abstract PDF of every displayed submission as one zip.
+    let pdfExportProgress: string | null = null;
+    async function exportAllPdf() {
+        if (pdfExportProgress !== null) return;
+        const toExport = [...submissionsToDisplay];
+        if (toExport.length == 0) return;
+        const { default: JSZip } = await import("jszip");
+        const zip = new JSZip();
+        const failed: number[] = [];
+        let done = 0;
+        pdfExportProgress = `0/${toExport.length}`;
+        try {
+            const queue = [...toExport];
+            const worker = async () => {
+                for (let s = queue.shift(); s; s = queue.shift()) {
+                    try {
+                        const response = await fetch(`/pdf/submissions/${s.id}`);
+                        if (!response.ok) throw new Error(`${response.status}`);
+                        zip.file(
+                            `${conference.acronym}-abstract-${s.local_id}.pdf`,
+                            await response.arrayBuffer(),
+                        );
+                    } catch {
+                        failed.push(s.local_id);
+                    }
+                    pdfExportProgress = `${++done}/${toExport.length}`;
+                }
+            };
+            await Promise.all(Array.from({ length: 4 }, worker));
+            if (failed.length == toExport.length) {
+                alert("PDF export failed");
+                return;
+            }
+            const blob = await zip.generateAsync({ type: "blob" });
+            const element = document.createElement("a");
+            const url = window.URL.createObjectURL(blob);
+            element.setAttribute("href", url);
+            element.setAttribute(
+                "download",
+                `${conference.acronym}-abstracts.zip`,
+            );
+            element.style.display = "none";
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            setTimeout(() => window.URL.revokeObjectURL(url), 10000);
+            if (failed.length)
+                alert(
+                    `Could not generate PDF for submissions: ${failed.sort((a, b) => a - b).join(", ")}`,
+                );
+        } finally {
+            pdfExportProgress = null;
+        }
+    }
     function applyFilters() {
         submissionsToDisplay = [];
         submissions.forEach((submission) => {
@@ -430,6 +484,15 @@
         document.body.removeChild(element);
     }}
     class="bare-button">Export to Docx</button
+>
+<br />
+<button
+    on:click={exportAllPdf}
+    disabled={pdfExportProgress !== null}
+    class="bare-button"
+    >{pdfExportProgress === null
+        ? `Export all PDF (${submissionsToDisplay.length})`
+        : `Exporting PDF… ${pdfExportProgress}`}</button
 >
 <div class="overflow-auto">
     <table class="striped">

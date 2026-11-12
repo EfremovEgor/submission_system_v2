@@ -50,6 +50,7 @@
         "dotenv": "^16.4.5",
         "ejs": "^3.1.10",
         "fs": "^0.0.1-security",
+        "jszip": "^3.10.1",
         "lucide-svelte": "^0.414.0",
         "redis": "^4.7.0",
         "roboto-font": "^0.1.0",
