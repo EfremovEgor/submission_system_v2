@@ -19,6 +19,16 @@
     let submissionsToDisplay = submissions.map((submission) => {
         return { ...submission, selected: false };
     });
+    // Extra recipients, one email per line: sent without any submission.
+    let extraEmails = "";
+    const parseEmails = (text: string) => [
+        ...new Set(
+            text
+                .split(/[\r\n,;]+/)
+                .map((email) => email.trim())
+                .filter((email) => email.length > 0),
+        ),
+    ];
     let settings = {
         mailing: {
             allAuthors: false,
@@ -91,15 +101,17 @@
                 .map((submission) => {
                     return { id: submission.id };
                 });
-            if (!selectedSubmissions.length) {
-                alert("No submissions selected!");
+            const emails = parseEmails(extraEmails);
+            if (!selectedSubmissions.length && !emails.length) {
+                alert("No submissions selected and no emails entered!");
                 return;
             }
-            if (
-                !confirm(
-                    `Send this email for ${selectedSubmissions.length} submission(s)?`,
-                )
-            )
+            const targets = [
+                selectedSubmissions.length &&
+                    `${selectedSubmissions.length} submission(s)`,
+                emails.length && `${emails.length} additional email(s)`,
+            ].filter(Boolean);
+            if (!confirm(`Send this email to ${targets.join(" and ")}?`))
                 return;
             sending = true;
             try {
@@ -112,6 +124,7 @@
                         template: emailHtml,
                         subject,
                         submissions: selectedSubmissions,
+                        emails,
                         settings,
                     }),
                 });
@@ -154,6 +167,23 @@
             />
             Send to all corresponding
         </label>
+    </article>
+    <article class="mt-5">
+        <label>
+            Additional recipients (one email per line)
+            <textarea
+                bind:value={extraEmails}
+                rows="5"
+                placeholder={"first@example.com\nsecond@example.com"}
+            ></textarea>
+        </label>
+        <small>
+            These emails get the letter without a submission: submission
+            placeholders and the recipient's name are left empty.
+            {#if parseEmails(extraEmails).length}
+                {parseEmails(extraEmails).length} email(s) entered.
+            {/if}
+        </small>
     </article>
     <article class="mt-5">
         <label>

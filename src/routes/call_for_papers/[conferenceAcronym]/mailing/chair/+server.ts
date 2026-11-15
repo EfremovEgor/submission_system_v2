@@ -16,6 +16,10 @@ import { error, json } from "@sveltejs/kit";
 // Read at runtime from the environment (.env), not baked into the build.
 const { DOMAIN } = env;
 
+// Extra recipients typed by the chair, sent without any submission.
+const MAX_EXTRA_EMAILS = 500;
+const EMAIL_PATTERN = /^[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]+$/;
+
 export async function POST({ request, cookies, params }) {
     const user = await authorizedRoute(cookies, redis);
     const conference = await getConferenceByAcronym(params.conferenceAcronym, {
@@ -37,6 +41,7 @@ export async function POST({ request, cookies, params }) {
         template,
         subject,
         submissions,
+        emails = [],
         settings,
     }: {
         template: string;
@@ -44,6 +49,7 @@ export async function POST({ request, cookies, params }) {
         submissions: {
             id: number;
         }[];
+        emails?: string[];
         settings: {
             mailing?: {
                 allAuthors: boolean;
@@ -54,9 +60,21 @@ export async function POST({ request, cookies, params }) {
     if (
         typeof template != "string" ||
         typeof subject != "string" ||
-        !Array.isArray(submissions)
+        !Array.isArray(submissions) ||
+        !Array.isArray(emails) ||
+        emails.some((email) => typeof email != "string")
     )
         error(422);
+    const extraEmails = [
+        ...new Set(emails.map((email) => email.trim()).filter(Boolean)),
+    ];
+    if (extraEmails.length > MAX_EXTRA_EMAILS)
+        error(422, `At most ${MAX_EXTRA_EMAILS} additional emails per mailing`);
+    const invalidEmails = extraEmails.filter(
+        (email) => !EMAIL_PATTERN.test(email),
+    );
+    if (invalidEmails.length)
+        error(422, `Invalid email(s): ${invalidEmails.join(", ")}`);
     const unsupportedTag =
         findUnsupportedTag(template) ?? findUnsupportedTag(subject);
     if (unsupportedTag != null)
@@ -84,6 +102,22 @@ export async function POST({ request, cookies, params }) {
 
     let sent = 0;
     let failed = 0;
+    const send = async (to: string, data: Record<string, unknown>) => {
+        try {
+            await transporter.sendMail({
+                from: MAILING_SETTINGS.from,
+                to,
+                subject: renderPlaceholders(subject, data, {
+                    escape: false,
+                }),
+                html: renderPlaceholders(template, data),
+            });
+            sent++;
+        } catch (e) {
+            console.error(`Mailing to ${to} failed`, e);
+            failed++;
+        }
+    };
     for (const submission of selectedSubmissions) {
         const submissionData = {
             ...submission,
@@ -100,21 +134,14 @@ export async function POST({ request, cookies, params }) {
                 submission: submissionData,
                 conference: conferenceData,
             };
-            try {
-                await transporter.sendMail({
-                    from: MAILING_SETTINGS.from,
-                    to: author.email,
-                    subject: renderPlaceholders(subject, data, {
-                        escape: false,
-                    }),
-                    html: renderPlaceholders(template, data),
-                });
-                sent++;
-            } catch (e) {
-                console.error(`Mailing to ${author.email} failed`, e);
-                failed++;
-            }
+            await send(author.email, data);
         }
+    }
+    for (const email of extraEmails) {
+        await send(email, {
+            recipient: { email },
+            conference: conferenceData,
+        });
     }
 
     return json({ status: "sent", sent, failed });
