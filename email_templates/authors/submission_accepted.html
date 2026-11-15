@@ -1,145 +1,139 @@
 <!doctype html>
 <html>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/uikit@3.18.3/dist/css/uikit.min.css"
-    />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.18.3/dist/css/uikit.min.css" />
 
-    <body>
-        <div
-            class="uk-container"
-            style="
+<body>
+    <div class="uk-container" style="
                 margin-top: 10px;
                 margin-bottom: 25px;
                 max-width: 980px;
                 min-height: 320px;
-            "
-        >
-            <p style="color: black">
-                Dear <%= recipient.title %> <%= recipient.first_name %> <%=
-                recipient.last_name %>,
-            </p>
-            <p style="color: black">
-                We are glad to inform that your paper with submission number <%=
-                submission.local_id %>
+            ">
+        <p style="color: black">
+            Dear <%= recipient.title %>
+                <%= recipient.first_name %>
+                    <%= recipient.last_name %>,
+        </p>
+        <p style="color: black">
+            We are glad to inform that your paper with submission number <%= submission.local_id %>
                 <strong>(<%= submission.title %>)</strong> has been accepted by
                 Program Committee for
-                <strong> <%= submission.presentation_format %> </strong>
-                presentation at
-                <strong> <%= submission.topic.name %> </strong> Technical
-                Session. <br />
-            </p>
-
-            <p>Please pay attention on further instructions below.</p>
-            <p style="color: black">
-                <strong>1. Please confirm or withdraw</strong> your presentation
-                at the Technical Session. To update the status, please go to the
-                <a href="https://confchair.org/author">Author profile</a>, click
-                the “magnifier” button in the table with your submission and
-                then press <strong style="color: green">Confirm</strong> or
-                <strong style="color: red">Withdraw</strong> button on the
-                submission page. Unconfirmed presentations after
-                <strong> November 29, 23:59 (Moscow Time, GMT+3) </strong>
-                will be removed from the 6th SciTech Forum and the presentation
-                slot will be transferred to a back-up abstract.
-            </p>
-            <p style="color: black">
-                <strong>2. Upload Manager</strong> for uploading presentation
-                and full manuscript is available on the
-                <a href="<%= submission.link %>">submission page</a> as well.
-            </p>
-
-            <p style="color: black">
-                <strong>Slides</strong> for on-sight presentations should be
-                uploaded <strong>12 hours before the presentation </strong> to
-                avoid any difficulties and delays with opening the slides during
-                technical sessions. During the technical session each presenter
-                will be given 15 minutes (10 min for a report and 3-5 minutes
-                for Q&A).
-            </p>
-            <p style="color: black">
-                We invite authors to upload
-                <strong>full manuscripts</strong> before the Forum. But since
-                there is not much time left, it is also possible to upload the
-                manuscript after the Forum<strong>
-                    not later than January 20, 2026
+                <strong>
+                    <%= submission.presentation_format %>
                 </strong>
-                . Manuscript template with format guidelines available for
-                download by the following
-                <a
-                    href="https://spacescitech.com/files/manuscript_template.docx"
-                    >link</a
-                >. Manuscripts should not exceed 20 pages.
-            </p>
-            <p>
-                <strong>3.</strong> All categories of participants need to
-                register to the Forum using the form on the Registration page.
-                Please note that online presentations are allowed only for
-                participants outside Moscow region according to the instructions
-                on the Forum web-site.
-            </p>
-            <p>
-                <strong>To join the Forum online</strong> attendees should go to
-                the Zoom registration form by the following link: <br />
-                https://us06web.zoom.us/meeting/register/a7NZ3jCgQRyI1N-wdhPFIA
-                <br />
-                (if the link doesn’t work on not clickable, please copy and
-                paste it to the browser address line directly)
-            </p>
-            <p>
-                To register the participant should indicate his name, surname
-                and email. The direct connection link will be sent on the
-                indicated email. This link is valid for all three days of the
-                Forum and leads to the Main Hall (Hall Galaxy), where Plenary
-                Sessions will take place.
-            </p>
+                presentation at
+                <strong>
+                    <%= submission.topic.name %>
+                </strong> Technical
+                Session. <br />
+        </p>
 
-            <p>
-                To attend Parallel Technical Sessions participant, being
-                connected to the Main Hall, should go to the menu below and
-                click on the Zoom Breakout Rooms icon and choose one of the
-                Technical Sessions Halls according to the Technical Program,
-                which will be posted with detailed schedule on the Forum
-                web-site not later than November 30.
-            </p>
+        <p style="color: black">Please pay attention on further instructions below.</p>
+        <p style="color: black">
+            <strong>1. Please confirm or withdraw</strong> your presentation
+            at the Technical Session. To update the status, please go to the
+            <a href="https://confchair.org/author">Author profile</a>, click
+            the “magnifier” button in the table with your submission and
+            then press <strong style="color: green">Confirm</strong> or
+            <strong style="color: red">Withdraw</strong> button on the
+            submission page. Unconfirmed presentations after
+            <strong> November 18, 23:59 (Moscow Time, GMT+3) </strong>
+            will be removed from the <%= conference.short_name %> and the presentation
+                slot will be transferred to a back-up abstract.
+        </p>
+        <p style="color: black">
+            <strong>2. Upload Manager</strong> for uploading presentation
+            and full manuscript is available on the
+            <a href="<%= submission.link %>">submission page</a> as well.
+        </p>
+        <p style="color: black">
+            <strong>Slides</strong> for on-sight presentations should be
+            uploaded <strong>12 hours before the presentation </strong> to
+            avoid any difficulties and delays with opening the slides during
+            technical sessions. During the technical session each presenter
+            will be given 15 minutes (10 min for a report and 3-5 minutes
+            for Q&A).
+        </p>
+        <p style="color: black">
+            We invite authors to upload
+            <strong>full manuscripts</strong> before the Forum. But since
+            there is not much time left, it is also possible to upload the
+            manuscript after the Forum<strong>
+                not later than January 20, 2027
+            </strong>
+            . Manuscript template with format guidelines available for
+            download by the following
+            <a href="https://spacescitech.com/files/manuscript_template.docx">link</a>. Manuscripts should not exceed 20
+            pages.
+        </p>
+        <p style="color: black">
+            <strong>3.</strong> All categories of participants need to
+            register to the Forum using the form on the Registration page.
+            Please note that online presentations are allowed only for
+            participants outside Moscow region according to the instructions
+            on the Forum web-site.
+        </p>
+        <p style="color: black">
+            <strong>To join the Forum online</strong> attendees should go to
+            the Zoom registration form by the following link: <br />
+            https://us06web.zoom.us/meeting/register/1cTsPyiGQ1SyQLnr18FLEA
+            <br />
+            (if the link doesn’t work on not clickable, please copy and
+            paste it to the browser address line directly)
+        </p>
+        <p style="color: black">
+            To register the participant should indicate his name, surname
+            and email. The direct connection link will be sent on the
+            indicated email. This link is valid for all three days of the
+            Forum and leads to the Main Hall (Hall Galaxy), where Plenary
+            Sessions will take place.
+        </p>
 
-            <p>
-                For the best experience it is strongly recommended to use Zoom
-                desktop or mobile application and install all the latest
-                updates.
-            </p>
+        <p style="color: black">
+            To attend Parallel Technical Sessions participant, being
+            connected to the Main Hall, should go to the menu below and
+            click on the Zoom Breakout Rooms icon and choose one of the
+            Technical Sessions Halls according to the Technical Program,
+            which will be posted with detailed schedule on the Forum
+            web-site not later than November 30.
+        </p>
 
-            <p style="color: black">
-                Thank you very much for your attendance in the <%=
-                conference.short_name %>.
-            </p>
-            <p>
-                If you have any questions, please address them to the Local
-                Organizing Committee: <br />
-                <%= conference.email %>.<br />
+        <p style="color: black">
+            For the best experience it is strongly recommended to use Zoom
+            desktop or mobile application and install all the latest
+            updates.
+        </p>
+
+        <p style="color: black">
+            Thank you very much for your attendance in the <%= conference.short_name %>.
+        </p>
+        <p style="color: black">
+            If you have any questions, please address them to the Local
+            Organizing Committee: <br />
+            <%= conference.email %>.<br />
                 Forum web-site:<br />
                 <%= conference.site_url %><br />
-            </p>
-            <p style="color: black">
-                Best Regards,<br />
-                SciTech Forum<br />
-                Local Organizing Committee
-            </p>
-        </div>
-    </body>
-    <style>
-        table td:last-child {
-            padding-left: 20px !important;
-        }
+        </p>
+        <p style="color: black">
+            Best Regards,<br />
+            SciTech Forum<br />
+            Local Organizing Committee </p>
+    </div>
+</body>
+<style>
+    table td:last-child {
+        padding-left: 20px !important;
+    }
 
-        table {
-            border-collapse: collapse;
-        }
+    table {
+        border-collapse: collapse;
+    }
 
-        table td,
-        table th {
-            border: 1px solid black;
-        }
-    </style>
+    table td,
+    table th {
+        border: 1px solid black;
+    }
+</style>
+
 </html>
