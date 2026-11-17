@@ -43,6 +43,7 @@
         "@types/pdfmake": "^0.2.9",
         "bits-ui": "^0.21.12",
         "bullmq": "^5.15.0",
+        "client-zip": "2.5.0",
         "clsx": "^2.1.1",
         "codemirror": "^6.0.1",
         "country-list": "^2.3.0",

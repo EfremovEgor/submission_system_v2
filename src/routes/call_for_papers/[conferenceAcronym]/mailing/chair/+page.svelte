@@ -1,389 +1,583 @@
 <script lang="ts">
-    import Modal from "$components/common/modal/modal.svelte";
-    export let data;
+    import { browser } from "$app/environment";
+    import { afterNavigate, replaceState } from "$app/navigation";
+    import { page } from "$app/stores";
+    import BackButton from "$components/common/buttons/backButton.svelte";
+    import FilterPanel from "$components/chair/FilterPanel.svelte";
+    import MailBatches from "$components/chair/MailBatches.svelte";
+    import SubmissionsTable from "$components/chair/SubmissionsTable.svelte";
+    import { applyFilters, filtersFromParams, filtersToParams } from "$src/lib/chair/filters";
+    import { html as htmlLang } from "@codemirror/lang-html";
+    import type { EditorView } from "@codemirror/view";
+    import { onMount } from "svelte";
     import CodeMirror from "svelte-codemirror-editor";
-    import { html } from "@codemirror/lang-html";
-    import { formatAuthors } from "$src/lib/utils.client.js";
-    import {
-        presentation_formats,
-        submission_statuses,
-    } from "$src/lib/aliases.js";
-    import SubmissionStatusText from "$components/common/submissionStatusText.svelte";
 
+    export let data;
+
+    const acronym = data.conference.acronym;
     const submissions = data.submissions;
-    let allState = false;
-    let preview = false;
-    let sending = false;
-    let emailHtml = "<h1>Email Template</h1>";
-    let subject = "Sample subject";
-    let submissionsToDisplay = submissions.map((submission) => {
-        return { ...submission, selected: false };
+    const endpoint = `/call_for_papers/${acronym}/mailing/chair`;
+
+    // ---- recipients ----
+    let filters = filtersFromParams($page.url.searchParams);
+    let mounted = false;
+    // replaceState needs the router, which is ready only after the first navigation.
+    let routerReady = false;
+    afterNavigate(() => (routerReady = true));
+    $: if (routerReady && browser) {
+        const url = new URL(window.location.href);
+        filtersToParams(filters, url.searchParams);
+        if (url.href != window.location.href) replaceState(url, {});
+    }
+    $: shown = applyFilters(submissions, filters);
+
+    // "?sel=1,2,3" comes from the dashboard's "Mailing to N selected".
+    let selected = new Set<number>(
+        ($page.url.searchParams.get("sel") ?? "")
+            .split(",")
+            .map(Number)
+            .filter((id) => submissions.some((s) => s.id == id)),
+    );
+    let audience: "all" | "corresponding" | "presenters" = "corresponding";
+    let extra = "";
+    $: extraLines = extra.split(/\r?\n/).filter((l) => l.trim()).length;
+    $: selectedRows = submissions.filter((s) => selected.has(s.id));
+    $: estimate =
+        selectedRows.reduce(
+            (n, s) =>
+                n +
+                new Set(
+                    s.authors
+                        .filter(
+                            (a) =>
+                                audience == "all" ||
+                                (audience == "corresponding" && a.is_corresponding) ||
+                                (audience == "presenters" && a.is_presenter),
+                        )
+                        .map((a) => a.email.trim().toLowerCase())
+                        .filter(Boolean),
+                ).size,
+            0,
+        ) + extraLines;
+
+    // ---- template ----
+    type Draft = { name: string; subject: string; html: string };
+    const DRAFTS_KEY = `chair-mailing-drafts:${acronym}`;
+    const STATE_KEY = `chair-mailing-current:${acronym}`;
+    const TEST_KEY = "chair-mailing-test-address";
+    let mode: string = "custom"; // "custom" or a system template key
+    let subject = "";
+    let html = "<p style=\"color: black\">Dear <%= recipient.title %> <%= recipient.first_name %> <%= recipient.last_name %>,</p>\n<p style=\"color: black\"></p>\n<p style=\"color: black\">Best Regards,<br />\n<%= conference.short_name %> Organizing Committee</p>\n";
+    let drafts: Draft[] = [];
+    let draftName = "";
+    let testEmail = "";
+    let view: EditorView | null = null;
+    let lastFocus: "subject" | "body" = "body";
+    let subjectInput: HTMLInputElement;
+
+    $: system = data.systemTemplates.find((t) => t.key == mode) ?? null;
+
+    onMount(() => {
+        try {
+            drafts = JSON.parse(localStorage.getItem(DRAFTS_KEY) ?? "[]");
+            const current = JSON.parse(localStorage.getItem(STATE_KEY) ?? "null");
+            if (current?.html) ({ subject, html } = current);
+            testEmail = localStorage.getItem(TEST_KEY) ?? "";
+        } catch {}
+        mounted = true;
     });
-    // Extra recipients, one email per line: sent without any submission.
-    let extraEmails = "";
-    const parseEmails = (text: string) => [
-        ...new Set(
-            text
-                .split(/[\r\n,;]+/)
-                .map((email) => email.trim())
-                .filter((email) => email.length > 0),
-        ),
-    ];
-    let settings = {
-        mailing: {
-            allAuthors: false,
-            allCorresponding: true,
-        },
+    // The letter being written survives a reload.
+    $: if (mounted)
+        try {
+            localStorage.setItem(STATE_KEY, JSON.stringify({ subject, html }));
+            localStorage.setItem(TEST_KEY, testEmail);
+        } catch {}
+
+    const saveDraft = () => {
+        const name = draftName.trim() || subject.trim() || "Untitled";
+        drafts = [...drafts.filter((d) => d.name != name), { name, subject, html }];
+        draftName = name;
+        localStorage.setItem(DRAFTS_KEY, JSON.stringify(drafts));
+    };
+    const loadDraft = (name: string) => {
+        const d = drafts.find((d) => d.name == name);
+        if (!d) return;
+        ({ subject, html } = d);
+        draftName = d.name;
+        mode = "custom";
+    };
+    const deleteDraft = () => {
+        drafts = drafts.filter((d) => d.name != draftName);
+        localStorage.setItem(DRAFTS_KEY, JSON.stringify(drafts));
+        draftName = "";
+    };
+    const editSystemCopy = () => {
+        if (!system?.source) return;
+        html = system.source;
+        subject = `${system.label}: paper #<%= submission.local_id %>`;
+        mode = "custom";
+    };
+
+    const insertPlaceholder = (path: string) => {
+        const tag = `<%= ${path} %>`;
+        if (lastFocus == "subject" && subjectInput) {
+            const start = subjectInput.selectionStart ?? subject.length;
+            const end = subjectInput.selectionEnd ?? start;
+            subject = subject.slice(0, start) + tag + subject.slice(end);
+            setTimeout(() => {
+                subjectInput.focus();
+                subjectInput.setSelectionRange(start + tag.length, start + tag.length);
+            });
+            return;
+        }
+        if (!view) {
+            html += tag;
+            return;
+        }
+        const { from, to } = view.state.selection.main;
+        view.dispatch({ changes: { from, to, insert: tag }, selection: { anchor: from + tag.length } });
+        view.focus();
+    };
+
+    // ---- server calls ----
+    const payload = (action: string, extraBody: object = {}) => ({
+        action,
+        template: mode == "custom" ? { mode: "custom", subject, html } : { mode: "system", key: mode },
+        submissions: [...selected],
+        audience,
+        extra,
+        ...extraBody,
+    });
+    const post = async (body: object) => {
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(body),
+        });
+        const json = await response.json().catch(() => null);
+        if (!response.ok) throw new Error(json?.message ?? `HTTP ${response.status}`);
+        return json;
+    };
+
+    let preview: {
+        count: number;
+        recipients: { to: string; note: string }[];
+        index: number;
+        letter: { subject: string; html: string } | null;
+    } | null = null;
+    let previewError = "";
+    let previewIndex = 0;
+    let loading = false;
+    const loadPreview = async (index = previewIndex) => {
+        loading = true;
+        previewError = "";
+        try {
+            preview = await post(payload("preview", { index }));
+            previewIndex = preview!.index;
+        } catch (e) {
+            preview = null;
+            previewError = (e as Error).message;
+        } finally {
+            loading = false;
+        }
+    };
+
+    let testStatus = "";
+    const sendTest = async () => {
+        testStatus = "Sending…";
+        try {
+            const r = await post(payload("test", { testEmail, index: previewIndex }));
+            testStatus = `Test sent to ${r.sent} (as for ${r.as})`;
+        } catch (e) {
+            testStatus = `Failed: ${(e as Error).message}`;
+        }
+    };
+
+    let batches = data.batches;
+    let sending = false;
+    let sendStatus = "";
+    const send = async () => {
+        let count: number;
+        try {
+            count = (await post(payload("preview", { index: 0 }))).count;
+        } catch (e) {
+            alert((e as Error).message);
+            return;
+        }
+        if (!count) {
+            alert("No recipients: tick papers and/or add addresses.");
+            return;
+        }
+        const what = mode == "custom" ? `“${subject}”` : `“${system?.label}”`;
+        if (!confirm(`Send ${what} to ${count} recipient(s)?`)) return;
+        sending = true;
+        try {
+            const r = await post(payload("send"));
+            sendStatus = `${r.total} letter(s) queued.`;
+            const response = await fetch(endpoint, { headers: { Accept: "application/json" } });
+            if (response.ok) batches = await response.json();
+        } catch (e) {
+            alert(`Sending failed: ${(e as Error).message}`);
+        } finally {
+            sending = false;
+        }
     };
 </script>
 
-<div class="container">
-    <textarea bind:value={subject}></textarea>
-    {#if preview}
-        <div class="h-1/2 overflow-auto">
-            {@html emailHtml}
-        </div>
-    {:else}
-        <CodeMirror
-            class="h-[800px] overflow-auto"
-            bind:value={emailHtml}
-            lang={html()}
-        />
-    {/if}
+<svelte:head>
+    <title>Mailing · {data.conference.name}</title>
+</svelte:head>
 
-    <div class="flex gap-3">
-        <article class="flex flex-col justify-between">
-            Author -> recipient
-            <ul>
-                <li>.title</li>
-                <li>.first_name</li>
-                <li>.last_name</li>
-            </ul>
-            Example: {"<%= recipient.title %>"} will be Author's title
-        </article>
-        <article class="flex flex-col justify-between">
-            Submission -> submission
-            <ul>
-                <li>.local_id</li>
-                <li>.presentation_format</li>
-                <li>.title</li>
-                <li>.topic.name</li>
-                <li>.link</li>
-            </ul>
-            Example: {"<%= submission.title %>"} will be Submission title
-        </article>
-        <article class="flex flex-col justify-between">
-            Conference -> conference
-            <ul>
-                <li>.name</li>
-                <li>.short_name</li>
-                <li>.presentation_deadline</li>
-                <li>.manuscript_deadline</li>
-                <li>.site_url</li>
-                <li>.confirmation_deadline</li>
-            </ul>
-            Example: {"<%= submission.title %>"} will be Conference name
-        </article>
+<div class="page">
+    <div class="top">
+        <BackButton url="/call_for_papers/{acronym}/submissions/view/chair" />
+        <h3>Mailing · {data.conference.name}</h3>
     </div>
-    <button
-        class="primary-button-hover outline"
-        on:click={() => (preview = !preview)}>Preview</button
-    >
-    <button
-        class="primary-button-hover button-green outline"
-        disabled={sending}
-        on:click={async () => {
-            const selectedSubmissions = submissionsToDisplay
-                .filter((submission) => {
-                    if (!submission.selected) return false;
-                    return true;
-                })
-                .map((submission) => {
-                    return { id: submission.id };
-                });
-            const emails = parseEmails(extraEmails);
-            if (!selectedSubmissions.length && !emails.length) {
-                alert("No submissions selected and no emails entered!");
-                return;
-            }
-            const targets = [
-                selectedSubmissions.length &&
-                    `${selectedSubmissions.length} submission(s)`,
-                emails.length && `${emails.length} additional email(s)`,
-            ].filter(Boolean);
-            if (!confirm(`Send this email to ${targets.join(" and ")}?`))
-                return;
-            sending = true;
-            try {
-                const response = await fetch("", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        template: emailHtml,
-                        subject,
-                        submissions: selectedSubmissions,
-                        emails,
-                        settings,
-                    }),
-                });
-                if (response.ok) {
-                    const { sent, failed } = await response.json();
-                    alert(
-                        failed
-                            ? `Sent ${sent} emails, ${failed} failed`
-                            : `Successfully sent ${sent} emails!`,
-                    );
-                } else {
-                    const body = await response.json().catch(() => null);
-                    alert(`Sending failed: ${body?.message ?? response.status}`);
-                }
-            } finally {
-                sending = false;
-            }
-        }}>{sending ? "Sending..." : "Send"}</button
-    >
-    <article class="mt-5">
-        <label>
-            <input
-                bind:checked={settings.mailing.allAuthors}
-                on:change={() => {
-                    if (settings.mailing.allAuthors)
-                        settings.mailing.allCorresponding = false;
-                }}
-                type="checkbox"
-            />
-            Send to all authors
-        </label>
-        <label>
-            <input
-                bind:checked={settings.mailing.allCorresponding}
-                on:change={() => {
-                    if (settings.mailing.allCorresponding)
-                        settings.mailing.allAuthors = false;
-                }}
-                type="checkbox"
-            />
-            Send to all corresponding
-        </label>
-    </article>
-    <article class="mt-5">
-        <label>
-            Additional recipients (one email per line)
-            <textarea
-                bind:value={extraEmails}
-                rows="5"
-                placeholder={"first@example.com\nsecond@example.com"}
-            ></textarea>
-        </label>
-        <small>
-            These emails get the letter without a submission: submission
-            placeholders and the recipient's name are left empty.
-            {#if parseEmails(extraEmails).length}
-                {parseEmails(extraEmails).length} email(s) entered.
+
+    <div class="grid">
+        <section class="col">
+            <h5>1. Recipients</h5>
+            <FilterPanel bind:filters {submissions} topics={data.topics} shown={shown.length} />
+            <div class="selbar">
+                <span><strong>{selected.size}</strong> paper(s) selected</span>
+                <button
+                    class="link"
+                    on:click={() => (selected = new Set([...selected, ...shown.map((s) => s.id)]))}
+                    >Select all {shown.length} shown</button
+                >
+                {#if selected.size}<button class="link" on:click={() => (selected = new Set())}
+                        >Clear</button
+                    >{/if}
+            </div>
+            <div class="tablebox">
+                <SubmissionsTable rows={shown} {acronym} bind:selected compact />
+            </div>
+            <div class="aud">
+                <span class="caption">Send to</span>
+                <label><input type="radio" bind:group={audience} value="corresponding" /> Corresponding authors</label>
+                <label><input type="radio" bind:group={audience} value="all" /> All authors</label>
+                <label><input type="radio" bind:group={audience} value="presenters" /> Presenters</label>
+            </div>
+            <label class="extra">
+                <span class="caption">Additional addresses (one per line)</span>
+                <textarea
+                    bind:value={extra}
+                    rows="5"
+                    placeholder={"someone@example.com\nauthor.new@example.com #12\nguest@example.com Ivan Petrov"}
+                ></textarea>
+            </label>
+            <small class="muted">
+                Add a paper number (<code>#12</code>) to fill in that paper and its author's name — e.g. to
+                resend a letter to a corrected address. A name after the address fills
+                <code>recipient.first_name</code>/<code>last_name</code>. System letters need a paper number.
+            </small>
+            <p class="estimate">≈ <strong>{estimate}</strong> letter(s)</p>
+        </section>
+
+        <section class="col">
+            <h5>2. Letter</h5>
+            <div class="row">
+                <label class="grow">
+                    <span class="caption">Template</span>
+                    <select bind:value={mode}>
+                        <option value="custom">Custom letter</option>
+                        <optgroup label="System letters">
+                            {#each data.systemTemplates as t}
+                                <option value={t.key}>{t.label}</option>
+                            {/each}
+                        </optgroup>
+                    </select>
+                </label>
+                {#if mode == "custom"}
+                    <label class="grow">
+                        <span class="caption">Saved drafts</span>
+                        <select value={draftName} on:change={(e) => loadDraft(e.currentTarget.value)}>
+                            <option value="">—</option>
+                            {#each drafts as d}<option value={d.name}>{d.name}</option>{/each}
+                        </select>
+                    </label>
+                {/if}
+            </div>
+
+            {#if system}
+                <p class="muted">
+                    The system letter is sent exactly as the site sends it, with its own subject and the
+                    paper's data.
+                    {#if system.source}
+                        <button class="link" on:click={editSystemCopy}>Edit a copy as a custom letter</button>
+                    {/if}
+                </p>
+            {:else}
+                <label>
+                    <span class="caption">Subject</span>
+                    <input
+                        bind:this={subjectInput}
+                        bind:value={subject}
+                        on:focus={() => (lastFocus = "subject")}
+                        placeholder="Subject"
+                    />
+                </label>
+                <span class="caption">Body (HTML)</span>
+                <div class="editor" on:focusin={() => (lastFocus = "body")}>
+                    <CodeMirror
+                        bind:value={html}
+                        lang={htmlLang()}
+                        lineWrapping
+                        on:ready={(e) => (view = e.detail)}
+                    />
+                </div>
+                <div class="placeholders">
+                    <span class="caption">Insert placeholder (into {lastFocus == "subject" ? "subject" : "body"})</span>
+                    {#each data.placeholders as g}
+                        <div class="ph-group">
+                            <b>{g.name}</b>
+                            {#each g.fields as f}
+                                <button class="ph" on:click={() => insertPlaceholder(`${g.name}.${f}`)}>{f}</button>
+                            {/each}
+                        </div>
+                    {/each}
+                </div>
+                <div class="row">
+                    <input class="grow" bind:value={draftName} placeholder="Draft name" />
+                    <button class="small secondary" on:click={saveDraft}>Save draft</button>
+                    {#if drafts.some((d) => d.name == draftName)}
+                        <button class="small secondary outline" on:click={deleteDraft}>Delete</button>
+                    {/if}
+                </div>
             {/if}
-        </small>
-    </article>
-    <article class="mt-5">
-        <label>
-            <input
-                type="radio"
-                name="acceptedSubmissionsVariety"
-                on:change={() => {
-                    submissionsToDisplay.forEach((submission) => {
-                        if (submission.status == "accepted")
-                            submission.selected = true;
-                        else submission.selected = false;
-                    });
-                    submissionsToDisplay = submissionsToDisplay;
-                }}
-            />
-            Select all accepted
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="acceptedSubmissionsVariety"
-                on:change={() => {
-                    submissionsToDisplay.forEach((submission) => {
-                        if (
-                            submission.status == "accepted" &&
-                            !submission.particiaption_confirmed &&
-                            !submission.withdrawn
-                        )
-                            submission.selected = true;
-                        else submission.selected = false;
-                    });
-                    submissionsToDisplay = submissionsToDisplay;
-                }}
-            />
-            Select all accepted (not confirmed)
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="acceptedSubmissionsVariety"
-                on:change={() => {
-                    submissionsToDisplay.forEach((submission) => {
-                        if (
-                            submission.status == "accepted" &&
-                            submission.particiaption_confirmed
-                        )
-                            submission.selected = true;
-                        else submission.selected = false;
-                    });
-                    submissionsToDisplay = submissionsToDisplay;
-                }}
-            />
-            Select all accepted (confirmed)
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="acceptedSubmissionsVariety"
-                on:change={() => {
-                    submissionsToDisplay.forEach((submission) => {
-                        if (
-                            submission.status == "accepted" &&
-                            submission.particiaption_confirmed &&
-                            !submission.presentation_file_id
-                        )
-                            submission.selected = true;
-                        else submission.selected = false;
-                    });
-                    submissionsToDisplay = submissionsToDisplay;
-                }}
-            />
-            Select all confirmed (without presentation)
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="acceptedSubmissionsVariety"
-                on:change={() => {
-                    submissionsToDisplay.forEach((submission) => {
-                        if (
-                            submission.status == "accepted" &&
-                            submission.withdrawn
-                        )
-                            submission.selected = true;
-                        else submission.selected = false;
-                    });
-                    submissionsToDisplay = submissionsToDisplay;
-                }}
-            />
-            Select all accepted (withdrawn)
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="acceptedSubmissionsVariety"
-                on:change={() => {
-                    submissionsToDisplay.forEach((submission) => {
-                        if (
-                            submission.status == "accepted" &&
-                            !submission.manuscript_file_id &&
-                            submission.particiaption_confirmed
-                        )
-                            submission.selected = true;
-                        else submission.selected = false;
-                    });
-                    submissionsToDisplay = submissionsToDisplay;
-                }}
-            />
-            Select all without uploaded manuscript
-        </label>
-    </article>
-    <div class="overflow-auto mt-5">
-        <table class="striped">
-            <thead>
-                <tr>
-                    <td class="text-center">
-                        <input
-                            type="checkbox"
-                            on:change={() => {
-                                allState = !allState;
-                                submissionsToDisplay.forEach((submission) => {
-                                    submission.selected = allState;
-                                });
-                                submissionsToDisplay = submissionsToDisplay;
-                            }}
-                        />
-                    </td>
-                    <td class="text-center"> # </td>
-                    <td class="text-center"> Authors </td>
-                    <td class="text-center"> Title </td>
-                    <td class="text-center"> Topic </td>
-                    <td class="text-center"> Presentation Format </td>
-                    <td class="text-center"> Status </td>
-                    <td class="text-center"> Presentation Uploaded </td>
-                    <td class="text-center"> Manuscript Uploaded</td>
-                </tr>
-            </thead>
-            <tbody>
-                {#each submissionsToDisplay as submission}
-                    <tr>
-                        <td class="text-center">
-                            <input
-                                type="checkbox"
-                                bind:checked={submission.selected}
-                            />
-                        </td>
-                        <td class="text-center"> {submission.local_id} </td>
-                        <td class="text-center"
-                            >{formatAuthors(submission.authors)}</td
+
+            <h5>3. Check and send</h5>
+            <div class="row">
+                <button class="small" on:click={() => loadPreview(0)} disabled={loading}
+                    >{loading ? "Rendering…" : "Preview"}</button
+                >
+                <input class="grow" type="email" bind:value={testEmail} placeholder="Test address" />
+                <button class="small secondary" on:click={sendTest} disabled={!testEmail}>Send test</button>
+            </div>
+            {#if testStatus}<small class="muted">{testStatus}</small>{/if}
+            {#if previewError}<p class="error">{previewError}</p>{/if}
+            {#if preview}
+                <div class="preview">
+                    <div class="nav">
+                        <button
+                            class="small secondary"
+                            disabled={previewIndex <= 0}
+                            on:click={() => loadPreview(previewIndex - 1)}>‹</button
                         >
-                        <td class="text-center"> {submission.title} </td>
-                        <td class="text-center"> {submission.topic.name} </td>
-                        <td class="text-center">
-                            {presentation_formats[
-                                submission.presentation_format
-                            ]}
-                        </td>
-                        <td class="text-center">
-                            <SubmissionStatusText status={submission.status} />
-                            {#if submission.withdrawn}
-                                <br /><span style="color:var(--red)">
-                                    {submission_statuses.withdrawn}
-                                </span>
-                            {:else if submission.particiaption_confirmed}
-                                <br /><span style="color:var(--green)">
-                                    {submission_statuses.particiaption_confirmed}
-                                </span>
-                            {/if}
-                        </td>
-                        <td class="text-center">
-                            {submission.presentation_file_id ? "Yes" : "No"}
-                        </td>
-                        <td class="text-center">
-                            {submission.manuscript_file_id ? "Yes" : "No"}</td
+                        <span
+                            >{preview.count ? previewIndex + 1 : 0} / {preview.count} recipients{#if preview.count}
+                                — <b>{preview.recipients[previewIndex].to}</b>
+                                <small>{preview.recipients[previewIndex].note}</small>{/if}</span
                         >
-                    </tr>
-                {/each}
-            </tbody>
-        </table>
+                        <button
+                            class="small secondary"
+                            disabled={previewIndex >= preview.count - 1}
+                            on:click={() => loadPreview(previewIndex + 1)}>›</button
+                        >
+                    </div>
+                    {#if preview.letter}
+                        <div class="subj"><span class="caption">Subject</span> {preview.letter.subject}</div>
+                        <iframe title="Letter preview" sandbox="" srcdoc={preview.letter.html}></iframe>
+                    {:else}
+                        <p class="muted">No recipients yet.</p>
+                    {/if}
+                    <details>
+                        <summary>All recipients ({preview.count})</summary>
+                        <ol class="rlist">
+                            {#each preview.recipients as r}<li>{r.to} <small>{r.note}</small></li>{/each}
+                        </ol>
+                    </details>
+                </div>
+            {/if}
+            <div class="row send">
+                <button class="send-btn" disabled={sending} on:click={send}
+                    >{sending ? "Queuing…" : `Send (≈${estimate})`}</button
+                >
+                {#if sendStatus}<span class="green">{sendStatus}</span>{/if}
+            </div>
+            <MailBatches {acronym} bind:batches />
+        </section>
     </div>
 </div>
 
 <style>
-    table * {
-        font-size: 16px !important;
+    .page {
+        --txt: var(--pico-color);
+        max-width: 1700px;
+        margin: 0 auto;
+        padding: 0 16px 40px;
     }
-    td {
-        padding: 5px !important;
+    .top {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 10px;
     }
-    details > div * {
-        font-size: 16px;
+    .top h3 {
+        margin: 0;
     }
-
-    table > thead * {
-        padding: 5px !important;
+    .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: 24px;
     }
-    .symposiums * {
-        padding: 0 !important;
+    @media (max-width: 1200px) {
+        .grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
     }
-    table * {
+    h5 {
+        margin: 6px 0 10px;
+    }
+    .tablebox {
+        max-height: 520px;
+        overflow: auto;
+        border: 1px solid var(--pico-muted-border-color);
+        border-radius: 8px;
+    }
+    .selbar,
+    .aud,
+    .row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 8px 0;
+    }
+    .aud label,
+    .row label {
+        margin: 0;
+        font-size: 14px;
+    }
+    .grow {
+        flex: 1 1 200px;
+    }
+    .caption {
+        display: block;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--pico-muted-color);
+        margin-bottom: 4px;
+    }
+    .aud .caption {
+        margin: 0;
+    }
+    .extra {
+        margin: 10px 0 4px;
+    }
+    .muted {
+        color: var(--pico-muted-color);
+        font-size: 13px;
+    }
+    .estimate {
+        margin: 10px 0 0;
+    }
+    .editor {
+        border: 1px solid var(--pico-muted-border-color);
+        border-radius: 6px;
+        max-height: 520px;
+        overflow: auto;
+        font-size: 13px;
+    }
+    .placeholders {
+        margin: 8px 0;
+    }
+    .ph-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+        margin: 3px 0;
+        font-size: 13px;
+    }
+    .ph-group b {
+        min-width: 86px;
+    }
+    .ph,
+    .small,
+    .link {
+        width: auto;
+        min-width: 0;
+        margin: 0;
+    }
+    .ph {
+        padding: 1px 8px;
+        font-size: 12px;
+        font-family: monospace;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--pico-primary);
+        border: 1px solid var(--pico-muted-border-color);
+    }
+    .small {
+        padding: 6px 14px;
+        font-size: 14px;
+    }
+    .link {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--pico-primary);
+        text-decoration: underline;
+        font-size: 14px;
+    }
+    input {
+        height: 40px !important;
+    }
+    .preview {
+        border: 1px solid var(--pico-muted-border-color);
+        border-radius: 8px;
         padding: 10px;
+        margin: 8px 0;
+    }
+    .nav {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 14px;
+    }
+    .nav span {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .subj {
+        margin: 8px 0;
+        font-size: 14px;
+    }
+    .subj .caption {
+        display: inline;
+        margin-right: 6px;
+    }
+    iframe {
+        width: 100%;
+        height: 480px;
+        border: 1px solid var(--pico-muted-border-color);
+        border-radius: 6px;
+        background: white;
+    }
+    .rlist {
+        max-height: 240px;
+        overflow: auto;
+        font-size: 13px;
+    }
+    .error {
+        color: var(--red);
+        white-space: pre-line;
+        font-size: 14px;
+    }
+    .send {
+        margin-top: 16px;
+    }
+    .send-btn {
+        width: auto;
+        min-width: 0;
+        margin: 0;
+        background: var(--green);
+        border-color: var(--green);
+    }
+    .green {
+        color: var(--green);
     }
 </style>
