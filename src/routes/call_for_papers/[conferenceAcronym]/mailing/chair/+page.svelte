@@ -139,6 +139,54 @@
         view.focus();
     };
 
+    // ---- sender ----
+    // The site's address, or the chair's own SMTP account. Everything but the password is
+    // remembered in this browser; the password stays only in this page.
+    const SMTP_KEY = "chair-mailing-smtp";
+    let senderMode: "system" | "own" = "system";
+    let smtp = { host: "", port: 465, security: "ssl", user: "", pass: "", from: "", name: "" };
+    let smtpStatus: { ok: boolean; text: string } | null = null;
+    let smtpChecking = false;
+    onMount(() => {
+        try {
+            const saved = JSON.parse(localStorage.getItem(SMTP_KEY) ?? "null");
+            if (saved) {
+                senderMode = saved.mode == "own" ? "own" : "system";
+                smtp = { ...smtp, ...saved.smtp, pass: "" };
+            }
+        } catch {}
+    });
+    $: if (mounted)
+        try {
+            const { pass, ...rest } = smtp;
+            localStorage.setItem(SMTP_KEY, JSON.stringify({ mode: senderMode, smtp: rest }));
+        } catch {}
+    // Any change to the account makes the last check stale.
+    const resetCheck = (..._deps: unknown[]) => (smtpStatus = null);
+    $: resetCheck(smtp, senderMode);
+    const setSecurity = (security: string) => {
+        smtp.security = security;
+        if (security == "ssl" && smtp.port == 587) smtp.port = 465;
+        if (security == "starttls" && smtp.port == 465) smtp.port = 587;
+    };
+    $: senderAddress = senderMode == "own" ? smtp.from.trim() || smtp.user.trim() : data.systemFrom;
+    const senderBody = () => (senderMode == "own" ? { sender: smtp } : {});
+    const checkSmtp = async () => {
+        smtpChecking = true;
+        let status: { ok: boolean; text: string };
+        try {
+            const r = await post({ action: "smtp-check", sender: smtp });
+            status = {
+                ok: true,
+                text: `Works: logged in and sent a check letter from ${r.from} to itself.`,
+            };
+        } catch (e) {
+            status = { ok: false, text: (e as Error).message };
+        }
+        smtpChecking = false;
+        smtpStatus = status;
+    };
+
     // ---- server calls ----
     const payload = (action: string, extraBody: object = {}) => ({
         action,
@@ -146,6 +194,7 @@
         submissions: [...selected],
         audience,
         extra,
+        ...senderBody(),
         ...extraBody,
     });
     const post = async (body: object) => {
@@ -209,7 +258,11 @@
             return;
         }
         const what = mode == "custom" ? `“${subject}”` : `“${system?.label}”`;
-        if (!confirm(`Send ${what} to ${count} recipient(s)?`)) return;
+        if (senderMode == "own" && !smtpStatus?.ok) {
+            alert("Check the SMTP account first (the Check button in the Sender block).");
+            return;
+        }
+        if (!confirm(`Send ${what} to ${count} recipient(s) from ${senderAddress}?`)) return;
         sending = true;
         try {
             const r = await post(payload("send"));
@@ -346,7 +399,67 @@
                 </div>
             {/if}
 
-            <h5>3. Check and send</h5>
+            <h5>3. Sender</h5>
+            <div class="aud">
+                <label><input type="radio" bind:group={senderMode} value="system" /> Site address ({data.systemFrom})</label>
+                <label><input type="radio" bind:group={senderMode} value="own" /> Own SMTP account</label>
+            </div>
+            {#if senderMode == "own"}
+                <div class="smtp">
+                    <label class="span2">
+                        <span class="caption">SMTP server</span>
+                        <input bind:value={smtp.host} placeholder="smtp.example.com" autocomplete="off" />
+                    </label>
+                    <label>
+                        <span class="caption">Security</span>
+                        <select value={smtp.security} on:change={(e) => setSecurity(e.currentTarget.value)}>
+                            <option value="ssl">SSL/TLS</option>
+                            <option value="starttls">STARTTLS</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span class="caption">Port</span>
+                        <select bind:value={smtp.port}>
+                            {#each data.smtpPorts as p}<option value={p}>{p}</option>{/each}
+                        </select>
+                    </label>
+                    <label class="span2">
+                        <span class="caption">Login</span>
+                        <input bind:value={smtp.user} placeholder="name@example.com" autocomplete="off" />
+                    </label>
+                    <label class="span2">
+                        <span class="caption">Password</span>
+                        <input type="password" bind:value={smtp.pass} autocomplete="new-password" />
+                    </label>
+                    <label class="span2">
+                        <span class="caption">From address (if not the login)</span>
+                        <input type="email" bind:value={smtp.from} placeholder={smtp.user || "name@example.com"} />
+                    </label>
+                    <label class="span2">
+                        <span class="caption">From name</span>
+                        <input bind:value={smtp.name} placeholder="Organizing Committee" />
+                    </label>
+                </div>
+                <div class="row">
+                    <button
+                        class="small"
+                        on:click={checkSmtp}
+                        disabled={smtpChecking || !smtp.host || !smtp.user || !smtp.pass}
+                        >{smtpChecking ? "Checking…" : "Check"}</button
+                    >
+                    {#if smtpStatus}
+                        <small class={smtpStatus.ok ? "green" : "error"}>{smtpStatus.text}</small>
+                    {:else}
+                        <small class="muted">
+                            Logs in and sends a short check letter from this address to itself. Gmail,
+                            Yandex and Mail.ru need an app password, not the account password. The
+                            password is not saved.
+                        </small>
+                    {/if}
+                </div>
+            {/if}
+
+            <h5>4. Check and send</h5>
             <div class="row">
                 <button class="small" on:click={() => loadPreview(0)} disabled={loading}
                     >{loading ? "Rendering…" : "Preview"}</button
@@ -393,6 +506,7 @@
                 <button class="send-btn" disabled={sending} on:click={send}
                     >{sending ? "Queuing…" : `Send (≈${estimate})`}</button
                 >
+                <small class="muted">from {senderAddress || "—"}</small>
                 {#if sendStatus}<span class="green">{sendStatus}</span>{/if}
             </div>
             <MailBatches {acronym} bind:batches />
@@ -569,6 +683,23 @@
     }
     .send {
         margin-top: 16px;
+    }
+    .smtp {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0 12px;
+    }
+    .smtp label {
+        margin: 0;
+        font-size: 14px;
+    }
+    .smtp .span2 {
+        grid-column: span 2;
+    }
+    @media (max-width: 600px) {
+        .smtp {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
     }
     .send-btn {
         width: auto;

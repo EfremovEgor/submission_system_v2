@@ -7,6 +7,8 @@ import {
 import { PLACEHOLDER_GROUPS } from "$src/lib/email/context.server";
 import { listSystemTemplates } from "$src/lib/email/system.server";
 import { listMailBatches } from "$src/lib/queue/mailing";
+import { MAILING_SETTINGS } from "$src/lib/email/mailing";
+import { SMTP_PORTS } from "$src/lib/email/sender.server";
 import { redirect, type ServerLoad } from "@sveltejs/kit";
 
 export const load: ServerLoad = async ({ url, cookies, params, parent }) => {
@@ -26,5 +28,7 @@ export const load: ServerLoad = async ({ url, cookies, params, parent }) => {
         systemTemplates,
         placeholders: PLACEHOLDER_GROUPS,
         batches,
+        systemFrom: MAILING_SETTINGS.from ?? "",
+        smtpPorts: SMTP_PORTS,
     };
 };

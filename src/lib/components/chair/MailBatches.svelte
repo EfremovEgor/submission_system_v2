@@ -6,6 +6,7 @@
         label: string;
         created_at: string;
         created_by: string;
+        from?: string;
         total: number;
         sent: number;
         failed: number;
@@ -46,7 +47,7 @@
                     <div class="line">
                         <span class="label" title={b.label}>{b.label}</span>
                         <span class="meta"
-                            >{new Date(b.created_at).toLocaleString()} · {b.created_by}</span
+                            >{new Date(b.created_at).toLocaleString()} · {b.created_by}{#if b.from} · from {b.from}{/if}</span
                         >
                     </div>
                     <div class="line">

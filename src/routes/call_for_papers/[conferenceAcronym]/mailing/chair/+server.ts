@@ -6,6 +6,7 @@ import {
     type Recipient,
 } from "$src/lib/chair/recipients.server";
 import { findUnsupportedTag } from "$src/lib/email/placeholders";
+import { checkSender, parseSender } from "$src/lib/email/sender.server";
 import {
     isSystemTemplateKey,
     renderCustomEmail,
@@ -25,6 +26,9 @@ import { error, json } from "@sveltejs/kit";
 //   action "preview" -> recipient list and one rendered letter
 //   action "test"    -> one rendered letter sent right away to a test address
 //   action "send"    -> all letters queued; returns the batch id for progress
+//   action "smtp-check" -> logs in to the chair's own SMTP account (body.sender) and sends a
+//                          check letter from it to itself
+// With body.sender, test and real letters go out through that account instead of the site's.
 
 type Template =
     | { mode: "custom"; subject: string; html: string }
@@ -55,6 +59,12 @@ export async function POST({ request, cookies, params }) {
     const { user, conference } = await requireConferenceChair(cookies, params.conferenceAcronym);
     const body = await request.json().catch(() => null);
     if (body == null) error(422);
+    const sender = parseSender(body.sender);
+    if (body.action == "smtp-check") {
+        if (!sender) error(422, "No SMTP account given");
+        await checkSender(sender, { deliver: true });
+        return json({ ok: true, from: sender.from });
+    }
     const template = parseTemplate(body.template);
     const audience: Audience = ["all", "corresponding", "presenters"].includes(body.audience)
         ? body.audience
@@ -95,7 +105,7 @@ export async function POST({ request, cookies, params }) {
         const index = Math.min(Math.max(Number(body.index) || 0, 0), recipients.length - 1);
         const letter = await render(template, recipients[index]);
         try {
-            await sendNow({ to, subject: `[TEST] ${letter.subject}`, html: letter.html });
+            await sendNow({ to, subject: `[TEST] ${letter.subject}`, html: letter.html }, sender);
         } catch (e) {
             console.error("Test letter failed", e);
             error(502, `Sending failed: ${(e as Error).message}`);
@@ -104,6 +114,8 @@ export async function POST({ request, cookies, params }) {
     }
 
     if (body.action == "send") {
+        // Fail now rather than letter by letter if the account does not work.
+        if (sender) await checkSender(sender);
         const messages = [];
         for (const r of recipients)
             messages.push({ to: r.to, note: r.note, ...(await render(template, r)) });
@@ -116,6 +128,7 @@ export async function POST({ request, cookies, params }) {
             label: `Mailing: ${label}`,
             createdBy: user.email,
             messages,
+            sender,
         });
         return json({ batchId, total: messages.length });
     }
